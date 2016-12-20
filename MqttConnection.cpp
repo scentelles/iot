@@ -17,7 +17,7 @@ void  mycallback(char* topic, byte* payload, unsigned int length) {
     tmp_string += " : I'm alive!!!!";
     
     g_mqttClient->publish("connection_events", tmp_string.c_str());
-   
+    Serial.println("after publish");
   } else {
     Serial.println("doing nothing");
    
@@ -78,10 +78,12 @@ void MqttConnection::subscribeAll()
 {
 	for (int i = 0; i < nbLeafTopic_; i++) {
 	  char* tmpLeafTopic = leafTopicList_[i];
-	  Serial.print("Subscribing to");
-	  Serial.println(tmpLeafTopic);
+
       String tmp_string = sensorId_;
+	  tmp_string += "/";
       tmp_string += tmpLeafTopic;
+	  Serial.print("Subscribing to : ");
+	  Serial.println(tmp_string.c_str());
 	  subscribe(tmp_string.c_str());		
 	}
 	
