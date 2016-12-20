@@ -74,6 +74,19 @@ void MqttConnection::publishValue(const char * leafTopic, float value, int preci
     publish(outTopic.c_str(), msg);
 }
 
+void MqttConnection::subscribeAll()
+{
+	for (int i = 0; i < nbLeafTopic_; i++) {
+	  char* tmpLeafTopic = leafTopicList_[i];
+	  Serial.print("Subscribing to");
+	  Serial.println(tmpLeafTopic);
+      String tmp_string = sensorId_;
+      tmp_string += tmpLeafTopic;
+	  subscribe(tmp_string.c_str());		
+	}
+	
+}
+
 void MqttConnection::reconnect() {
   // Loop until we're reconnected
   while (!connected()) {
@@ -88,9 +101,8 @@ void MqttConnection::reconnect() {
       String connectMsg = "New connection from " + clientId;
       publish("connection_events", connectMsg.c_str());
       // ... and resubscribe
-      String tmp_string = clientId;
-      tmp_string += "/ping";
-      subscribe(tmp_string.c_str());
+	  subscribeAll();
+
     } 
     else {
       Serial.print("failed, rc=");
@@ -102,10 +114,22 @@ void MqttConnection::reconnect() {
   }
 }
 
-
+void MqttConnection::addSubscription(const char * leafTopic)
+{
+	if(nbLeafTopic_ < MAX_SUBSCRIBE_LEAF_TOPIC - 1)
+	{
+	    nbLeafTopic_++;
+	    strcpy(leafTopicList_[nbLeafTopic_ - 1], leafTopic); 
+	}
+	else
+	{
+		Serial.print("Error : too many topics to subscribe");
+	}
+}
 
 MqttConnection::MqttConnection(const char* sensorId, const char* ssid, const char* pass, const char* mqttServer, int mqttPort) : PubSubClient(wifiClient_)
 {
+  addSubscription(PING_LEAF_TOPIC);
   sensorId_ = sensorId; 
   wifiSetup(ssid, pass);
       
