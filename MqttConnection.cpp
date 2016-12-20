@@ -1,6 +1,7 @@
 #include "MqttConnection.h"
 
 PubSubClient * g_mqttClient;
+void (* customMsgProcessing)(char* topic, byte* payload, unsigned int length) = NULL;
 
 void  mycallback(char* topic, byte* payload, unsigned int length) {
   Serial.print("Message arrived [");
@@ -22,6 +23,12 @@ void  mycallback(char* topic, byte* payload, unsigned int length) {
     Serial.println("doing nothing");
    
   }
+  if(customMsgProcessing)
+  {
+	  customMsgProcessing(topic, payload, length);
+	  
+  }
+  
 
 }
 
@@ -53,6 +60,11 @@ void MqttConnection::wifiSetup(const char* ssid, const char* pass) {
 
 }
 
+void registerCustomProcessing(void (*myFunc)(char* topic, byte* payload, unsigned int length) )
+{
+	customMsgProcessing = myFunc;
+
+}
 
 void MqttConnection::publishValue(const char * leafTopic, float value, int precision)
 {
