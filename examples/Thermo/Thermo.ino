@@ -10,7 +10,7 @@ MqttConnection * myMqtt;
 #define DHTPIN D4     // what pin we're connected to
 #define DHTTYPE DHT11   // DHT 11
 
-#define RELAY_PIN D2
+
 
 
 DHT dht(DHTPIN, DHTTYPE); //// Initialize DHT sensor
