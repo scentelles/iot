@@ -17,7 +17,8 @@ class MqttConnection : public PubSubClient
 	  void reconnect();
 	  void publishValue(const char * leafTopic, float value, int precision);
       void addSubscription(const char * leafTopic);
-	  void registerCustomProcessing(void (*myFunc)(char* topic, byte* payload, unsigned int length) );
+	  void registerCustomProcessing(void (*)(char*, byte*, unsigned int) );
+	  
   private:
 	  char leafTopicList_[MAX_SUBSCRIBE_LEAF_TOPIC][MAX_CHAR_TOPIC];
 	  int nbLeafTopic_ = 0;

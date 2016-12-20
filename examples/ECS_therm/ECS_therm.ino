@@ -28,12 +28,33 @@ DallasTemperature DS18B20(&oneWire);
 
 long lastMsg = 0;
 
+void processEcsStateMsg(char* topic, byte* payload, unsigned int length)
+{
+	
+  Serial.print("Checking if state topic");
+  if(String(topic) == "ECS/state"){
+	  Serial.println("Received ECS/State change message");
+	  if ((char)payload[0] == '1') {
+		Serial.println("ECS ON received");
+		
+	  }
+	  else{
+		  Serial.println("ECS OFF received");
+	  }
+	  
+  }
+  else{
+	  Serial.println("not for me...");
+  }
 
+	
+}
 
 
 void setup() {
   Serial.begin(115200);
-  myMqtt = new MqttConnection(SENSOR_ID, WLAN_SSID, WLAN_PASS, MQTT_SERVER, MQTT_PORT);  
+  myMqtt = new MqttConnection(SENSOR_ID, WLAN_SSID, WLAN_PASS, MQTT_SERVER, MQTT_PORT);
+  myMqtt->registerCustomProcessing(&processEcsStateMsg);
   myMqtt->addSubscription("state");
   
 }

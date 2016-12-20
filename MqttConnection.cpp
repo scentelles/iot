@@ -12,21 +12,24 @@ void  mycallback(char* topic, byte* payload, unsigned int length) {
   }
   Serial.println();
 
-  if ((char)payload[0] == '1') {
-    Serial.println("Ping received");
-    String tmp_string = topic;
-    tmp_string += " : I'm alive!!!!";
-    
-    g_mqttClient->publish("connection_events", tmp_string.c_str());
-    Serial.println("after publish");
-  } else {
-    Serial.println("doing nothing");
-   
+  if(String(topic) == "PING_LEAF_TOPIC"){
+	  if ((char)payload[0] == '1') {
+		Serial.println("Ping received");
+		String tmp_string = topic;
+		tmp_string += " : I'm alive!!!!";
+		
+		g_mqttClient->publish("connection_events", tmp_string.c_str());
+		Serial.println("after publish");
+	  } else {
+		Serial.println("doing nothing");
+	  }
   }
-  if(customMsgProcessing)
-  {
-	  customMsgProcessing(topic, payload, length);
-	  
+  else{
+	  if(customMsgProcessing)
+	  {
+		  customMsgProcessing(topic, payload, length);
+		  
+	  }
   }
   
 
@@ -60,7 +63,7 @@ void MqttConnection::wifiSetup(const char* ssid, const char* pass) {
 
 }
 
-void registerCustomProcessing(void (*myFunc)(char* topic, byte* payload, unsigned int length) )
+void MqttConnection::registerCustomProcessing(void (*myFunc)(char* topic, byte* payload, unsigned int length) )
 {
 	customMsgProcessing = myFunc;
 
