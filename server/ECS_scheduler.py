@@ -15,6 +15,16 @@ import ConfigParser
 import sched, time
 
 import pytz
+from enum import Enum
+
+class EcsCommand(Enum):
+    OFF         = 1
+    ON_MEDIUM   = 2
+    ON_HIGH     = 3
+    
+ECS_STATE_OFF = "OFF"
+ECS_STATE_ON = "ON"
+ecsState = ECS_STATE_OFF    
 
 try:
     import argparse
@@ -34,8 +44,8 @@ DELAY_BETWEEN_SCHED_CHECK   = 1
 DELAY_BETWEEN_AGENDA_CHECK  = 10  # in multiples of SCHED check
 NB_EVENTS_TO_GET_FROM_CALENDAR  = 1
 class ThermoEvent:
-        def __init__(self, name, value, start, end):
-                self.name = name
+        def __init__(self, title, value, start, end):
+                self.title = title
                 self.value = value
                 self.start = start
                 self.end = end
@@ -114,23 +124,31 @@ def getEventsFromCalendar(calendarId):
 
     return events
 
+def setEcsCommand(command):
+    global ecsState
+    if (command == EcsCommand.OFF):
+        print("turning ECS OFF")
+        ecsState = ECS_STATE_OFF
+    else: 
+        if (command == EcsCommand.ON_MEDIUM):
+            print("turning ECS ON MEDIUM heat target")
+            ecsState = ECS_STATE_ON
+        else: 
+            if (command == EcsCommand.ON_HIGH):
+                print("turning ECS ON HIGH heat target")
+                ecsState = ECS_STATE_ON
+                print("NEW STATE", ecsState)
+            else:
+                print("Error : unknown EcsCommand")
+
+
+
 
 def main():
-    """Shows basic usage of the Google Calendar API.
-
-    Creates a Google Calendar API service object and outputs a list of the next
-    10 events on the user's calendar.
-    """
-	
-	#Custom part
     config = ConfigParser.ConfigParser()
     config.read('myconf.conf')
-
     calendarId = config.get('Calendar', 'calendarId')
-	
-	#End of custom
-	
-    
+	   
     while(1):
         events = getEventsFromCalendar(calendarId)
         if not events:
@@ -155,7 +173,16 @@ def main():
                 print ("DELTA with next start event: ", delta)
                 if (now > thermoEvents[0].start) and  (now < thermoEvents[0].end):  
                 # call to your scheduled task goes here
-                    print("\nScheduling task !!!!!!!!!!\n")
+                    if(ecsState == ECS_STATE_OFF):
+                        print(ecsState)
+                        if(thermoEvents[0].title == "HIGH"):
+                            setEcsCommand(EcsCommand.ON_HIGH)
+                        else:
+                            setEcsCommand(EcsCommand.ON_MEDIUM)
+                else:
+                    if(ecsState != ECS_STATE_OFF):
+                        setEcsCommand(EcsCommand.OFF)
+                    
                 
                 time.sleep(DELAY_BETWEEN_SCHED_CHECK)
     	
