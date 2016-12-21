@@ -30,6 +30,9 @@ APPLICATION_NAME = 'Client ECS'
 
 
 
+DELAY_BETWEEN_SCHED_CHECK   = 1
+DELAY_BETWEEN_AGENDA_CHECK  = 10  # in multiples of SCHED check
+NB_EVENTS_TO_GET_FROM_CALENDAR  = 1
 class ThermoEvent:
         def __init__(self, name, value, start, end):
                 self.name = name
@@ -90,6 +93,28 @@ def get_credentials():
 
 def turnEcsOn(): print ("Turning ECS ON :", time.time())
 
+def getEventsFromCalendar(calendarId):
+    credentials = get_credentials()
+    http = credentials.authorize(httplib2.Http())
+    service = discovery.build('calendar', 'v3', http=http)
+
+    now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
+	
+    mynow  = datetime.datetime.utcnow()
+    myweek = datetime.timedelta(days=7)
+
+    start_date = mynow.isoformat() + 'Z'
+    end_date = (mynow + myweek).isoformat() + 'Z'
+
+    print('Getting the upcoming events')
+    eventsResult = service.events().list(
+        calendarId=calendarId, timeMin=start_date, timeMax=end_date, maxResults=NB_EVENTS_TO_GET_FROM_CALENDAR, singleEvents=True, 
+        orderBy='startTime').execute()
+    events = eventsResult.get('items', [])
+
+    return events
+
+
 def main():
     """Shows basic usage of the Google Calendar API.
 
@@ -105,69 +130,34 @@ def main():
 	
 	#End of custom
 	
-    credentials = get_credentials()
-    http = credentials.authorize(httplib2.Http())
-    service = discovery.build('calendar', 'v3', http=http)
-
-    now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-    print (now)
-	
-    mynow  = datetime.datetime.utcnow()
-    myweek = datetime.timedelta(days=7)
-
-    start_date = mynow.isoformat() + 'Z'
-    end_date = (mynow + myweek).isoformat() + 'Z'
-    print ("start query", start_date)
-    print ("end query", end_date)
-    print('Getting the upcoming 10 events')
-    eventsResult = service.events().list(
-        calendarId=calendarId, timeMin=start_date, timeMax=end_date, maxResults=10, singleEvents=True, 
-        orderBy='startTime').execute()
-    events = eventsResult.get('items', [])
-
-    if not events:
-        print('No upcoming events found.')
-		
-    for event in events:
-        start = event['start'].get('dateTime')
-        
-        input_string = start
-        test_date = get_date_object(input_string)
-        print ("\nnew date : ", test_date)
-
-        
-    thermoEvents = []
-	
-    for event in events:
-        title = event['summary']
-        content = ""
-
-        start = get_date_object(event['start'].get('dateTime'))
-        end = get_date_object(event['end'].get('dateTime'))
-        thermoEvents.append(ThermoEvent(title, content, start, end))
-
     
-    
-    event_bytes = [0] * 336
-
     while(1):
-        parisTz = pytz.timezone('Europe/Paris')
-        now = parisTz.localize(datetime.datetime.now())
-        print ("converted now Time :", now)
-        print ("next event start : ", thermoEvents[0].start)
-        delta = thermoEvents[0].start - now
-        print ("DELTA : ", delta)
-        if (now > thermoEvents[0].start) and  (now < thermoEvents[0].end):  
-        # call to your scheduled task goes here
-            print("\nScheduling task !!!!!!!!!!\n")
+        events = getEventsFromCalendar(calendarId)
+        if not events:
+            print('No upcoming events found.')
         else:
-            print("nothing")
-        
-        time.sleep(1)
-        
+            thermoEvents = []
+            count = 0
+            
+            for event in events:
+                title = event['summary']
+                content = ""
+                start = get_date_object(event['start'].get('dateTime'))
+                end = get_date_object(event['end'].get('dateTime'))
+                thermoEvents.append(ThermoEvent(title, content, start, end))
 
-        
+            while(count < DELAY_BETWEEN_AGENDA_CHECK):
+                count += 1
+                parisTz = pytz.timezone('Europe/Paris')
+                now = parisTz.localize(datetime.datetime.now())
 
+                delta = thermoEvents[0].start - now
+                print ("DELTA with next start event: ", delta)
+                if (now > thermoEvents[0].start) and  (now < thermoEvents[0].end):  
+                # call to your scheduled task goes here
+                    print("\nScheduling task !!!!!!!!!!\n")
+                
+                time.sleep(DELAY_BETWEEN_SCHED_CHECK)
     	
 
 
