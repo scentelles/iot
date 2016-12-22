@@ -17,6 +17,11 @@ import sched, time
 import pytz
 from enum import Enum
 
+import paho.mqtt.client as mqtt
+
+mqttClient = 0
+
+
 class EcsCommand(Enum):
     OFF         = 1
     ON_MEDIUM   = 2
@@ -25,6 +30,8 @@ class EcsCommand(Enum):
 ECS_STATE_OFF = "OFF"
 ECS_STATE_ON = "ON"
 ecsState = ECS_STATE_OFF    
+
+MQTT_ADDRESS = "localhost"
 
 try:
     import argparse
@@ -50,14 +57,16 @@ class ThermoEvent:
                 self.start = start
                 self.end = end
 
-def datetime_to_336(dt):
-        r = 0
-        r += 48 * dt.weekday()
-        r += 2 * dt.hour
-        if dt.minute >= 30:
-                r += 1
-        return r
-		
+# The callback for when the client receives a CONNACK response from the server.
+def on_connect(client, userdata, flags, rc):
+    print("Connected with result code "+str(rc) + "\n")
+
+def on_message(client, userdata, msg):
+    print(msg.topic+" "+str(msg.payload) + "\n")
+    
+
+
+
 def get_date_object(date_string):
   return iso8601.parse_date(date_string)
 
@@ -126,17 +135,24 @@ def getEventsFromCalendar(calendarId):
 
 def setEcsCommand(command):
     global ecsState
+    global mqttClient
     if (command == EcsCommand.OFF):
         print("turning ECS OFF")
         ecsState = ECS_STATE_OFF
+        mqttClient.publish("ECS/state", payload='1', qos=0, retain=False)
+
     else: 
         if (command == EcsCommand.ON_MEDIUM):
             print("turning ECS ON MEDIUM heat target")
             ecsState = ECS_STATE_ON
+            mqttClient.publish("ECS/state", payload='2', qos=0, retain=False)
+
         else: 
             if (command == EcsCommand.ON_HIGH):
                 print("turning ECS ON HIGH heat target")
                 ecsState = ECS_STATE_ON
+                mqttClient.publish("ECS/state", payload='2', qos=0, retain=False)
+
                 print("NEW STATE", ecsState)
             else:
                 print("Error : unknown EcsCommand")
@@ -148,6 +164,15 @@ def main():
     config = ConfigParser.ConfigParser()
     config.read('myconf.conf')
     calendarId = config.get('Calendar', 'calendarId')
+
+
+    global mqttClient
+    mqttClient = mqtt.Client()
+    mqttClient.on_connect = on_connect
+    mqttClient.on_message = on_message
+    mqttClient.connect(MQTT_ADDRESS)
+    mqttClient.loop_start()
+
 	   
     while(1):
         events = getEventsFromCalendar(calendarId)
