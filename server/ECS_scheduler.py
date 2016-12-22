@@ -17,21 +17,32 @@ import sched, time
 import pytz
 from enum import Enum
 
-import paho.mqtt.client as mqtt
+#import paho.mqtt.client as mqtt
+from threading import Thread
 
 mqttClient = 0
 
 
+
 class EcsCommand(Enum):
     OFF         = 1
-    ON_MEDIUM   = 2
-    ON_HIGH     = 3
+    ON          = 2
+    
+class EcsHeatProfile(Enum):
+    LOW         = 1
+    MEDIUM      = 2
+    HIGH     = 3
+
+
+MQTT_ADDRESS = "localhost"
     
 ECS_STATE_OFF = "OFF"
 ECS_STATE_ON = "ON"
-ecsState = ECS_STATE_OFF    
-
-MQTT_ADDRESS = "localhost"
+#Globals
+ecsState = ECS_STATE_OFF  
+heatProfile  = EcsHeatProfile.MEDIUM
+nextStartTime = ""
+nextEventfromCalendar = None
 
 try:
     import argparse
@@ -133,33 +144,101 @@ def getEventsFromCalendar(calendarId):
 
     return events
 
-def setEcsCommand(command):
+def heatManager():
     global ecsState
     global mqttClient
-    if (command == EcsCommand.OFF):
-        print("turning ECS OFF")
-        ecsState = ECS_STATE_OFF
-        mqttClient.publish("ECS/state", payload='1', qos=0, retain=False)
+    previousEcsState = ecsState
+    while True:
+        if(ecsState != previousEcsState):
+            if (ecsState == ECS_STATE_OFF):
+                print("Heat Manager : turning ECS OFF")
+                #mqttClient.publish("ECS/state", payload='1', qos=0, retain=False)
 
-    else: 
-        if (command == EcsCommand.ON_MEDIUM):
-            print("turning ECS ON MEDIUM heat target")
-            ecsState = ECS_STATE_ON
-            mqttClient.publish("ECS/state", payload='2', qos=0, retain=False)
+            else: 
+                if (ecsState == ECS_STATE_ON):
+                    print("Heat Manager : turning ECS ON")
+                    #mqttClient.publish("ECS/state", payload='2', qos=0, retain=False)
 
-        else: 
-            if (command == EcsCommand.ON_HIGH):
-                print("turning ECS ON HIGH heat target")
-                ecsState = ECS_STATE_ON
-                mqttClient.publish("ECS/state", payload='2', qos=0, retain=False)
+                else: 
+                    print("Heat Manager : Error : unknown EcsState")
+        
+        #if ON
+        # compare with temperature target
+        # if temerature reached, send OFF command
+        
+        
+        previousEcsState = ecsState
+        time.sleep(1)
 
-                print("NEW STATE", ecsState)
+def calendarMonitor(calendarId):
+    global nextEventfromCalendar 
+    while True:
+        events = getEventsFromCalendar(calendarId)
+        nextEventfromCalendar = None
+        if not events:
+            print('No upcoming events found.')
+        else:
+            myevent = events[0]
+            title = myevent['summary']
+            content = ""
+            start = get_date_object(myevent['start'].get('dateTime'))
+            end   = get_date_object(myevent['end'].get('dateTime'))
+            nextEventfromCalendar = ThermoEvent(title, content, start, end)
+              
+        time.sleep(DELAY_BETWEEN_AGENDA_CHECK)
+
+def ecsStateScheduler():
+    global ecsState
+    logNoEventDisplayed     = False
+    while True:
+        if(nextEventfromCalendar):
+            parisTz = pytz.timezone('Europe/Paris')
+            now = parisTz.localize(datetime.datetime.now())
+            #print ("START : ", nextEventfromCalendar.start)
+            #print ("END : ", nextEventfromCalendar.end)
+            #print ("NOW : ", now)
+            nextStartTime = nextEventfromCalendar.start - now
+            if(nextEventfromCalendar.start < now):
+                if(logNoEventDisplayed == False):
+                    print("No event Scheduled")
+                    logNoEventDisplayed = True
             else:
-                print("Error : unknown EcsCommand")
+                print("Next Start in :", nextStartTime)
 
+            
+            if (now > nextEventfromCalendar.start) and  (now < nextEventfromCalendar.end): 
+                nextEndTime = nextEventfromCalendar.end - now
+                print("Next End in :", nextEndTime)
+                if(ecsState == ECS_STATE_OFF):
+                    ecsState = ECS_STATE_ON
+                    print("Switching ECS STATE :", ecsState)
+                    if(nextEventfromCalendar.title == "HIGH"):
+                        heatProfile = "HIGH"
+                    else:
+                        if (nextEventfromCalendar.title == "LOW"):
+                            heatProfile = "LOW"
+                        else:
+                            heatProfile = "MEDIUM"
+            else:
+                if(ecsState != ECS_STATE_OFF):
+                    ecsState = ECS_STATE_OFF
+                    print("Switching ECS STATE :", ecsState)
+                    logNextEndDisplayed = False
+                    logNoEventDisplayed = False
 
+        else:
+            if(ecsState == ECS_STATE_ON):
+                logNoEventDisplayed = False
+                ecsState = ECS_STATE_OFF
+                print("Switching ECS STATE :", ecsState)
 
+            if(logNoEventDisplayed == False):
+                print("No event Scheduled")
+                logNoEventDisplayed = True
+        
+        time.sleep(DELAY_BETWEEN_SCHED_CHECK)
 
+        
 def main():
     config = ConfigParser.ConfigParser()
     config.read('myconf.conf')
@@ -167,50 +246,18 @@ def main():
 
 
     global mqttClient
-    mqttClient = mqtt.Client()
-    mqttClient.on_connect = on_connect
-    mqttClient.on_message = on_message
-    mqttClient.connect(MQTT_ADDRESS)
-    mqttClient.loop_start()
+ #   mqttClient = mqtt.Client()
+ #   mqttClient.on_connect = on_connect
+ #   mqttClient.on_message = on_message
+ #   mqttClient.connect(MQTT_ADDRESS)
+ #   mqttClient.loop_start()
 
-	   
-    while(1):
-        events = getEventsFromCalendar(calendarId)
-        if not events:
-            print('No upcoming events found.')
-        else:
-            thermoEvents = []
-            count = 0
-            
-            for event in events:
-                title = event['summary']
-                content = ""
-                start = get_date_object(event['start'].get('dateTime'))
-                end = get_date_object(event['end'].get('dateTime'))
-                thermoEvents.append(ThermoEvent(title, content, start, end))
-
-            while(count < DELAY_BETWEEN_AGENDA_CHECK):
-                count += 1
-                parisTz = pytz.timezone('Europe/Paris')
-                now = parisTz.localize(datetime.datetime.now())
-
-                delta = thermoEvents[0].start - now
-                print ("DELTA with next start event: ", delta)
-                if (now > thermoEvents[0].start) and  (now < thermoEvents[0].end):  
-                # call to your scheduled task goes here
-                    if(ecsState == ECS_STATE_OFF):
-                        print(ecsState)
-                        if(thermoEvents[0].title == "HIGH"):
-                            setEcsCommand(EcsCommand.ON_HIGH)
-                        else:
-                            setEcsCommand(EcsCommand.ON_MEDIUM)
-                else:
-                    if(ecsState != ECS_STATE_OFF):
-                        setEcsCommand(EcsCommand.OFF)
-                    
-                
-                time.sleep(DELAY_BETWEEN_SCHED_CHECK)
-    	
+    CalendarMonitorThread = Thread(target=calendarMonitor, args=(calendarId,))
+    CalendarMonitorThread.start()
+    EcsStateSchedulerThread = Thread(target=ecsStateScheduler, args=())
+    EcsStateSchedulerThread.start() 
+    HeatManagerThread = Thread(target=heatManager, args=())    
+    HeatManagerThread.start() 
 
 
 if __name__ == '__main__':
