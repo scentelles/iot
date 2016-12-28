@@ -40,9 +40,7 @@ ECS_STATE_OFF = "OFF"
 ECS_STATE_ON = "ON"
 
 
-
 #Globals
-ecsState = ECS_STATE_OFF  
 heatProfile  = EcsHeatProfile.MEDIUM
 nextStartTime = ""
 nextEventfromCalendar = None
