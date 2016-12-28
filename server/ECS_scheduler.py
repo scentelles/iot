@@ -41,8 +41,6 @@ ECS_STATE_ON = "ON"
 
 
 #Globals
-heatProfile  = EcsHeatProfile.MEDIUM
-nextStartTime = ""
 nextEventfromCalendar = None
 
 
@@ -173,7 +171,7 @@ def heatManager(msqQueue, mqttClient):
     ecsStateForced = False
     
     ecsTemperature = 0
-    heatProfile = ""
+    heatProfile  = EcsHeatProfile.MEDIUM
     
     
     while True:
@@ -265,6 +263,7 @@ def mqttLoop(heatMgrQueue, mqttClient):
 def ecsStateScheduler(heatMgrQueue):
     logNoEventDisplayed     = False
     ecsState = ECS_STATE_OFF
+    nextStartTime = ""
     while True:
         if(nextEventfromCalendar):
             parisTz = pytz.timezone('Europe/Paris')
