@@ -61,6 +61,15 @@ APPLICATION_NAME = 'Client ECS'
 DELAY_BETWEEN_SCHED_CHECK   = 1
 DELAY_BETWEEN_AGENDA_CHECK  = 10  # in multiples of SCHED check
 NB_EVENTS_TO_GET_FROM_CALENDAR  = 1
+
+
+
+
+
+
+
+
+
 class ThermoEvent:
         def __init__(self, title, value, start, end):
                 self.title = title
@@ -154,12 +163,11 @@ def heatManager():
                 print("Heat Manager : turning ECS OFF")
                 #mqttClient.publish("ECS/state", payload='1', qos=0, retain=False)
 
-            else: 
-                if (ecsState == ECS_STATE_ON):
-                    print("Heat Manager : turning ECS ON")
+            elif (ecsState == ECS_STATE_ON):
+                print("Heat Manager : turning ECS ON")
                     #mqttClient.publish("ECS/state", payload='2', qos=0, retain=False)
 
-                else: 
+            else: 
                     print("Heat Manager : Error : unknown EcsState")
         
         #if ON
@@ -214,17 +222,15 @@ def ecsStateScheduler():
                     print("Switching ECS STATE :", ecsState)
                     if(nextEventfromCalendar.title == "HIGH"):
                         heatProfile = "HIGH"
-                    else:
-                        if (nextEventfromCalendar.title == "LOW"):
-                            heatProfile = "LOW"
-                        else:
-                            heatProfile = "MEDIUM"
-            else:
-                if(ecsState != ECS_STATE_OFF):
-                    ecsState = ECS_STATE_OFF
-                    print("Switching ECS STATE :", ecsState)
-                    logNextEndDisplayed = False
-                    logNoEventDisplayed = False
+                elif (nextEventfromCalendar.title == "LOW"):
+                    heatProfile = "LOW"
+                else:
+                    heatProfile = "MEDIUM"
+            elif(ecsState != ECS_STATE_OFF):
+                ecsState = ECS_STATE_OFF
+                print("Switching ECS STATE :", ecsState)
+                logNextEndDisplayed = False
+                logNoEventDisplayed = False
 
         else:
             if(ecsState == ECS_STATE_ON):
