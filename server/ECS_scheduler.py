@@ -71,27 +71,30 @@ class ThermoEvent:
                 self.start = start
                 self.end = end
 
+#=========================================================================#                
+#                      callback definition for MQTT                       #          
+#=========================================================================#
+
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc) + "\n")
 
 def on_message(client, userdata, msg):
     print(msg.topic+" "+str(msg.payload) + "\n")
-    
 
-
-
+#=========================================================================#   
+#           helper functions for timezone and format conversion           #
+#=========================================================================#
 def get_date_object(date_string):
   return iso8601.parse_date(date_string)
 
 def get_date_string(date_object):
   return rfc3339.rfc3339(date_object)  
 
-
-
-    
+   
 		
 #=========================================================================#
+# Functions for Google calendar data retrieval                            #
 # Coming from Google API example                                          #
 # https://developers.google.com/google-apps/calendar/quickstart/python    #
 #=========================================================================#
@@ -148,6 +151,12 @@ def getEventsFromCalendar(calendarId):
     return events
 
    
+   
+   
+#=========================================================================#   
+#           Heat profile to temperature conversion                        #
+#=========================================================================#
+        
 def getTargetTemperature(profile):
     if (profile == EcsHeatProfile.HIGH):
         return 55
@@ -158,21 +167,18 @@ def getTargetTemperature(profile):
     else:
         return 50
         
-   
 #=========================================================================#
 # Heat manager thread body                                                #
-# Periodically checks for variable state changes :                        # 
-#       - ecsState                                                        #
-#       - heatProfile (used to set target temperature)                    #
-#       - temperature(s) from the ECS sensor(s)                           #
+# processes messages from Queue :                                         # 
+#       - ECS state change requests (from Ecs Scheduler thread)           #
+#       - ECS force state (from MQTTLoop thread)                          #
+#       - temperature(s)  (from MQTTLoop thread)                          #
 #=========================================================================#
 def heatManager(msqQueue, mqttClient):
     ecsState = ECS_STATE_OFF 
     ecsStateForced = False
-    
     ecsTemperature = 0
     heatProfile  = EcsHeatProfile.MEDIUM
-    
     
     while True:
         print ("HeatManager waiting for message")
@@ -180,8 +186,8 @@ def heatManager(msqQueue, mqttClient):
         msgType = msg[0]
         msgValue = msg[1]
         print ("HeatManager waking up. message received")
-        #process messages
 
+        #process messages
         if(msgType == "ECS_STATE_CHANGE"):
             if (ecsStateForced is False):
                 if (msgValue == ECS_STATE_OFF):
@@ -199,6 +205,7 @@ def heatManager(msqQueue, mqttClient):
                         print("Heat Manager : No ECS ON despite calendar, due to target temperature already reached")
                 else: 
                     print("Heat Manager : Error : unknown EcsState %s in received message" % msgValue)
+
         elif(msgType == "ECS_TEMPERATURE"):
             ecsTemperature = msgValue
             print ("updating temperature : %i", msgValue)
@@ -208,8 +215,7 @@ def heatManager(msqQueue, mqttClient):
                     print("Heat Manager : Switching ECS OFF despite calendar, due to target temperature reached")
                     ecsState = ECS_STATE_OFF
                     #mqttClient.publish("ECS/state", payload='1', qos=0, retain=False)
-                    
-                    
+ 
         elif(msgType == "ECS_FORCE"):   
             if (msgValue == ECS_STATE_OFF):
                 print("Heat Manager : Forcing ECS OFF") 
@@ -228,9 +234,14 @@ def heatManager(msqQueue, mqttClient):
  
             else:  
                 print("Heat Manager : Unknown message value %s " % msgValue)
+        
         else:
             print("Heat Manager : Unknown message type %s " % msgType)
 
+#=========================================================================#
+# Calendar monitor thread body                                            #
+# Periodically checks for events defined in cloud                         # 
+#=========================================================================#
 def calendarMonitor(calendarId):
     global nextEventfromCalendar 
     while True:
@@ -248,6 +259,11 @@ def calendarMonitor(calendarId):
               
         time.sleep(DELAY_BETWEEN_AGENDA_CHECK)
 
+#=========================================================================#
+# MQTT Loop thread body                                                   #
+# Subscribes to MQTT topics, and then send messages to heatManager        # 
+# upon MQTT message reception                                             #
+#=========================================================================#
 def mqttLoop(heatMgrQueue, mqttClient):
     count = 0
     while True:
@@ -259,7 +275,11 @@ def mqttLoop(heatMgrQueue, mqttClient):
         count += 1
         time.sleep(1)
         
-
+#=========================================================================#
+# ECS State scheduler                                                     #
+# Sends commands to heatManager based on periodical checks of             #
+# next event defined by Calendar monitor                                  # 
+#=========================================================================#
 def ecsStateScheduler(heatMgrQueue):
     logNoEventDisplayed     = False
     ecsState = ECS_STATE_OFF
@@ -314,7 +334,10 @@ def ecsStateScheduler(heatMgrQueue):
         
         time.sleep(DELAY_BETWEEN_SCHED_CHECK)
 
-        
+  
+#=========================================================================#
+# Main...                                                                 #
+#=========================================================================#  
 def main():
     config = ConfigParser.ConfigParser()
     config.read('myconf.conf')
