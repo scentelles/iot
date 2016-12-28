@@ -1,2 +1,4 @@
 [Calendar]
 calendarId=xxxxxxxxx
+[MQTT]
+mqttAddress=localhost

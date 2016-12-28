@@ -12,30 +12,28 @@ import rfc3339      # for date object -> date string
 import iso8601      # for date string -> date object
 
 import ConfigParser
-import sched, time
-
+import time
 import pytz
+
 from enum import Enum
 
 #import paho.mqtt.client as mqtt
 from threading import Thread
 from Queue import Queue
 
-mqttClient = 0
-
-
-
+#TODO unused
 class EcsCommand(Enum):
     OFF         = 1
     ON          = 2
     
+    
 class EcsHeatProfile(Enum):
     LOW         = 1
     MEDIUM      = 2
-    HIGH     = 3
+    HIGH        = 3
 
 
-MQTT_ADDRESS = "localhost"
+
     
 #defines
 ECS_STATE_OFF = "OFF"
@@ -172,10 +170,9 @@ def getTargetTemperature(profile):
 #       - heatProfile (used to set target temperature)                    #
 #       - temperature(s) from the ECS sensor(s)                           #
 #=========================================================================#
-def heatManager(msqQueue):
+def heatManager(msqQueue, mqttClient):
     ecsState = ECS_STATE_OFF 
     ecsStateForced = False
-    global mqttClient
     
     ecsTemperature = 0
     heatProfile = ""
@@ -255,7 +252,7 @@ def calendarMonitor(calendarId):
               
         time.sleep(DELAY_BETWEEN_AGENDA_CHECK)
 
-def mqttLoop(heatMgrQueue):
+def mqttLoop(heatMgrQueue, mqttClient):
     count = 0
     while True:
         heatMgrQueue.put(("ECS_TEMPERATURE" , 22 + count))
@@ -325,12 +322,11 @@ def main():
     config = ConfigParser.ConfigParser()
     config.read('myconf.conf')
     calendarId = config.get('Calendar', 'calendarId')
-
-
-    global mqttClient
-    
+    mqttAddress = config.get('MQTT', 'mqttAddress')
+  
     heatMgrQueue = Queue()
     
+    mqttClient = ""
  #   mqttClient = mqtt.Client()
  #   mqttClient.on_connect = on_connect
  #   mqttClient.on_message = on_message
@@ -341,9 +337,9 @@ def main():
     CalendarMonitorThread.start()
     EcsStateSchedulerThread = Thread(target=ecsStateScheduler, args=(heatMgrQueue,))
     EcsStateSchedulerThread.start() 
-    HeatManagerThread = Thread(target=heatManager, args=(heatMgrQueue,))    
+    HeatManagerThread = Thread(target=heatManager, args=(heatMgrQueue,mqttClient,))    
     HeatManagerThread.start() 
-    MqttLoopThread = Thread(target=mqttLoop, args=(heatMgrQueue,))    
+    MqttLoopThread = Thread(target=mqttLoop, args=(heatMgrQueue,mqttClient,))    
     MqttLoopThread.start() 
 
 if __name__ == '__main__':
