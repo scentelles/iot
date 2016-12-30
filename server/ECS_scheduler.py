@@ -32,8 +32,6 @@ class EcsHeatProfile(Enum):
     MEDIUM      = 2
     HIGH        = 3
 
-
-
     
 #defines
 ECS_STATE_OFF = "OFF"
