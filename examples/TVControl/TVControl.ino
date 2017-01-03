@@ -3,9 +3,9 @@
 const char* ssid     = "ESP8266";
 const char* password = "audiowifi";
 
-#define BOX_STATUS_PIN      D2
-#define AMPLIFIER_RELAY_PIN D3
-#define TV_RELAY_PIN        D4
+#define BOX_STATUS_PIN      D2    
+#define AMPLIFIER_RELAY_PIN D5
+#define TV_RELAY_PIN        D6
 #define DELAY_BETWEEN_TOGGLE 10000
 #define DELAY_BETWEEN_BOX_CHECK 10
  
@@ -19,9 +19,9 @@ void setup() {
   Serial.begin(115200);
   pinMode(BOX_STATUS_PIN, INPUT);
   pinMode(AMPLIFIER_RELAY_PIN, OUTPUT);
-  digitalWrite(AMPLIFIER_RELAY_PIN, LOW);
+  digitalWrite(AMPLIFIER_RELAY_PIN, HIGH);
   pinMode(TV_RELAY_PIN, OUTPUT);
-  digitalWrite(TV_RELAY_PIN, LOW);  
+  digitalWrite(TV_RELAY_PIN, HIGH);  
   
   delay(10);
 }
@@ -44,8 +44,8 @@ void switchAllOn(){
   }
     
   Serial.println("Switching all ON");
-  digitalWrite(AMPLIFIER_RELAY_PIN, HIGH);
-  digitalWrite(TV_RELAY_PIN, HIGH);  
+  digitalWrite(AMPLIFIER_RELAY_PIN, LOW);
+  digitalWrite(TV_RELAY_PIN, LOW);  
   boxStatus = BOX_ON;
   lastSwitch = millis();
 
@@ -56,8 +56,8 @@ void switchAllOff(){
     return;
   }
   Serial.println("Switching all OFF");
-  digitalWrite(AMPLIFIER_RELAY_PIN, LOW);
-  digitalWrite(TV_RELAY_PIN, LOW);  
+  digitalWrite(AMPLIFIER_RELAY_PIN, HIGH);
+  digitalWrite(TV_RELAY_PIN, HIGH);  
   boxStatus = BOX_OFF;
   lastSwitch = millis();
 }
@@ -67,6 +67,7 @@ void loop() {
   // put your main code here, to run repeatedly:
 
   int boxStatusPin = digitalRead(BOX_STATUS_PIN);
+
 
   if((boxStatusPin == 1) and (boxStatus == BOX_OFF)){
         switchAllOn();
