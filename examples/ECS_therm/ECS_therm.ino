@@ -145,8 +145,8 @@ void loop() {
       else
       {
           //send to MQTT server
-          myMqtt->publishValue("temp", temp1, 1);    
-		  myMqtt->publishValue("temp", temp2, 1);    
+          myMqtt->publishValue("temp1", temp1, 1);    
+		  myMqtt->publishValue("temp2", temp2, 1);    
       }
   }
 
