@@ -8,7 +8,7 @@ MqttConnection * myMqtt;
 const char ECS_STATE_OFF = '1';
 const char ECS_STATE_ON  = '2';
 
-#define SENSOR_ID "ECS2"
+#define SENSOR_ID "ECS"
 #define PROBE_TEMPO 60000  //1 measure per minute
 #define ONE_WIRE_BUS D4  // DS18B20 pin
 #define RELAY_PIN D1
