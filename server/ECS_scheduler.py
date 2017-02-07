@@ -17,9 +17,12 @@ import pytz
 
 from enum import Enum
 
-#import paho.mqtt.client as mqtt
+import paho.mqtt.client as mqtt
 from threading import Thread
 from Queue import Queue
+
+MQTT_ADDRESS = "77.146.227.62"
+MQTT_PORT = 1357
 
 #TODO unused
 class EcsCommand(Enum):
@@ -79,6 +82,11 @@ def on_connect(client, userdata, flags, rc):
 
 def on_message(client, userdata, msg):
     print(msg.topic+" "+str(msg.payload) + "\n")
+    if msg.topic == "ECS/force":
+        print (msg.topic)
+        print ("Forcing!!!!")
+    if msg.payload == "2":
+        print ("payload 2")
 
 #=========================================================================#   
 #           helper functions for timezone and format conversion           #
@@ -264,6 +272,10 @@ def calendarMonitor(calendarId):
 #=========================================================================#
 def mqttLoop(heatMgrQueue, mqttClient):
     count = 0
+    mqttClient.subscribe("ECS/temp1")
+    mqttClient.subscribe("ECS/temp2")
+    mqttClient.subscribe("ECS/force")
+    
     while True:
         heatMgrQueue.put(("ECS_TEMPERATURE" , 22 + count))
         if(count == 30):
@@ -344,12 +356,11 @@ def main():
   
     heatMgrQueue = Queue()
     
-    mqttClient = ""
- #   mqttClient = mqtt.Client()
- #   mqttClient.on_connect = on_connect
- #   mqttClient.on_message = on_message
- #   mqttClient.connect(MQTT_ADDRESS)
- #   mqttClient.loop_start()
+    mqttClient = mqtt.Client()
+    mqttClient.on_connect = on_connect
+    mqttClient.on_message = on_message
+    mqttClient.connect(MQTT_ADDRESS, MQTT_PORT)
+    mqttClient.loop_start()
 
     CalendarMonitorThread = Thread(target=calendarMonitor, args=(calendarId,))
     CalendarMonitorThread.start()
