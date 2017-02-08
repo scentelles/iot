@@ -231,6 +231,7 @@ def heatManager(msqQueue, mqttClient):
         print ("\tmsgvalue :", msgValue)
         print ("\tmsgheatprofile :", msgHeatProfile)
         print ("\n\tECS state :", ecsState)
+        print ("\tECS remote state :", ecsRemoteState)
         print ("\tECS force state :", ecsStateForced)
         print ("\tECS temperature :", ecsTemperature)
         print ("\tTarget temperature : ", ecsHeatTarget)
