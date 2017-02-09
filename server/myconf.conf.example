@@ -3,3 +3,8 @@ calendarId=xxxxxxxxx
 [MQTT]
 mqttAddress=localhost
 mqttPort=1883
+[EMAIL]
+smtpLogin=xxx
+smtpPassword=xxx
+warningSender=xxx@gmail.com
+warningRecipient=xxx

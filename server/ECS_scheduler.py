@@ -15,11 +15,16 @@ import ConfigParser
 import time
 import pytz
 
+import smtplib
+from email.MIMEMultipart import MIMEMultipart
+from email.MIMEText import MIMEText
+
 from enum import Enum
 
 import paho.mqtt.client as mqtt
 from threading import Thread
 from Queue import Queue
+
 
 
 heatMgrQueue = 0
@@ -34,7 +39,11 @@ class EcsForceCommand(Enum):
     OFF         = 1
     ON          = 2   
 
-       
+lastTemperatureUpdate = datetime.datetime.now()
+currentTemperatureUpdate = datetime.datetime.now()
+global configWarningSender, configWarningRecipient, configSmtpLogin, configSmtpPassword
+global ecsState, ecsRemoteState, ecsStateForced, ecsTemperature, ecsHeatTarget      
+
 #defines
 ECS_HEAT_PROFILE_LOW         = "LOW"
 ECS_HEAT_PROFILE_MEDIUM      = "MEDIUM"
@@ -46,6 +55,10 @@ ECS_STATE_ON = "ON"
 ECS_FORCE_DISABLED = "FORCE_DISABLED"
 ECS_FORCE_OFF = "FORCE_OFF"
 ECS_FORCE_ON  = "FORCE_ON"
+
+
+OVERHEAT_TEMPERATURE = 61
+UNDERHEAT_TEMPERATURE = 16
 
 #Globals
 nextEventfromCalendar = None
@@ -68,6 +81,7 @@ HEAT_MANAGER_PERIOD         = 1
 DELAY_BETWEEN_SCHED_CHECK   = 1
 DELAY_BETWEEN_AGENDA_CHECK  = 10  # in multiples of SCHED check
 NB_EVENTS_TO_GET_FROM_CALENDAR  = 1
+DELAY_BETWEEN_TEMPERATURE_UPDATE = 60
 
 class heatMgrMessage:
         def __init__(self, type, value, heatProfile="MEDIUM"):
@@ -162,6 +176,7 @@ def get_credentials():
 
 def turnEcsOn(): print ("Turning ECS ON :", time.time())
 
+#TODO retrieve weekly calendar on demand and once for all
 def getEventsFromCalendar(calendarId):
     credentials = get_credentials()
     http = credentials.authorize(httplib2.Http())
@@ -201,6 +216,43 @@ def getTargetTemperature(profile):
         print("Unknown heatprofile. Defaulting to 50", profile)
         return 53
         
+        
+def getStatusString():
+    global ecsState, ecsRemoteState, ecsStateForced, ecsTemperature, ecsHeatTarget
+    result  = "\n\n====================="
+    result += "\n\tECS state :" + ecsState
+    result += "\n\tECS remote state :" + ecsRemoteState
+    result += "\n\tECS force state :" + str(ecsStateForced)
+    result += "\n\tECS temperature :" + str(ecsTemperature)
+    result += "\n\tTarget temperature : " + str(ecsHeatTarget)
+    result += "\n====================="
+    return result
+
+
+def warnMessage(msg):
+    Mimemsg = MIMEMultipart()
+    global configWarningSender, configWarningRecipient, configSmtpLogin, configSmtpPassword
+    
+    Mimemsg['From'] = configWarningSender
+    Mimemsg['To'] = configWarningRecipient
+    Mimemsg['Subject'] = 'ECS WARNING' 
+    msg += getStatusString()
+    Mimemsg.attach(MIMEText(msg))
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.ehlo()
+    server.starttls()
+    server.login(configSmtpLogin, configSmtpPassword)
+    server.sendmail(configWarningSender, configWarningRecipient, Mimemsg.as_string())
+    server.quit()
+
+def checkTemperatureValidity(temperature):  
+    if(temperature < UNDERHEAT_TEMPERATURE):
+        warnMessage("Warning, the temperature of the ECS is getting low. Consider forcing ON")
+    if(temperature > OVERHEAT_TEMPERATURE):
+        warnMessage("Warning, the temperature of the ECS is getting too high. Consider forcing OFF")
+
+
+    
 #=========================================================================#
 # Heat manager thread body                                                #
 # processes messages from Queue :                                         # 
@@ -209,6 +261,8 @@ def getTargetTemperature(profile):
 #       - temperature(s)  (from MQTTLoop thread)                          #
 #=========================================================================#
 def heatManager(msqQueue, mqttClient):
+    global ecsState, ecsRemoteState, ecsStateForced, ecsTemperature, ecsHeatTarget
+    global lastTemperatureUpdate, currentTemperatureUpdate
     ecsState = ECS_STATE_OFF 
     ecsRemoteState = ECS_STATE_OFF 
     ecsStateForced = False
@@ -223,17 +277,12 @@ def heatManager(msqQueue, mqttClient):
         msgValue = msg.value
         msgHeatProfile = msg.heatProfile
 
-        print ("HeatManager waking up. message received")
-        print ("=====================")
+        print("HeatManager waking up. message received")
         print("\tmsgtype : ", msgType)
         print ("\tmsgvalue :", msgValue)
         print ("\tmsgheatprofile :", msgHeatProfile)
-        print ("\n\tECS state :", ecsState)
-        print ("\tECS remote state :", ecsRemoteState)
-        print ("\tECS force state :", ecsStateForced)
-        print ("\tECS temperature :", ecsTemperature)
-        print ("\tTarget temperature : ", ecsHeatTarget)
-        print ("=====================")
+        print(getStatusString())
+       
         
         
         
@@ -249,6 +298,16 @@ def heatManager(msqQueue, mqttClient):
                 elif (msgValue == ECS_STATE_ON):
                     ecsState = ECS_STATE_ON
                     ecsHeatTarget = getTargetTemperature(msgHeatProfile)
+                    
+                    #Check if temperature is recent enough to be valid, else warn user
+                    currentTime = datetime.datetime.now()
+                    deltaTime = currentTime - currentTemperatureUpdate
+                    deltaTimeInSeconds = deltaTime.total_seconds()
+                    if(deltaTimeInSeconds > DELAY_BETWEEN_TEMPERATURE_UPDATE *10):
+                        message = "Warning : Switching ECS while temperature info may not be valid : \nsensor update exceeded 10 times maximum delta time: " + str(deltaTimeInSeconds) + "seconds"
+                        warnMessage(message)  
+                        print(message)
+                    
                     if(ecsTemperature < ecsHeatTarget):
                         print("Heat Manager : turning ECS ON")
                         mqttClient.publish("ECS/state", payload='2', qos=1, retain=False)
@@ -260,7 +319,21 @@ def heatManager(msqQueue, mqttClient):
 
         elif(msgType == "ECS_TEMPERATURE"):
             ecsTemperature = float(msgValue)
+
+            lastTemperatureUpdate = currentTemperatureUpdate
+            currentTemperatureUpdate = datetime.datetime.now()
+            deltaTime = currentTemperatureUpdate - lastTemperatureUpdate
+            deltaTimeInSeconds = deltaTime.total_seconds()
+            
+            if(deltaTimeInSeconds > DELAY_BETWEEN_TEMPERATURE_UPDATE *2):
+                message = "Warning : Temperature update from sensor exceeded twice maximum delta time: " + str(deltaTimeInSeconds) + "seconds"
+                print(message)
+                warnMessage(message)
+            
+            
+            
             print ("updating temperature : ", msgValue)
+            checkTemperatureValidity(ecsTemperature)
             #Check against temperature target when ECS is ON and not in forced mode
             if ((ecsState == ECS_STATE_ON) and (ecsStateForced is False)):
                 if (ecsTemperature > ecsHeatTarget):
@@ -390,7 +463,14 @@ def main():
     config.read('myconf.conf')
     calendarId = config.get('Calendar', 'calendarId')
     mqttAddress = config.get('MQTT', 'mqttAddress')
-    mqttAddress = config.get('MQTT', 'mqttPort')
+    mqttPort = config.get('MQTT', 'mqttPort')
+    global configWarningSender, configWarningRecipient, configSmtpLogin, configSmtpPassword
+    
+    configWarningSender     = config.get('EMAIL', 'warningSender')
+    configWarningRecipient  = config.get('EMAIL', 'warningRecipient')
+    configSmtpLogin         = config.get('EMAIL', 'smtpLogin')
+    configSmtpPassword      = config.get('EMAIL', 'smtpPassword')  
+    
     global heatMgrQueue
     heatMgrQueue = Queue()
     
