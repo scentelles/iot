@@ -21,8 +21,6 @@ import paho.mqtt.client as mqtt
 from threading import Thread
 from Queue import Queue
 
-MQTT_ADDRESS = "77.146.227.62"
-MQTT_PORT = 1357
 
 heatMgrQueue = 0
 

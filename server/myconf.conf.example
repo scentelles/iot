@@ -2,3 +2,4 @@
 calendarId=xxxxxxxxx
 [MQTT]
 mqttAddress=localhost
+mqttPort=1883
