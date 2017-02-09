@@ -237,7 +237,8 @@ def heatManager(msqQueue, mqttClient):
         print ("\tTarget temperature : ", ecsHeatTarget)
         print ("=====================")
         
-       
+        
+        
             
         #process messages
         if(msgType == "ECS_STATE_CHANGE"):
@@ -391,7 +392,7 @@ def main():
     config.read('myconf.conf')
     calendarId = config.get('Calendar', 'calendarId')
     mqttAddress = config.get('MQTT', 'mqttAddress')
-  
+    mqttAddress = config.get('MQTT', 'mqttPort')
     global heatMgrQueue
     heatMgrQueue = Queue()
     
@@ -400,7 +401,7 @@ def main():
     print (heatMgrQueue)
     mqttClient.on_connect = on_connect
     mqttClient.on_message = on_message
-    mqttClient.connect(MQTT_ADDRESS, MQTT_PORT)
+    mqttClient.connect(mqttAddress, mqttPort)
     mqttClient.loop_start()
     mqttClient.subscribe("ECS/temp1")
     mqttClient.subscribe("ECS/temp2")
