@@ -1,0 +1,6051 @@
+heatMgrQueue : 
+<Queue.Queue instance at 0x76208e68>
+Connected with result code 0
+
+No event Scheduled
+HeatManager waiting for message
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/force 0
+
+Callback sending force command to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_FORCE
+	msgvalue : FORCE_DISABLED
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :False
+	ECS temperature :0
+	Target temperature : 0
+=====================
+HeatMgr : ecsState OFF
+Heat Manager : Disabling Forcing ECS
+HeatManager waiting for message
+Getting the upcoming events
+Next Start in : 4:18:02.429968
+Next Start in : 4:18:01.428111
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :False
+	ECS temperature :0
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 4:18:00.426471
+Next Start in : 4:17:59.424594
+Next Start in : 4:17:58.422705
+Next Start in : 4:17:57.420806
+Next Start in : 4:17:56.418931
+Next Start in : 4:17:55.417027
+Next Start in : 4:17:54.414974
+Next Start in : 4:17:53.413115
+Next Start in : 4:17:52.411286
+Getting the upcoming events
+Next Start in : 4:17:51.409415
+Next Start in : 4:17:50.407533
+Next Start in : 4:17:49.405644
+Next Start in : 4:17:48.403770
+Next Start in : 4:17:47.401879
+Next Start in : 4:17:46.399942
+Next Start in : 4:17:45.398075
+Next Start in : 4:17:44.396205
+Next Start in : 4:17:43.394316
+Next Start in : 4:17:42.392432
+Getting the upcoming events
+Next Start in : 4:17:41.372091
+Next Start in : 4:17:40.370036
+Next Start in : 4:17:39.368168
+Next Start in : 4:17:38.366276
+Next Start in : 4:17:37.364391
+Next Start in : 4:17:36.362518
+Next Start in : 4:17:35.360637
+Next Start in : 4:17:34.358755
+Next Start in : 4:17:33.356889
+Next Start in : 4:17:32.354923
+Next Start in : 4:17:31.353045
+Getting the upcoming events
+Next Start in : 4:17:30.351178
+Next Start in : 4:17:29.349298
+Next Start in : 4:17:28.347397
+Next Start in : 4:17:27.345527
+Next Start in : 4:17:26.343639
+Next Start in : 4:17:25.341753
+Next Start in : 4:17:24.339867
+Next Start in : 4:17:23.337961
+Next Start in : 4:17:22.336057
+Next Start in : 4:17:21.334171
+Next Start in : 4:17:20.332278
+Getting the upcoming events
+Next Start in : 4:17:19.330389
+Next Start in : 4:17:18.328501
+Next Start in : 4:17:17.326539
+Next Start in : 4:17:16.324647
+Next Start in : 4:17:15.322762
+Next Start in : 4:17:14.320858
+Next Start in : 4:17:13.318974
+Next Start in : 4:17:12.317093
+Next Start in : 4:17:11.315080
+Next Start in : 4:17:10.313150
+Getting the upcoming events
+Next Start in : 4:17:09.261862
+Next Start in : 4:17:08.251872
+Next Start in : 4:17:07.249985
+Next Start in : 4:17:06.248089
+Next Start in : 4:17:05.246172
+Next Start in : 4:17:04.244273
+Next Start in : 4:17:03.242388
+Next Start in : 4:17:02.240495
+Next Start in : 4:17:01.238602
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :False
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 4:17:00.236696
+Next Start in : 4:16:59.235576
+Getting the upcoming events
+Next Start in : 4:16:58.233655
+Next Start in : 4:16:57.232703
+Next Start in : 4:16:56.230993
+Next Start in : 4:16:55.229076
+Next Start in : 4:16:54.227113
+Next Start in : 4:16:53.225123
+Next Start in : 4:16:52.223229
+Next Start in : 4:16:51.221341
+Next Start in : 4:16:50.219462
+Next Start in : 4:16:49.217510
+Next Start in : 4:16:48.215625
+Getting the upcoming events
+Next Start in : 4:16:47.213738
+Next Start in : 4:16:46.211854
+Next Start in : 4:16:45.209975
+Next Start in : 4:16:44.208087
+Next Start in : 4:16:43.206444
+Next Start in : 4:16:42.204545
+Next Start in : 4:16:41.202641
+Next Start in : 4:16:40.200751
+Next Start in : 4:16:39.198873
+Next Start in : 4:16:38.196988
+Next Start in : 4:16:37.194980
+Getting the upcoming events
+Next Start in : 4:16:36.192059
+Next Start in : 4:16:35.190161
+Next Start in : 4:16:34.188259
+Next Start in : 4:16:33.186347
+Next Start in : 4:16:32.184438
+Next Start in : 4:16:31.182515
+Next Start in : 4:16:30.180607
+Next Start in : 4:16:29.179513
+Next Start in : 4:16:28.177632
+Next Start in : 4:16:27.175760
+Getting the upcoming events
+Next Start in : 4:16:26.159824
+Next Start in : 4:16:25.157724
+Next Start in : 4:16:24.155859
+Next Start in : 4:16:23.154008
+Next Start in : 4:16:22.152148
+Next Start in : 4:16:21.150290
+Next Start in : 4:16:20.148415
+Next Start in : 4:16:19.146480
+Next Start in : 4:16:18.144611
+Next Start in : 4:16:17.142738
+Next Start in : 4:16:16.140873
+Getting the upcoming events
+Next Start in : 4:16:15.139010
+Next Start in : 4:16:14.137068
+Next Start in : 4:16:13.135129
+Next Start in : 4:16:12.133257
+Next Start in : 4:16:11.131384
+Next Start in : 4:16:10.129515
+Next Start in : 4:16:09.127637
+Next Start in : 4:16:08.125742
+Next Start in : 4:16:07.123861
+Next Start in : 4:16:06.121984
+Next Start in : 4:16:05.120070
+Getting the upcoming events
+Next Start in : 4:16:04.118493
+Next Start in : 4:16:03.116547
+Next Start in : 4:16:02.114658
+Next Start in : 4:16:01.112770
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :False
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 4:16:00.110898
+Next Start in : 4:15:59.109014
+Next Start in : 4:15:58.107131
+Next Start in : 4:15:57.105177
+Next Start in : 4:15:56.103297
+Next Start in : 4:15:55.101069
+Next Start in : 4:15:54.097661
+Getting the upcoming events
+Next Start in : 4:15:53.095695
+Next Start in : 4:15:52.093812
+Next Start in : 4:15:51.091908
+Next Start in : 4:15:50.090021
+Next Start in : 4:15:49.088153
+Next Start in : 4:15:48.086395
+Next Start in : 4:15:47.084475
+Next Start in : 4:15:46.082593
+Next Start in : 4:15:45.080696
+Next Start in : 4:15:44.078778
+Getting the upcoming events
+Next Start in : 4:15:43.076875
+Next Start in : 4:15:42.074871
+Next Start in : 4:15:41.072958
+Next Start in : 4:15:40.071076
+Next Start in : 4:15:39.069172
+Next Start in : 4:15:38.067271
+Next Start in : 4:15:37.065268
+Next Start in : 4:15:36.063354
+Next Start in : 4:15:35.061449
+Next Start in : 4:15:34.059568
+Next Start in : 4:15:33.057682
+Getting the upcoming events
+Next Start in : 4:15:32.055764
+Next Start in : 4:15:31.053841
+Next Start in : 4:15:30.051906
+Next Start in : 4:15:29.049992
+Next Start in : 4:15:28.048117
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/force 2
+
+Callback sending force command to heatManager
+Callback payload 2HeatManager waking up. message received
+
+	msgtype :  ECS_FORCE
+	msgvalue : FORCE_ON
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :False
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+HeatMgr : ecsState OFF
+Heat Manager : Forcing ECS ON
+	Heat Manager : Switching ECS ON
+HeatManager waiting for message
+Next Start in : 4:15:27.046448
+Next Start in : 4:15:26.044558
+Next Start in : 4:15:25.042676
+Next Start in : 4:15:24.040767
+Next Start in : 4:15:23.038847
+Next Start in : 4:15:22.036981
+Getting the upcoming events
+Next Start in : 4:15:21.034982
+Next Start in : 4:15:20.033069
+Next Start in : 4:15:19.031177
+Next Start in : 4:15:18.029202
+Next Start in : 4:15:17.027288
+Next Start in : 4:15:16.025314
+Next Start in : 4:15:15.023422
+Next Start in : 4:15:14.021517
+Next Start in : 4:15:13.019638
+Next Start in : 4:15:12.017733
+Getting the upcoming events
+Next Start in : 4:15:11.016431
+Next Start in : 4:15:10.014556
+Next Start in : 4:15:09.012656
+Next Start in : 4:15:08.010759
+Next Start in : 4:15:07.008885
+Next Start in : 4:15:06.006965
+Next Start in : 4:15:05.004955
+Next Start in : 4:15:04.003035
+Next Start in : 4:15:03.001127
+Next Start in : 4:15:01.999220
+Next Start in : 4:15:00.991008
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Getting the upcoming events
+Next Start in : 4:14:59.989100
+Next Start in : 4:14:58.987185
+Next Start in : 4:14:57.985166
+Next Start in : 4:14:56.983249
+Next Start in : 4:14:55.981330
+Next Start in : 4:14:54.979420
+Next Start in : 4:14:53.977483
+Next Start in : 4:14:52.975532
+Next Start in : 4:14:51.973615
+Next Start in : 4:14:50.972472
+Next Start in : 4:14:49.970513
+Getting the upcoming events
+Next Start in : 4:14:48.968605
+Next Start in : 4:14:47.966679
+Next Start in : 4:14:46.964695
+Next Start in : 4:14:45.962805
+Next Start in : 4:14:44.961613
+Next Start in : 4:14:43.959700
+Next Start in : 4:14:42.957808
+Next Start in : 4:14:41.955892
+Next Start in : 4:14:40.954745
+Next Start in : 4:14:39.952870
+Getting the upcoming events
+Next Start in : 4:14:38.884957
+Next Start in : 4:14:37.883069
+Next Start in : 4:14:36.881196
+Next Start in : 4:14:35.879301
+Next Start in : 4:14:34.877415
+Next Start in : 4:14:33.875533
+Next Start in : 4:14:32.874363
+Next Start in : 4:14:31.872488
+Next Start in : 4:14:30.870594
+Next Start in : 4:14:29.868674
+Next Start in : 4:14:28.866805
+Getting the upcoming events
+Next Start in : 4:14:27.864824
+Next Start in : 4:14:26.862935
+Next Start in : 4:14:25.861053
+Next Start in : 4:14:24.859149
+Next Start in : 4:14:23.857261
+Next Start in : 4:14:22.855285
+Next Start in : 4:14:21.853381
+Next Start in : 4:14:20.851510
+Next Start in : 4:14:19.849628
+Next Start in : 4:14:18.847741
+Next Start in : 4:14:17.845828
+Getting the upcoming events
+Next Start in : 4:14:16.843959
+Next Start in : 4:14:15.842063
+Next Start in : 4:14:14.840192
+Next Start in : 4:14:13.838305
+Next Start in : 4:14:12.836416
+Next Start in : 4:14:11.834508
+Next Start in : 4:14:10.832640
+Next Start in : 4:14:09.830762
+Next Start in : 4:14:08.828882
+Next Start in : 4:14:07.826993
+Next Start in : 4:14:06.825029
+Getting the upcoming events
+Next Start in : 4:14:05.823070
+Next Start in : 4:14:04.821190
+Next Start in : 4:14:03.817071
+Next Start in : 4:14:02.815079
+Next Start in : 4:14:01.813172
+Next Start in : 4:14:00.811247
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 4:13:59.809305
+Next Start in : 4:13:58.807403
+Next Start in : 4:13:57.806461
+Next Start in : 4:13:56.804569
+Getting the upcoming events
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/force 0
+
+Callback sending force command to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_FORCE
+	msgvalue : FORCE_DISABLED
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+HeatMgr : ecsState ON
+Heat Manager : Disabling Forcing ECS
+HeatManager waiting for message
+Next Start in : 4:13:55.802675
+Next Start in : 4:13:54.800765
+Next Start in : 4:13:53.798884
+Next Start in : 4:13:52.796997
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/force 1
+
+Callback sending force command to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_FORCE
+	msgvalue : FORCE_OFF
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :False
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+HeatMgr : ecsState ON
+Heat Manager : Forcing ECS OFF
+	Heat Manager : Switching ECS OFF
+HeatManager waiting for message
+Next Start in : 4:13:51.795039
+Next Start in : 4:13:50.793116
+Next Start in : 4:13:49.791218
+Next Start in : 4:13:48.789307
+Next Start in : 4:13:47.787431
+Next Start in : 4:13:46.785520
+Next Start in : 4:13:45.783628
+Getting the upcoming events
+Next Start in : 4:13:44.781721
+Next Start in : 4:13:43.779836
+Next Start in : 4:13:42.777933
+Next Start in : 4:13:41.776415
+Next Start in : 4:13:40.774551
+Next Start in : 4:13:39.772677
+Next Start in : 4:13:38.770784
+Next Start in : 4:13:37.768891
+Next Start in : 4:13:36.766988
+Next Start in : 4:13:35.765008
+Next Start in : 4:13:34.763147
+Getting the upcoming events
+Next Start in : 4:13:33.761293
+Next Start in : 4:13:32.759411
+Next Start in : 4:13:31.757540
+Next Start in : 4:13:30.756419
+Next Start in : 4:13:29.754521
+Next Start in : 4:13:28.752643
+Next Start in : 4:13:27.750786
+Next Start in : 4:13:26.748887
+Next Start in : 4:13:25.747009
+Next Start in : 4:13:24.745006
+Getting the upcoming events
+Next Start in : 4:13:23.705656
+Next Start in : 4:13:22.703576
+Next Start in : 4:13:21.701695
+Next Start in : 4:13:20.699794
+Next Start in : 4:13:19.697883
+Next Start in : 4:13:18.695886
+Next Start in : 4:13:17.693957
+Next Start in : 4:13:16.692052
+Next Start in : 4:13:15.690153
+Next Start in : 4:13:14.688041
+Next Start in : 4:13:13.685977
+Getting the upcoming events
+Next Start in : 4:13:12.684043
+Next Start in : 4:13:11.682141
+Next Start in : 4:13:10.680246
+Next Start in : 4:13:09.678355
+Next Start in : 4:13:08.676463
+Next Start in : 4:13:07.674555
+Next Start in : 4:13:06.672659
+Next Start in : 4:13:05.670780
+Next Start in : 4:13:04.668896
+Next Start in : 4:13:03.666982
+Next Start in : 4:13:02.664957
+Getting the upcoming events
+Next Start in : 4:13:01.663057
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 4:13:00.661184
+Next Start in : 4:12:59.659317
+Next Start in : 4:12:58.657434
+Next Start in : 4:12:57.656458
+Next Start in : 4:12:56.654587
+Next Start in : 4:12:55.652702
+Next Start in : 4:12:54.650828
+Next Start in : 4:12:53.648938
+Next Start in : 4:12:52.647047
+Next Start in : 4:12:51.645057
+Getting the upcoming events
+Next Start in : 4:12:50.643149
+Next Start in : 4:12:49.641268
+Next Start in : 4:12:48.639347
+Next Start in : 4:12:47.637446
+Next Start in : 4:12:46.635579
+Next Start in : 4:12:45.633699
+Next Start in : 4:12:44.631821
+Next Start in : 4:12:43.629881
+Next Start in : 4:12:42.627979
+Next Start in : 4:12:41.626063
+Getting the upcoming events
+Next Start in : 4:12:40.624164
+Next Start in : 4:12:39.622269
+Next Start in : 4:12:38.620401
+Next Start in : 4:12:37.618522
+Next Start in : 4:12:36.616576
+Next Start in : 4:12:35.614689
+Next Start in : 4:12:34.612798
+Next Start in : 4:12:33.610933
+Next Start in : 4:12:32.609033
+Next Start in : 4:12:31.607142
+Next Start in : 4:12:30.605195
+Getting the upcoming events
+Next Start in : 4:12:29.603302
+Next Start in : 4:12:28.601433
+Next Start in : 4:12:27.599557
+Next Start in : 4:12:26.597677
+Next Start in : 4:12:25.595805
+Next Start in : 4:12:24.593959
+Next Start in : 4:12:23.592105
+Next Start in : 4:12:22.590219
+Next Start in : 4:12:21.588321
+Next Start in : 4:12:20.586422
+Next Start in : 4:12:19.584517
+Getting the upcoming events
+Next Start in : 4:12:18.582630
+Next Start in : 4:12:17.580735
+Next Start in : 4:12:16.578860
+Next Start in : 4:12:15.576984
+Next Start in : 4:12:14.575018
+Next Start in : 4:12:13.573140
+Next Start in : 4:12:12.571239
+Next Start in : 4:12:11.569827
+Next Start in : 4:12:10.568568
+Next Start in : 4:12:09.566673
+Next Start in : 4:12:08.564732
+Getting the upcoming events
+Next Start in : 4:12:07.563541
+Next Start in : 4:12:06.561647
+Next Start in : 4:12:05.559774
+Next Start in : 4:12:04.557917
+Next Start in : 4:12:03.556058
+Next Start in : 4:12:02.554169
+Next Start in : 4:12:01.552323
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 4:12:00.550513
+Next Start in : 4:11:59.548608
+Next Start in : 4:11:58.546717
+Getting the upcoming events
+Next Start in : 4:11:57.544807
+Next Start in : 4:11:56.542919
+Next Start in : 4:11:55.541759
+Next Start in : 4:11:54.539852
+Next Start in : 4:11:53.537952
+Next Start in : 4:11:52.536047
+Next Start in : 4:11:51.534156
+Next Start in : 4:11:50.532251
+Next Start in : 4:11:49.530437
+Next Start in : 4:11:48.528627
+Next Start in : 4:11:47.526703
+Getting the upcoming events
+Next Start in : 4:11:46.524813
+Next Start in : 4:11:45.522990
+Next Start in : 4:11:44.521190
+Next Start in : 4:11:43.519375
+Next Start in : 4:11:42.517583
+Next Start in : 4:11:41.515722
+Next Start in : 4:11:40.513921
+Next Start in : 4:11:39.512108
+Next Start in : 4:11:38.510174
+Next Start in : 4:11:37.508246
+Next Start in : 4:11:36.506328
+Getting the upcoming events
+Next Start in : 4:11:35.504409
+Next Start in : 4:11:34.502512
+Next Start in : 4:11:33.500611
+Next Start in : 4:11:32.498696
+Next Start in : 4:11:31.496778
+Next Start in : 4:11:30.494806
+Next Start in : 4:11:29.492893
+Next Start in : 4:11:28.490995
+Next Start in : 4:11:27.489097
+Next Start in : 4:11:26.487191
+Next Start in : 4:11:25.485211
+Getting the upcoming events
+Next Start in : 4:11:24.483284
+Next Start in : 4:11:23.481359
+Next Start in : 4:11:22.479446
+Next Start in : 4:11:21.477547
+Next Start in : 4:11:20.475606
+Next Start in : 4:11:19.473721
+Next Start in : 4:11:18.471814
+Next Start in : 4:11:17.469895
+Next Start in : 4:11:16.467971
+Next Start in : 4:11:15.466045
+Getting the upcoming events
+Next Start in : 4:11:14.464147
+Next Start in : 4:11:13.462257
+Next Start in : 4:11:12.460349
+Next Start in : 4:11:11.458452
+Next Start in : 4:11:10.456501
+Next Start in : 4:11:09.454637
+Next Start in : 4:11:08.452737
+Next Start in : 4:11:07.450848
+Next Start in : 4:11:06.448962
+Next Start in : 4:11:05.447084
+Next Start in : 4:11:04.445148
+Getting the upcoming events
+Next Start in : 4:11:03.443254
+Next Start in : 4:11:02.441370
+Next Start in : 4:11:01.439492
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 4:11:00.437620
+Next Start in : 4:10:59.435737
+Next Start in : 4:10:58.433831
+Next Start in : 4:10:57.431862
+Next Start in : 4:10:56.429992
+Next Start in : 4:10:55.428100
+Next Start in : 4:10:54.426196
+Next Start in : 4:10:53.424322
+Getting the upcoming events
+Next Start in : 4:10:52.422337
+Next Start in : 4:10:51.420417
+Next Start in : 4:10:50.418491
+Next Start in : 4:10:49.416509
+Next Start in : 4:10:48.414603
+Next Start in : 4:10:47.412702
+Next Start in : 4:10:46.410806
+Next Start in : 4:10:45.408931
+Next Start in : 4:10:44.407050
+Next Start in : 4:10:43.405106
+Getting the upcoming events
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/force 2
+
+Callback sending force command to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_FORCE
+	msgvalue : FORCE_ON
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+HeatMgr : ecsState OFF
+Heat Manager : Forcing ECS ON
+	Heat Manager : Switching ECS ON
+HeatManager waiting for messageCallback payload 2
+
+Next Start in : 4:10:42.403258
+Next Start in : 4:10:41.400409
+Next Start in : 4:10:40.398505
+Next Start in : 4:10:39.396532
+Next Start in : 4:10:38.394637
+Next Start in : 4:10:37.392754
+Next Start in : 4:10:36.391470
+Next Start in : 4:10:35.390202
+Next Start in : 4:10:34.388904
+Next Start in : 4:10:33.387633
+Next Start in : 4:10:32.386269
+Getting the upcoming events
+Next Start in : 4:10:31.384980
+Next Start in : 4:10:30.383694
+Next Start in : 4:10:29.382403
+Next Start in : 4:10:28.381134
+Next Start in : 4:10:27.379835
+Next Start in : 4:10:26.378560
+Next Start in : 4:10:25.377295
+Next Start in : 4:10:24.375972
+Next Start in : 4:10:23.374702
+Next Start in : 4:10:22.373396
+Next Start in : 4:10:21.372163
+Getting the upcoming events
+Next Start in : 4:10:20.370824
+Next Start in : 4:10:19.365951
+Next Start in : 4:10:18.364082
+Next Start in : 4:10:17.362213
+Next Start in : 4:10:16.360349
+Next Start in : 4:10:15.358454
+Next Start in : 4:10:14.356495
+Next Start in : 4:10:13.354531
+Next Start in : 4:10:12.352519
+Next Start in : 4:10:11.350627
+Getting the upcoming events
+Next Start in : 4:10:10.347033
+Next Start in : 4:10:09.343746
+Next Start in : 4:10:08.336998
+Next Start in : 4:10:07.335058
+Next Start in : 4:10:06.333182
+Next Start in : 4:10:05.331311
+Next Start in : 4:10:04.329446
+Next Start in : 4:10:03.327562
+Next Start in : 4:10:02.325671
+Next Start in : 4:10:01.323807
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 4:10:00.321893
+Getting the upcoming events
+Next Start in : 4:09:59.319964
+Next Start in : 4:09:58.318078
+Next Start in : 4:09:57.316411
+Next Start in : 4:09:56.314491
+Next Start in : 4:09:55.312594
+Next Start in : 4:09:54.310670
+Next Start in : 4:09:53.308761
+Next Start in : 4:09:52.306850
+Next Start in : 4:09:51.304843
+Next Start in : 4:09:50.303197
+Next Start in : 4:09:49.301660
+Getting the upcoming events
+Next Start in : 4:09:48.299990
+Next Start in : 4:09:47.298425
+Next Start in : 4:09:46.296899
+Next Start in : 4:09:45.294851
+Next Start in : 4:09:44.293049
+Next Start in : 4:09:43.291158
+Next Start in : 4:09:42.289225
+Next Start in : 4:09:41.287347
+Next Start in : 4:09:40.285337
+Next Start in : 4:09:39.283387
+Next Start in : 4:09:38.281483
+Getting the upcoming events
+Next Start in : 4:09:37.279546
+Next Start in : 4:09:36.277606
+Next Start in : 4:09:35.275914
+Next Start in : 4:09:34.274142
+Next Start in : 4:09:33.272230
+Next Start in : 4:09:32.270504
+Next Start in : 4:09:31.268749
+Next Start in : 4:09:30.267014
+Next Start in : 4:09:29.264993
+Next Start in : 4:09:28.263110
+Getting the upcoming events
+Next Start in : 4:09:27.261181
+Next Start in : 4:09:26.259280
+Next Start in : 4:09:25.257390
+Next Start in : 4:09:24.255494
+Next Start in : 4:09:23.253602
+Next Start in : 4:09:22.251726
+Next Start in : 4:09:21.249826
+Next Start in : 4:09:20.247945
+Next Start in : 4:09:19.246073
+Next Start in : 4:09:18.244168
+Next Start in : 4:09:17.242228
+Getting the upcoming events
+Next Start in : 4:09:16.240335
+Next Start in : 4:09:15.238422
+Next Start in : 4:09:14.236485
+Next Start in : 4:09:13.234568
+Next Start in : 4:09:12.232635
+Next Start in : 4:09:11.230710
+Next Start in : 4:09:10.228805
+Next Start in : 4:09:09.226896
+Next Start in : 4:09:08.224904
+Next Start in : 4:09:07.223008
+Getting the upcoming eventsNext Start in :
+ 4:09:06.208233
+Next Start in : 4:09:05.111454
+Next Start in : 4:09:04.109547
+Next Start in : 4:09:03.107592
+Next Start in : 4:09:02.105695
+Next Start in : 4:09:01.103778
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 4:09:00.101858
+Next Start in : 4:08:59.099958
+Next Start in : 4:08:58.098012
+Next Start in : 4:08:57.096115
+Next Start in : 4:08:56.094224
+Getting the upcoming events
+Next Start in : 4:08:55.092326
+Next Start in : 4:08:54.090420
+Next Start in : 4:08:53.088503
+Next Start in : 4:08:52.086531
+Next Start in : 4:08:51.084626
+Next Start in : 4:08:50.082694
+Next Start in : 4:08:49.080758
+Next Start in : 4:08:48.078857
+Next Start in : 4:08:47.076890
+Next Start in : 4:08:46.074890
+Next Start in : 4:08:45.072955
+Getting the upcoming events
+Next Start in : 4:08:44.071065
+Next Start in : 4:08:43.069142
+Next Start in : 4:08:42.067160
+Next Start in : 4:08:41.065167
+Next Start in : 4:08:40.063235
+Next Start in : 4:08:39.061316
+Next Start in : 4:08:38.059419
+Next Start in : 4:08:37.057494
+Next Start in : 4:08:36.055535
+Next Start in : 4:08:35.053573
+Next Start in : 4:08:34.047971
+Getting the upcoming events
+Next Start in : 4:08:33.046016
+Next Start in : 4:08:32.044098
+Next Start in : 4:08:31.042182
+Next Start in : 4:08:30.040250
+Next Start in : 4:08:29.038320
+Next Start in : 4:08:28.036423
+Next Start in : 4:08:27.034476
+Next Start in : 4:08:26.032548
+Next Start in : 4:08:25.030598
+Next Start in : 4:08:24.028627
+Next Start in : 4:08:23.026682
+Getting the upcoming events
+Next Start in : 4:08:22.024678
+Next Start in : 4:08:21.022732
+Next Start in : 4:08:20.020834
+Next Start in : 4:08:19.018929
+Next Start in : 4:08:18.017019
+Next Start in : 4:08:17.015053
+Next Start in : 4:08:16.013154
+Next Start in : 4:08:15.011765
+Next Start in : 4:08:14.009895
+Next Start in : 4:08:13.007973
+Getting the upcoming events
+Next Start in : 4:08:12.006061
+Next Start in : 4:08:11.003630
+Next Start in : 4:08:10.001761
+Next Start in : 4:08:08.999855
+Next Start in : 4:08:07.997955
+Next Start in : 4:08:06.996458
+Next Start in : 4:08:05.994561
+Next Start in : 4:08:04.992665
+Next Start in : 4:08:03.990758
+Next Start in : 4:08:02.988850
+Next Start in : 4:08:01.986902
+Getting the upcoming events
+Next Start in : 4:08:00.979707
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 4:07:59.977789
+Next Start in : 4:07:58.975860
+Next Start in : 4:07:57.973914
+Next Start in : 4:07:56.971997
+Next Start in : 4:07:55.970094
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/force 1
+
+Callback sending force command to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_FORCE
+	msgvalue : FORCE_OFF
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+HeatMgr : ecsState ON
+Heat Manager : Forcing ECS OFF
+	Heat Manager : Switching ECS OFF
+HeatManager waiting for message
+Next Start in : 4:07:54.968119
+Next Start in : 4:07:53.966189
+Next Start in : 4:07:52.964286
+Next Start in : 4:07:51.962398
+Getting the upcoming eventsNext Start in :
+ 4:07:50.915435
+Next Start in : 4:07:49.866320
+Next Start in : 4:07:48.864596
+Next Start in : 4:07:47.862696
+Next Start in : 4:07:46.860733
+Next Start in : 4:07:45.858801
+Next Start in : 4:07:44.856899
+Next Start in : 4:07:43.854904
+Next Start in : 4:07:42.853023
+Next Start in : 4:07:41.851076
+Next Start in : 4:07:40.849179
+Getting the upcoming events
+Next Start in : 4:07:39.847241
+Next Start in : 4:07:38.840098
+Next Start in : 4:07:37.838175
+Next Start in : 4:07:36.836277
+Next Start in : 4:07:35.834380
+Next Start in : 4:07:34.832468
+Next Start in : 4:07:33.830528
+Next Start in : 4:07:32.828610
+Next Start in : 4:07:31.826708
+Next Start in : 4:07:30.824737
+Next Start in : 4:07:29.822810
+Getting the upcoming events
+Next Start in : 4:07:28.820857
+Next Start in : 4:07:27.818912
+Next Start in : 4:07:26.816953
+Next Start in : 4:07:25.814886
+Next Start in : 4:07:24.812953
+Next Start in : 4:07:23.811038
+Next Start in : 4:07:22.809119
+Next Start in : 4:07:21.807200
+Next Start in : 4:07:20.805164
+Next Start in : 4:07:19.803250
+Next Start in : 4:07:18.801137
+Getting the upcoming events
+Next Start in : 4:07:17.751465
+Next Start in : 4:07:16.749418
+Next Start in : 4:07:15.740679
+Next Start in : 4:07:14.738629
+Next Start in : 4:07:13.736433
+Next Start in : 4:07:12.734552
+Next Start in : 4:07:11.732654
+Next Start in : 4:07:10.730746
+Next Start in : 4:07:09.728854
+Next Start in : 4:07:08.726949
+Next Start in : 4:07:07.724968
+Next Start in : 4:07:06.723078
+Next Start in : 4:07:05.721184
+Getting the upcoming events
+Next Start in : 4:07:04.719280
+Next Start in : 4:07:03.717392
+Next Start in : 4:07:02.715502
+Next Start in : 4:07:01.713635
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Next Start in : 4:07:00.711765
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 4:06:59.709886
+Next Start in : 4:06:58.707955
+Next Start in : 4:06:57.706054
+Next Start in : 4:06:56.704144
+Next Start in : 4:06:55.702255
+Next Start in : 4:06:54.700325
+Next Start in : 4:06:53.698336
+Next Start in : 4:06:52.696422
+Next Start in : 4:06:51.694537
+Next Start in : 4:06:50.692626
+Next Start in : 4:06:49.690687
+Next Start in : 4:06:48.688767
+Next Start in : 4:06:47.686840
+Next Start in : 4:06:46.684791
+Next Start in : 4:06:45.682860
+Next Start in : 4:06:44.680939
+Next Start in : 4:06:43.679028
+Next Start in : 4:06:42.677072
+Getting the upcoming events
+Next Start in : 4:06:41.675086
+Next Start in : 4:06:40.672895
+Next Start in : 4:06:39.671031
+Next Start in : 4:06:38.669157
+Next Start in : 4:06:37.667262
+Next Start in : 4:06:36.665273
+Next Start in : 4:06:35.663399
+Next Start in : 4:06:34.661530
+Next Start in : 4:06:33.659661
+Next Start in : 4:06:32.657803
+Next Start in :Getting the upcoming events 
+4:06:31.644069
+Next Start in : 4:06:30.545209
+Next Start in : 4:06:29.543318
+Next Start in : 4:06:28.541400
+Next Start in : 4:06:27.539511
+Next Start in : 4:06:26.537439
+Next Start in : 4:06:25.536424
+Next Start in : 4:06:24.534538
+Next Start in : 4:06:23.532636
+Next Start in : 4:06:22.530719
+Next Start in : 4:06:21.528776
+Getting the upcoming events
+Next Start in : 4:06:20.526891
+Next Start in : 4:06:19.524910
+Next Start in : 4:06:18.522980
+Next Start in : 4:06:17.521079
+Next Start in : 4:06:16.519176
+Next Start in : 4:06:15.517290
+Next Start in : 4:06:14.515328
+Next Start in : 4:06:13.513355
+Next Start in : 4:06:12.511426
+Next Start in : 4:06:11.509532
+Next Start in : 4:06:10.507620
+Getting the upcoming events
+Next Start in : 4:06:09.505698
+Next Start in : 4:06:08.504030
+Next Start in : 4:06:07.502104
+Next Start in : 4:06:06.500211
+Next Start in : 4:06:05.498335
+Next Start in : 4:06:04.496411
+Next Start in : 4:06:03.494481
+Next Start in : 4:06:02.492533
+Next Start in : 4:06:01.490587
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 4:06:00.488646
+Getting the upcoming events
+Next Start in : 4:05:59.486707
+Next Start in : 4:05:58.484715
+Next Start in : 4:05:57.482747
+Next Start in : 4:05:56.480716
+Next Start in : 4:05:55.478804
+Next Start in : 4:05:54.476896
+Next Start in : 4:05:53.474904
+Next Start in : 4:05:52.472976
+Next Start in : 4:05:51.470923
+Next Start in : 4:05:50.468978
+Next Start in : 4:05:49.467012
+Getting the upcoming events
+Next Start in : 4:05:48.465022
+Next Start in : 4:05:47.463149
+Next Start in : 4:05:46.454835
+Next Start in : 4:05:45.452893
+Next Start in : 4:05:44.451031
+Next Start in : 4:05:43.449144
+Next Start in : 4:05:42.447260
+Next Start in : 4:05:41.445270
+Next Start in : 4:05:40.443383
+Next Start in : 4:05:39.441514
+Next Start in : 4:05:38.439632
+Getting the upcoming events
+Next Start in : 4:05:37.437736
+Next Start in : 4:05:36.435837
+Next Start in : 4:05:35.433884
+Next Start in : 4:05:34.431984
+Next Start in : 4:05:33.430078
+Next Start in : 4:05:32.428162
+Next Start in : 4:05:31.426420
+Next Start in : 4:05:30.424494
+Next Start in : 4:05:29.422561
+Next Start in : 4:05:28.415136
+Next Start in : 4:05:27.413172
+Getting the upcoming events
+Next Start in : 4:05:26.411178
+Next Start in : 4:05:25.409272
+Next Start in : 4:05:24.407379
+Next Start in : 4:05:23.405378
+Next Start in : 4:05:22.403424
+Next Start in : 4:05:21.401519
+Next Start in : 4:05:20.399598
+Next Start in : 4:05:19.397654
+Next Start in : 4:05:18.395709
+Next Start in : 4:05:17.393753
+Getting the upcoming events
+Next Start in : 4:05:16.391821
+Next Start in : 4:05:15.389917
+Next Start in : 4:05:14.388008
+Next Start in : 4:05:13.386080
+Next Start in : 4:05:12.384158
+Next Start in : 4:05:11.382223
+Next Start in : 4:05:10.380283
+Next Start in : 4:05:09.378341
+Next Start in : 4:05:08.376380
+Next Start in : 4:05:07.374415
+Next Start in : 4:05:06.372463
+Getting the upcoming events
+Next Start in : 4:05:05.370498
+Next Start in : 4:05:04.368550
+Next Start in : 4:05:03.366551
+Next Start in : 4:05:02.364637
+Next Start in : 4:05:01.362710
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 4:05:00.360797
+Next Start in : 4:04:59.358900
+Next Start in : 4:04:58.357002
+Next Start in : 4:04:57.355024
+Next Start in : 4:04:56.353137
+Next Start in : 4:04:55.351251
+Getting the upcoming events
+Next Start in : 4:04:54.349301
+Next Start in : 4:04:53.347401
+Next Start in : 4:04:52.345497
+Next Start in : 4:04:51.343607
+Next Start in : 4:04:50.341666
+Next Start in : 4:04:49.339782
+Next Start in : 4:04:48.337887
+Next Start in : 4:04:47.335996
+Next Start in : 4:04:46.334102
+Next Start in : 4:04:45.332828
+Getting the upcoming events
+Next Start in : 4:04:44.330960
+Next Start in : 4:04:43.329069
+Next Start in : 4:04:42.327194
+Next Start in : 4:04:41.325244
+Next Start in : 4:04:40.323355
+Next Start in : 4:04:39.321478
+Next Start in : 4:04:38.319596
+Next Start in : 4:04:37.317702
+Next Start in : 4:04:36.315823
+Next Start in : 4:04:35.313935
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 28.0
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 28.0
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  28.0
+HeatManager waiting for message
+Next Start in : 4:04:34.312028
+Getting the upcoming events
+Next Start in : 4:04:33.310128
+Next Start in : 4:04:32.308216
+Next Start in : 4:04:31.306291
+Next Start in : 4:04:30.304395
+Next Start in : 4:04:29.302507
+Next Start in : 4:04:28.300597
+Next Start in : 4:04:27.298708
+Next Start in : 4:04:26.291922
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/force 2
+
+Callback sending force command to heatManager
+Callback payload 2HeatManager waking up. message received
+
+	msgtype :  ECS_FORCE
+	msgvalue : FORCE_ON
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :28.0
+	Target temperature : 0
+=====================
+HeatMgr : ecsState OFF
+Heat Manager : Forcing ECS ON
+	Heat Manager : Switching ECS ON
+HeatManager waiting for message
+Next Start in : 4:04:25.289999
+Next Start in : 4:04:24.288074
+Next Start in : 4:04:23.286133
+Getting the upcoming events
+Next Start in : 4:04:22.284206
+Next Start in : 4:04:21.282286
+Next Start in : 4:04:20.280365
+Next Start in : 4:04:19.278440
+Next Start in : 4:04:18.276449
+Next Start in : 4:04:17.274539
+Next Start in : 4:04:16.272636
+Next Start in : 4:04:15.270708
+Next Start in : 4:04:14.268774
+Next Start in : 4:04:13.266870
+Getting the upcoming eventsNext Start in :
+ 4:04:12.244381
+Next Start in : 4:04:11.148481
+Next Start in : 4:04:10.146548
+Next Start in : 4:04:09.139437
+Next Start in : 4:04:08.137543
+Next Start in : 4:04:07.135654
+Next Start in : 4:04:06.133763
+Next Start in : 4:04:05.131862
+Next Start in : 4:04:04.125115
+Next Start in : 4:04:03.123218
+Next Start in : 4:04:02.121324
+Getting the upcoming events
+Next Start in : 4:04:01.119418
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :28.0
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 4:04:00.117514
+Next Start in : 4:03:59.115574
+Next Start in : 4:03:58.113665
+Next Start in : 4:03:57.111763
+Next Start in : 4:03:56.109865
+Next Start in : 4:03:55.107973
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 39.0
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 39.0
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  39.0
+HeatManager waiting for message
+Next Start in : 4:03:54.106421
+Next Start in : 4:03:53.104523
+Next Start in : 4:03:52.102632
+Next Start in : 4:03:51.100785
+Getting the upcoming events
+Next Start in : 4:03:50.098893
+Next Start in : 4:03:49.097002
+Next Start in : 4:03:48.095002
+Next Start in : 4:03:47.093076
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/force 1
+
+Callback sending force command to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_FORCE
+	msgvalue : FORCE_OFF
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :39.0
+	Target temperature : 0
+=====================
+HeatMgr : ecsState ON
+Heat Manager : Forcing ECS OFF
+	Heat Manager : Switching ECS OFF
+HeatManager waiting for message
+Next Start in : 4:03:46.091123
+Next Start in : 4:03:45.089211
+Next Start in : 4:03:44.087294
+Next Start in : 4:03:43.085319
+Next Start in : 4:03:42.083406
+Next Start in : 4:03:41.081507
+Getting the upcoming events
+Next Start in : 4:03:40.079623
+Next Start in : 4:03:39.077739
+Next Start in : 4:03:38.075860
+Next Start in : 4:03:37.073968
+Next Start in : 4:03:36.072047
+Next Start in : 4:03:35.070138
+Next Start in : 4:03:34.068257
+Next Start in : 4:03:33.066359
+Next Start in : 4:03:32.064451
+Next Start in : 4:03:31.062571
+Next Start in : 4:03:30.060679
+Getting the upcoming events
+Next Start in : 4:03:29.058791
+Next Start in : 4:03:28.056891
+Next Start in : 4:03:27.054902
+Next Start in : 4:03:26.053002
+Next Start in : 4:03:25.051070
+Next Start in : 4:03:24.049130
+Next Start in : 4:03:23.047221
+Next Start in : 4:03:22.045251
+Next Start in : 4:03:21.043359
+Next Start in : 4:03:20.041474
+Next Start in : 4:03:19.039581
+Getting the upcoming events
+Next Start in : 4:03:18.037715
+Next Start in : 4:03:17.035837
+Next Start in : 4:03:16.033899
+Next Start in : 4:03:15.031970
+Next Start in : 4:03:14.030080
+Next Start in : 4:03:13.028179
+Next Start in : 4:03:12.026272
+Next Start in : 4:03:11.024369
+Next Start in : 4:03:10.022478
+Next Start in : 4:03:09.020583
+Next Start in : 4:03:08.018681
+Getting the upcoming events
+Next Start in : 4:03:07.010781
+Next Start in : 4:03:06.008863
+Next Start in : 4:03:05.006952
+Next Start in : 4:03:04.004941
+Next Start in : 4:03:03.003020
+Next Start in : 4:03:02.001114
+Next Start in : 4:03:00.999217
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :39.0
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 4:02:59.997326
+Next Start in : 4:02:58.995302
+Next Start in : 4:02:57.989961
+Getting the upcoming events
+Next Start in : 4:02:56.987961
+Next Start in : 4:02:55.986045
+Next Start in : 4:02:54.984127
+Next Start in : 4:02:53.982215
+Next Start in : 4:02:52.976095
+Next Start in : 4:02:51.974084
+Next Start in : 4:02:50.972178
+Next Start in : 4:02:49.970265
+Next Start in : 4:02:48.968349
+Next Start in : 4:02:47.960585
+Next Start in : 4:02:46.958679
+Getting the upcoming events
+Next Start in : 4:02:45.956758
+Next Start in : 4:02:44.954798
+Next Start in : 4:02:43.952903
+Next Start in : 4:02:42.940409
+Next Start in : 4:02:41.938507
+Next Start in : 4:02:40.936552
+Next Start in : 4:02:39.934665
+Next Start in : 4:02:38.932775
+Next Start in : 4:02:37.930868
+Next Start in : 4:02:36.928963
+Next Start in : 4:02:35.927059
+Getting the upcoming events
+Next Start in : 4:02:34.925077
+Next Start in : 4:02:33.923153
+Next Start in : 4:02:32.921267
+Next Start in : 4:02:31.919368
+Next Start in : 4:02:30.917464
+Next Start in : 4:02:29.915559
+Next Start in : 4:02:28.913654
+Next Start in : 4:02:27.911769
+Next Start in : 4:02:26.909875
+Next Start in : 4:02:25.907978
+Getting the upcoming events
+Next Start in : 4:02:24.859451
+Next Start in : 4:02:23.857297
+Next Start in : 4:02:22.855259
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 21.0
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 21.0
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  21.0
+HeatManager waiting for message
+Next Start in : 4:02:21.853373
+Next Start in : 4:02:20.851511
+Next Start in : 4:02:19.849599
+Next Start in : 4:02:18.847744
+Next Start in : 4:02:17.845859
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/force 0
+
+Callback sending force command to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_FORCE
+	msgvalue : FORCE_DISABLED
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :21.0
+	Target temperature : 0
+=====================
+HeatMgr : ecsState OFF
+Heat Manager : Disabling Forcing ECS
+HeatManager waiting for message
+Next Start in : 4:02:16.844031
+Next Start in : 4:02:15.842146
+Next Start in : 4:02:14.840296
+Getting the upcoming events
+Next Start in : 4:02:13.838413
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/force 2
+
+Callback sending force command to heatManager
+Callback payload 2
+HeatManager waking up. message received
+	msgtype :  ECS_FORCE
+	msgvalue : FORCE_ON
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :False
+	ECS temperature :21.0
+	Target temperature : 0
+=====================
+HeatMgr : ecsState OFF
+Heat Manager : Forcing ECS ON
+	Heat Manager : Switching ECS ON
+HeatManager waiting for message
+Next Start in : 4:02:12.836494
+Next Start in : 4:02:11.833985
+Next Start in : 4:02:10.832094
+Next Start in : 4:02:09.830205
+Next Start in : 4:02:08.828331
+Next Start in : 4:02:07.826433
+Next Start in : 4:02:06.824562
+Next Start in : 4:02:05.822679
+Next Start in : 4:02:04.820808
+Next Start in : 4:02:03.818922
+Getting the upcoming events
+Next Start in : 4:02:02.816945
+Next Start in : 4:02:01.814982
+Next Start in : 4:02:00.813097
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :21.0
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 4:01:59.811215
+Next Start in : 4:01:58.809331
+Next Start in : 4:01:57.807423
+Next Start in : 4:01:56.805507
+Next Start in : 4:01:55.803604
+Next Start in : 4:01:54.801705
+Next Start in : 4:01:53.799803
+Getting the upcoming events
+Next Start in : 4:01:52.707468
+Next Start in : 4:01:51.705293
+Next Start in : 4:01:50.703422
+Next Start in : 4:01:49.701543
+Next Start in : 4:01:48.699656
+Next Start in : 4:01:47.697780
+Next Start in : 4:01:46.695804
+Next Start in : 4:01:45.693939
+Next Start in : 4:01:44.692053
+Next Start in : 4:01:43.690175
+Next Start in : 4:01:42.688281
+Getting the upcoming events
+Next Start in : 4:01:41.686346
+Next Start in : 4:01:40.684438
+Next Start in : 4:01:39.682564
+Next Start in : 4:01:38.680671
+Next Start in : 4:01:37.678790
+Next Start in : 4:01:36.676899
+Next Start in : 4:01:35.674939
+Next Start in : 4:01:34.673037
+Next Start in : 4:01:33.671136
+Next Start in : 4:01:32.669242
+Next Start in : 4:01:31.667345
+Getting the upcoming events
+Next Start in : 4:01:30.665789
+Next Start in : 4:01:29.663897
+Next Start in : 4:01:28.662000
+Next Start in : 4:01:27.660126
+Next Start in : 4:01:26.658248
+Next Start in : 4:01:25.656372
+Next Start in : 4:01:24.654485
+Next Start in : 4:01:23.652612
+Next Start in : 4:01:22.650737
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 33.0
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 33.0
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  33.0
+HeatManager waiting for message
+Next Start in : 4:01:21.648866
+Next Start in : 4:01:20.647009
+Getting the upcoming events
+Next Start in : 4:01:19.645017
+Next Start in : 4:01:18.643133
+Next Start in : 4:01:17.641257
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/force 1
+
+Callback sending force command to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_FORCE
+	msgvalue : FORCE_OFF
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :33.0
+	Target temperature : 0
+=====================
+HeatMgr : ecsState ON
+Heat Manager : Forcing ECS OFF
+	Heat Manager : Switching ECS OFF
+HeatManager waiting for message
+Next Start in : 4:01:16.639380
+Next Start in : 4:01:15.637508
+Next Start in : 4:01:14.635612
+Next Start in : 4:01:13.633725
+Next Start in : 4:01:12.631850
+Next Start in : 4:01:11.629961
+Next Start in : 4:01:10.628055
+Getting the upcoming events
+Next Start in : 4:01:09.597547
+Next Start in : 4:01:08.590359
+Next Start in : 4:01:07.588473
+Next Start in : 4:01:06.586501
+Next Start in : 4:01:05.584606
+Next Start in : 4:01:04.582716
+Next Start in : 4:01:03.580824
+Next Start in : 4:01:02.578906
+Next Start in : 4:01:01.576970
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.2
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :33.0
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 4:01:00.575000
+Next Start in : 4:00:59.573108
+Getting the upcoming events
+Next Start in : 4:00:58.571188
+Next Start in : 4:00:57.569261
+Next Start in : 4:00:56.567240
+Next Start in : 4:00:55.565148
+Next Start in : 4:00:54.563263
+Next Start in : 4:00:53.561360
+Next Start in : 4:00:52.559460
+Next Start in : 4:00:51.557570
+Next Start in : 4:00:50.555658
+Next Start in : 4:00:49.553751
+Next Start in : 4:00:48.551853
+Getting the upcoming events
+Next Start in : 4:00:47.549948
+Next Start in : 4:00:46.548066
+Next Start in : 4:00:45.546165
+Next Start in : 4:00:44.544255
+Next Start in : 4:00:43.542373
+Next Start in : 4:00:42.540482
+Next Start in : 4:00:41.538592
+Next Start in : 4:00:40.536709
+Next Start in : 4:00:39.534730
+Next Start in : 4:00:38.532825
+Getting the upcoming events
+Next Start in : 4:00:37.488117
+Next Start in : 4:00:36.486048
+Next Start in : 4:00:35.484153
+Next Start in : 4:00:34.482260
+Next Start in : 4:00:33.480355
+Next Start in : 4:00:32.478437
+Next Start in : 4:00:31.476490
+Next Start in : 4:00:30.474600
+Next Start in : 4:00:29.472700
+Next Start in : 4:00:28.470794
+Next Start in : 4:00:27.468879
+Getting the upcoming events
+Next Start in : 4:00:26.466976
+Next Start in : 4:00:25.465002
+Next Start in : 4:00:24.463088
+Next Start in : 4:00:23.461181
+Next Start in : 4:00:22.459289
+Next Start in : 4:00:21.457395
+Next Start in : 4:00:20.455413
+Next Start in : 4:00:19.453548
+Next Start in : 4:00:18.451649
+Next Start in : 4:00:17.449753
+Next Start in : 4:00:16.447868
+Getting the upcoming events
+Next Start in : 4:00:15.445941
+Next Start in : 4:00:14.444037
+Next Start in : 4:00:13.442141
+Next Start in : 4:00:12.440250
+Next Start in : 4:00:11.438361
+Next Start in : 4:00:10.436478
+Next Start in : 4:00:09.434602
+Next Start in : 4:00:08.432684
+Next Start in : 4:00:07.430790
+Next Start in : 4:00:06.428890
+Next Start in : 4:00:05.427000
+Getting the upcoming events
+Next Start in : 4:00:04.424984
+Next Start in : 4:00:03.423050
+Next Start in : 4:00:02.421126
+Next Start in : 4:00:01.419226
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 4:00:00.417296
+Next Start in : 3:59:59.415238
+Next Start in : 3:59:58.413328
+Next Start in : 3:59:57.411393
+Next Start in : 3:59:56.409461
+Next Start in : 3:59:55.407567
+Getting the upcoming events
+Next Start in : 3:59:54.405645
+Next Start in : 3:59:53.403712
+Next Start in : 3:59:52.401797
+Next Start in : 3:59:51.399868
+Next Start in : 3:59:50.397946
+Next Start in : 3:59:49.396054
+Next Start in : 3:59:48.394127
+Next Start in : 3:59:47.392211
+Next Start in : 3:59:46.390318
+Next Start in : 3:59:45.388419
+Next Start in : 3:59:44.386458
+Getting the upcoming events
+Next Start in : 3:59:43.384548
+Next Start in : 3:59:42.382621
+Next Start in : 3:59:41.380694
+Next Start in : 3:59:40.378790
+Next Start in : 3:59:39.376867
+Next Start in : 3:59:38.374837
+Next Start in : 3:59:37.372874
+Next Start in : 3:59:36.370947
+Next Start in : 3:59:35.369016
+Next Start in : 3:59:34.367119
+Next Start in : 3:59:33.365125
+Getting the upcoming events
+Next Start in : 3:59:32.363204
+Next Start in : 3:59:31.361286
+Next Start in : 3:59:30.359381
+Next Start in : 3:59:29.357487
+Next Start in : 3:59:28.355602
+Next Start in : 3:59:27.353706
+Next Start in : 3:59:26.351794
+Next Start in : 3:59:25.349900
+Next Start in : 3:59:24.348002
+Next Start in : 3:59:23.346071
+Getting the upcoming events
+Next Start in : 3:59:22.344150
+Next Start in : 3:59:21.336514
+Next Start in : 3:59:20.334623
+Next Start in : 3:59:19.332740
+Next Start in : 3:59:18.330839
+Next Start in : 3:59:17.328901
+Next Start in : 3:59:16.326995
+Next Start in : 3:59:15.325762
+Next Start in : 3:59:14.323877
+Next Start in : 3:59:13.321978
+Next Start in : 3:59:12.320066
+Getting the upcoming events
+Next Start in : 3:59:11.318117
+Next Start in : 3:59:10.316166
+Next Start in : 3:59:09.314249
+Next Start in : 3:59:08.312328
+Next Start in : 3:59:07.310404
+Next Start in : 3:59:06.308489
+Next Start in : 3:59:05.306474
+Next Start in : 3:59:04.304534
+Next Start in : 3:59:03.302605
+Next Start in : 3:59:02.300682
+Next Start in : 3:59:01.298786
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Getting the upcoming events
+Next Start in : 3:59:00.296881
+Next Start in : 3:58:59.294897
+Next Start in : 3:58:58.292952
+Next Start in : 3:58:57.291043
+Next Start in : 3:58:56.289137
+Next Start in : 3:58:55.287231
+Next Start in : 3:58:54.285182
+Next Start in : 3:58:53.276109
+Next Start in : 3:58:52.274179
+Next Start in : 3:58:51.272258
+Next Start in : 3:58:50.270366
+Getting the upcoming events
+Next Start in : 3:58:49.268484
+Next Start in : 3:58:48.259140
+Next Start in : 3:58:47.257205
+Next Start in : 3:58:46.255249
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/force 2
+
+Callback sending force command to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_FORCE
+	msgvalue : FORCE_ON
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+HeatMgr : ecsState OFF
+Heat Manager : Forcing ECS ON
+	Heat Manager : Switching ECS ON
+HeatManager waiting for message
+Callback payload 2
+Next Start in : 3:58:45.253349
+Next Start in : 3:58:44.251433
+Next Start in : 3:58:43.244258
+Next Start in : 3:58:42.242351
+Next Start in : 3:58:41.240447
+Next Start in : 3:58:40.238578
+Next Start in : 3:58:39.236722
+Getting the upcoming events
+Next Start in : 3:58:38.228797
+Next Start in : 3:58:37.226910
+Next Start in : 3:58:36.224918
+Next Start in : 3:58:35.222961
+Next Start in : 3:58:34.221086
+Next Start in : 3:58:33.219202
+Next Start in : 3:58:32.217317
+Next Start in : 3:58:31.215340
+Next Start in : 3:58:30.213447
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 30.0
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 30.0
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  30.0
+HeatManager waiting for message
+Next Start in : 3:58:29.211552
+Getting the upcoming events
+Next Start in : 3:58:28.209684
+Next Start in : 3:58:27.202742
+Next Start in : 3:58:26.200856
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/force 1
+
+Callback sending force command to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_FORCE
+	msgvalue : FORCE_OFF
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :30.0
+	Target temperature : 0
+=====================
+HeatMgr : ecsState ON
+Heat Manager : Forcing ECS OFF
+	Heat Manager : Switching ECS OFF
+HeatManager waiting for message
+Next Start in : 3:58:25.198966
+Next Start in : 3:58:24.197059
+Next Start in : 3:58:23.195086
+Next Start in : 3:58:22.193106
+Next Start in : 3:58:21.191165
+Next Start in : 3:58:20.189270
+Next Start in : 3:58:19.187372
+Next Start in : 3:58:18.185387
+Getting the upcoming events
+Next Start in : 3:58:17.183498
+Next Start in : 3:58:16.181636
+Next Start in : 3:58:15.179754
+Next Start in : 3:58:14.177856
+Next Start in : 3:58:13.175959
+Next Start in : 3:58:12.174035
+Next Start in : 3:58:11.172112
+Next Start in : 3:58:10.170205
+Next Start in : 3:58:09.168305
+Next Start in : 3:58:08.166394
+Next Start in : 3:58:07.164478
+Getting the upcoming events
+Next Start in : 3:58:06.162549
+Next Start in : 3:58:05.154829
+Next Start in : 3:58:04.152945
+Next Start in : 3:58:03.151044
+Next Start in : 3:58:02.149143
+Next Start in : 3:58:01.147256
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.2
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :30.0
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 3:58:00.140589
+Next Start in : 3:57:59.138684
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/force 2
+
+Callback sending force command to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_FORCE
+	msgvalue : FORCE_ON
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+HeatMgr : ecsState OFF
+Heat Manager : Forcing ECS ON
+	Heat Manager : Switching ECS ON
+HeatManager waiting for message
+Callback payload 2
+Next Start in : 3:57:58.136762
+Next Start in : 3:57:57.134764
+Getting the upcoming events
+Next Start in : 3:57:56.132913
+Next Start in : 3:57:55.126259
+Next Start in : 3:57:54.124327
+Next Start in : 3:57:53.122396
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/force 1
+
+Callback sending force command to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_FORCE
+	msgvalue : FORCE_OFF
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+HeatMgr : ecsState ON
+Heat Manager : Forcing ECS OFF
+	Heat Manager : Switching ECS OFF
+HeatManager waiting for message
+Next Start in : 3:57:52.120478
+Next Start in : 3:57:51.118568
+Next Start in : 3:57:50.116573
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/force 2
+
+Callback sending force command to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_FORCE
+	msgvalue : FORCE_ON
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+HeatMgr : ecsState OFF
+Heat Manager : Forcing ECS ON
+	Heat Manager : Switching ECS ON
+HeatManager waiting for message
+Callback payload 2
+Next Start in : 3:57:49.114647
+Next Start in : 3:57:48.112739
+Next Start in : 3:57:47.110830
+Next Start in : 3:57:46.108946
+Getting the upcoming events
+Next Start in : 3:57:45.107054
+Next Start in : 3:57:44.105087
+Next Start in : 3:57:43.103198
+Next Start in : 3:57:42.101292
+Next Start in : 3:57:41.099394
+Next Start in : 3:57:40.097502
+Next Start in : 3:57:39.095592
+Next Start in : 3:57:38.093675
+Next Start in : 3:57:37.091777
+Next Start in : 3:57:36.089870
+Next Start in : 3:57:35.087955
+Getting the upcoming events
+Next Start in : 3:57:34.086057
+Next Start in : 3:57:33.084137
+Next Start in : 3:57:32.082224
+Next Start in : 3:57:31.080320
+Next Start in : 3:57:30.078418
+Next Start in : 3:57:29.076452
+Next Start in : 3:57:28.074531
+Next Start in : 3:57:27.072614
+Next Start in : 3:57:26.070694
+Next Start in : 3:57:25.068785
+Next Start in : 3:57:24.066854
+Getting the upcoming events
+Next Start in : 3:57:23.064862
+Next Start in : 3:57:22.062961
+Next Start in : 3:57:21.061054
+Next Start in : 3:57:20.059157
+Next Start in : 3:57:19.057254
+Next Start in : 3:57:18.055271
+Next Start in : 3:57:17.053374
+Next Start in : 3:57:16.051495
+Next Start in : 3:57:15.049594
+Next Start in : 3:57:14.047690
+Getting the upcoming events
+Next Start in : 3:57:13.045821
+Next Start in : 3:57:12.043946
+Next Start in : 3:57:11.042078
+Next Start in : 3:57:10.040205
+Next Start in : 3:57:09.038317
+Next Start in : 3:57:08.036416
+Next Start in : 3:57:07.034545
+Next Start in : 3:57:06.032668
+Next Start in : 3:57:05.030776
+Next Start in : 3:57:04.028902
+Next Start in : 3:57:03.027005
+Getting the upcoming events
+Next Start in : 3:57:02.025012
+Next Start in : 3:57:01.023133
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 3:57:00.021232
+Next Start in : 3:56:59.019334
+Next Start in : 3:56:58.017433
+Next Start in : 3:56:57.015535
+Next Start in : 3:56:56.013645
+Next Start in : 3:56:55.011747
+Next Start in : 3:56:54.009833
+Next Start in : 3:56:53.007917
+Next Start in : 3:56:52.006005
+Getting the upcoming events
+Next Start in : 3:56:51.004110
+Next Start in : 3:56:50.002206
+Next Start in : 3:56:49.000312
+Next Start in : 3:56:47.987572
+Next Start in : 3:56:46.985649
+Next Start in : 3:56:45.983749
+Next Start in : 3:56:44.981866
+Next Start in : 3:56:43.979978
+Next Start in : 3:56:42.972066
+Next Start in : 3:56:41.970143
+Next Start in : 3:56:40.968230
+Getting the upcoming events
+Next Start in : 3:56:39.966324
+Next Start in : 3:56:38.964393
+Next Start in : 3:56:37.957792
+Next Start in : 3:56:36.955870
+Next Start in : 3:56:35.953969
+Next Start in : 3:56:34.952081
+Next Start in : 3:56:33.950186
+Next Start in : 3:56:32.943318
+Next Start in : 3:56:31.941427
+Next Start in : 3:56:30.939550
+Next Start in : 3:56:29.937661
+Next Start in : 3:56:28.935766
+Next Start in : 3:56:27.928972
+Next Start in : 3:56:26.927086
+Getting the upcoming events
+Next Start in : 3:56:25.925119
+Next Start in : 3:56:24.923237
+Next Start in : 3:56:23.921338
+Next Start in : 3:56:22.919445
+Next Start in : 3:56:21.917554
+Next Start in : 3:56:20.915662
+Next Start in : 3:56:19.913780
+Next Start in : 3:56:18.911884
+Next Start in : 3:56:17.909985
+Next Start in : 3:56:16.908085
+Next Start in : 3:56:15.906194
+Next Start in : 3:56:14.904259
+Getting the upcoming events
+Next Start in : 3:56:13.902379
+Next Start in : 3:56:12.852430
+Next Start in : 3:56:11.850550
+Next Start in : 3:56:10.848678
+Next Start in : 3:56:09.846806
+Next Start in : 3:56:08.844872
+Next Start in : 3:56:07.842968
+Next Start in : 3:56:06.841077
+Next Start in : 3:56:05.839209
+Next Start in : 3:56:04.837336
+Next Start in : 3:56:03.835402
+Getting the upcoming events
+Next Start in : 3:56:02.833513
+Next Start in : 3:56:01.831629
+Next Start in : 3:56:00.829742
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 3:55:59.827867
+Next Start in : 3:55:58.825982
+Next Start in : 3:55:57.824110
+Next Start in : 3:55:56.822252
+Next Start in : 3:55:55.820354
+Next Start in : 3:55:54.818455
+Next Start in : 3:55:53.816492
+Next Start in : 3:55:52.814626
+Getting the upcoming events
+Next Start in : 3:55:51.812745
+Next Start in : 3:55:50.810833
+Next Start in : 3:55:49.808929
+Next Start in : 3:55:48.807043
+Next Start in : 3:55:47.805086
+Next Start in : 3:55:46.803187
+Next Start in : 3:55:45.801300
+Next Start in : 3:55:44.799403
+Next Start in : 3:55:43.797478
+Next Start in : 3:55:42.795559
+Getting the upcoming events
+Next Start in : 3:55:41.793646
+Next Start in : 3:55:40.791746
+Next Start in : 3:55:39.789835
+Next Start in : 3:55:38.787883
+Next Start in : 3:55:37.785969
+Next Start in : 3:55:36.784050
+Next Start in : 3:55:35.782139
+Next Start in : 3:55:34.780246
+Next Start in : 3:55:33.778321
+Next Start in : 3:55:32.776380
+Next Start in : 3:55:31.774460
+Getting the upcoming events
+Next Start in : 3:55:30.772558
+Next Start in : 3:55:29.770649
+Next Start in : 3:55:28.768732
+Next Start in : 3:55:27.766837
+Next Start in : 3:55:26.764820
+Next Start in : 3:55:25.762885
+Next Start in : 3:55:24.760946
+Next Start in : 3:55:23.759050
+Next Start in : 3:55:22.757157
+Next Start in : 3:55:21.755189
+Next Start in : 3:55:20.753277
+Getting the upcoming events
+Next Start in : 3:55:19.751391
+Next Start in : 3:55:18.749494
+Next Start in : 3:55:17.747614
+Next Start in : 3:55:16.745716
+Next Start in : 3:55:15.743829
+Next Start in : 3:55:14.741930
+Next Start in : 3:55:13.740021
+Next Start in : 3:55:12.738134
+Next Start in : 3:55:11.736236
+Next Start in : 3:55:10.734338
+Next Start in : 3:55:09.732441
+Getting the upcoming events
+Next Start in : 3:55:08.730527
+Next Start in : 3:55:07.728633
+Next Start in : 3:55:06.726737
+Next Start in : 3:55:05.724764
+Next Start in : 3:55:04.722857
+Next Start in : 3:55:03.720944
+Next Start in : 3:55:02.719013
+Next Start in : 3:55:01.717100
+Next Start in : 3:55:00.715116
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 3:54:59.713240
+Next Start in : 3:54:58.711334
+Getting the upcoming eventsNext Start in :
+ 3:54:57.683267
+Next Start in : 3:54:56.534541
+Next Start in : 3:54:55.532629
+Next Start in : 3:54:54.530736
+Next Start in : 3:54:53.528861
+Next Start in : 3:54:52.526958
+Next Start in : 3:54:51.524975
+Next Start in : 3:54:50.523103
+Next Start in : 3:54:49.521188
+Next Start in : 3:54:48.519274
+Next Start in : 3:54:47.517390
+Getting the upcoming events
+Next Start in : 3:54:46.515411
+Next Start in : 3:54:45.513517
+Next Start in : 3:54:44.511643
+Next Start in : 3:54:43.509677
+Next Start in : 3:54:42.507787
+Next Start in : 3:54:41.505892
+Next Start in : 3:54:40.503933
+Next Start in : 3:54:39.502035
+Next Start in : 3:54:38.500158
+Next Start in : 3:54:37.498248
+Next Start in : 3:54:36.496345
+Getting the upcoming events
+Next Start in : 3:54:35.494394
+Next Start in : 3:54:34.492493
+Next Start in : 3:54:33.490577
+Next Start in : 3:54:32.488694
+Next Start in : 3:54:31.486787
+Next Start in : 3:54:30.484740
+Next Start in : 3:54:29.482840
+Next Start in : 3:54:28.480934
+Next Start in : 3:54:27.479035
+Next Start in : 3:54:26.477140
+Next Start in : 3:54:25.475180
+Getting the upcoming events
+Next Start in : 3:54:24.473263
+Next Start in : 3:54:23.471349
+Next Start in : 3:54:22.469407
+Next Start in : 3:54:21.467507
+Next Start in : 3:54:20.465622
+Next Start in : 3:54:19.463716
+Next Start in : 3:54:18.461797
+Next Start in : 3:54:17.459890
+Next Start in : 3:54:16.457989
+Next Start in : 3:54:15.456101
+Next Start in : 3:54:14.454237
+Getting the upcoming events
+Next Start in : 3:54:13.452313
+Next Start in : 3:54:12.450397
+Next Start in : 3:54:11.448508
+Next Start in : 3:54:10.446578
+Next Start in : 3:54:09.444716
+Next Start in : 3:54:08.442842
+Next Start in : 3:54:07.440969
+Next Start in : 3:54:06.439077
+Next Start in : 3:54:05.437204
+Next Start in : 3:54:04.435270
+Getting the upcoming events
+Next Start in : 3:54:03.433403
+Next Start in : 3:54:02.431544
+Next Start in : 3:54:01.429677
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 3:54:00.427786
+Next Start in : 3:53:59.426438
+Next Start in : 3:53:58.424547
+Next Start in : 3:53:57.422645
+Next Start in : 3:53:56.420752
+Next Start in : 3:53:55.418818
+Next Start in : 3:53:54.416847
+Next Start in : 3:53:53.414879
+Getting the upcoming events
+Next Start in : 3:53:52.412962
+Next Start in : 3:53:51.411052
+Next Start in : 3:53:50.409134
+Next Start in : 3:53:49.407235
+Next Start in : 3:53:48.405258
+Next Start in : 3:53:47.403342
+Next Start in : 3:53:46.401419
+Next Start in : 3:53:45.399526
+Next Start in : 3:53:44.397704
+Next Start in : 3:53:43.395777
+Next Start in : 3:53:42.393910
+Getting the upcoming events
+Next Start in : 3:53:41.392142
+Next Start in : 3:53:40.390224
+Next Start in : 3:53:39.388314
+Next Start in : 3:53:38.386407
+Next Start in : 3:53:37.384470
+Next Start in : 3:53:36.382554
+Next Start in : 3:53:35.380653
+Next Start in : 3:53:34.378753
+Next Start in : 3:53:33.376839
+Next Start in : 3:53:32.374853
+Next Start in : 3:53:31.372963
+Getting the upcoming events
+Next Start in : 3:53:30.371083
+Next Start in : 3:53:29.369198
+Next Start in : 3:53:28.367277
+Next Start in : 3:53:27.365290
+Next Start in : 3:53:26.363385
+Next Start in : 3:53:25.361479
+Next Start in : 3:53:24.359581
+Next Start in : 3:53:23.357677
+Next Start in : 3:53:22.355888
+Next Start in : 3:53:21.353955
+Next Start in : 3:53:20.347121
+Getting the upcoming events
+Next Start in : 3:53:19.345106
+Next Start in : 3:53:18.343192
+Next Start in : 3:53:17.341285
+Next Start in : 3:53:16.339379
+Next Start in : 3:53:15.330097
+Next Start in : 3:53:14.328257
+Next Start in : 3:53:13.326339
+Next Start in : 3:53:12.324451
+Next Start in : 3:53:11.322570
+Next Start in : 3:53:10.320658
+Getting the upcoming events
+Next Start in : 3:53:09.318748
+Next Start in : 3:53:08.316828
+Next Start in : 3:53:07.314869
+Next Start in : 3:53:06.312977
+Next Start in : 3:53:05.311082
+Next Start in : 3:53:04.309155
+Next Start in : 3:53:03.307261
+Next Start in : 3:53:02.305286
+Next Start in : 3:53:01.303379
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 3:53:00.301453
+Next Start in : 3:52:59.299493
+Getting the upcoming events
+Next Start in : 3:52:58.297571
+Next Start in : 3:52:57.295674
+Next Start in : 3:52:56.293773
+Next Start in : 3:52:55.291861
+Next Start in : 3:52:54.289942
+Next Start in : 3:52:53.288034
+Next Start in : 3:52:52.286104
+Next Start in : 3:52:51.284198
+Next Start in : 3:52:50.282268
+Next Start in : 3:52:49.280361
+Next Start in : 3:52:48.278462
+Getting the upcoming events
+Next Start in : 3:52:47.276495
+Next Start in : 3:52:46.274587
+Next Start in : 3:52:45.272688
+Next Start in : 3:52:44.270782
+Next Start in : 3:52:43.268876
+Next Start in : 3:52:42.266963
+Next Start in : 3:52:41.264952
+Next Start in : 3:52:40.263075
+Next Start in : 3:52:39.261200
+Next Start in : 3:52:38.259327
+Getting the upcoming events
+Next Start in : 3:52:37.257481
+Next Start in : 3:52:36.255582
+Next Start in : 3:52:35.253651
+Next Start in : 3:52:34.251748
+Next Start in : 3:52:33.249850
+Next Start in : 3:52:32.247901
+Next Start in : 3:52:31.246001
+Next Start in : 3:52:30.244078
+Next Start in : 3:52:29.242152
+Next Start in : 3:52:28.240258
+Next Start in : 3:52:27.238366
+Getting the upcoming events
+Next Start in : 3:52:26.237380
+Next Start in : 3:52:25.235506
+Next Start in : 3:52:24.233579
+Next Start in : 3:52:23.231667
+Next Start in : 3:52:22.229778
+Next Start in : 3:52:21.227880
+Next Start in : 3:52:20.225973
+Next Start in : 3:52:19.224081
+Next Start in : 3:52:18.222128
+Next Start in : 3:52:17.220207
+Next Start in : 3:52:16.218313
+Getting the upcoming events
+Next Start in : 3:52:15.216443
+Next Start in : 3:52:14.214525
+Next Start in : 3:52:13.212626
+Next Start in : 3:52:12.210717
+Next Start in : 3:52:11.208801
+Next Start in : 3:52:10.206891
+Next Start in : 3:52:09.204869
+Next Start in : 3:52:08.202962
+Next Start in : 3:52:07.201060
+Next Start in : 3:52:06.199132
+Next Start in : 3:52:05.197206
+Getting the upcoming events
+Next Start in : 3:52:04.186854
+Next Start in : 3:52:03.184872
+Next Start in : 3:52:02.182955
+Next Start in : 3:52:01.180822
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 3:52:00.178895
+Next Start in : 3:51:59.176964
+Next Start in : 3:51:58.175002
+Next Start in : 3:51:57.173105
+Next Start in : 3:51:56.171215
+Next Start in : 3:51:55.169320
+Getting the upcoming events
+Next Start in : 3:51:54.166921
+Next Start in : 3:51:53.163501
+Next Start in : 3:51:52.161548
+Next Start in : 3:51:51.159649
+Next Start in : 3:51:50.157763
+Next Start in : 3:51:49.155867
+Next Start in : 3:51:48.153936
+Next Start in : 3:51:47.152004
+Next Start in : 3:51:46.150116
+Next Start in : 3:51:45.148231
+Next Start in : 3:51:44.146352
+Getting the upcoming events
+Next Start in : 3:51:43.144451
+Next Start in : 3:51:42.142532
+Next Start in : 3:51:41.140626
+Next Start in : 3:51:40.138749
+Next Start in : 3:51:39.136874
+Next Start in : 3:51:38.134958
+Next Start in : 3:51:37.133082
+Next Start in : 3:51:36.131175
+Next Start in : 3:51:35.129265
+Next Start in : 3:51:34.127390
+Next Start in : 3:51:33.125490
+Getting the upcoming events
+Next Start in : 3:51:32.123591
+Next Start in : 3:51:31.121694
+Next Start in : 3:51:30.119777
+Next Start in : 3:51:29.117854
+Next Start in : 3:51:28.115960
+Next Start in : 3:51:27.114070
+Next Start in : 3:51:26.112187
+Next Start in : 3:51:25.110248
+Next Start in : 3:51:24.108339
+Next Start in : 3:51:23.106429
+Next Start in : 3:51:22.104576
+Getting the upcoming events
+Next Start in : 3:51:21.102701
+Next Start in : 3:51:20.100824
+Next Start in : 3:51:19.098947
+Next Start in : 3:51:18.097040
+Next Start in : 3:51:17.095035
+Next Start in : 3:51:16.093125
+Next Start in : 3:51:15.091239
+Next Start in : 3:51:14.089358
+Next Start in : 3:51:13.087479
+Next Start in : 3:51:12.085558
+Getting the upcoming events
+Next Start in : 3:51:11.010654
+Next Start in : 3:51:10.008578
+Next Start in : 3:51:09.006681
+Next Start in : 3:51:08.004728
+Next Start in : 3:51:07.002836
+Next Start in : 3:51:05.999945
+Next Start in : 3:51:04.998051
+Next Start in : 3:51:03.996143
+Next Start in : 3:51:02.994238
+Next Start in : 3:51:01.992333
+Next Start in : 3:51:00.990408
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Getting the upcoming events
+Next Start in : 3:50:59.988525
+Next Start in : 3:50:58.986580
+Next Start in : 3:50:57.984613
+Next Start in : 3:50:56.982724
+Next Start in : 3:50:55.980843
+Next Start in : 3:50:54.978939
+Next Start in : 3:50:53.977026
+Next Start in : 3:50:52.975032
+Next Start in : 3:50:51.973141
+Next Start in : 3:50:50.971246
+Next Start in : 3:50:49.969358
+Next Start in : 3:50:48.967486
+Getting the upcoming events
+Next Start in : 3:50:47.965579
+Next Start in : 3:50:46.963683
+Next Start in : 3:50:45.961793
+Next Start in : 3:50:44.959911
+Next Start in : 3:50:43.957994
+Next Start in : 3:50:42.956099
+Next Start in : 3:50:41.954211
+Next Start in : 3:50:40.952322
+Next Start in : 3:50:39.950435
+Next Start in : 3:50:38.948541
+Next Start in : 3:50:37.946594
+Getting the upcoming events
+Next Start in : 3:50:36.944686
+Next Start in : 3:50:35.942787
+Next Start in : 3:50:34.940896
+Next Start in : 3:50:33.939000
+Next Start in : 3:50:32.937099
+Next Start in : 3:50:31.935146
+Next Start in : 3:50:30.933268
+Next Start in : 3:50:29.931375
+Next Start in : 3:50:28.929478
+Next Start in : 3:50:27.927583
+Getting the upcoming events
+Next Start in : 3:50:26.869929
+Next Start in : 3:50:25.864828
+Next Start in : 3:50:24.862935
+Next Start in : 3:50:23.857238
+Next Start in : 3:50:22.855240
+Next Start in : 3:50:21.853314
+Next Start in : 3:50:20.851403
+Next Start in : 3:50:19.849518
+Next Start in : 3:50:18.847625
+Next Start in : 3:50:17.846399
+Next Start in : 3:50:16.844496
+Getting the upcoming events
+Next Start in : 3:50:15.842465
+Next Start in : 3:50:14.840580
+Next Start in : 3:50:13.838694
+Next Start in : 3:50:12.836816
+Next Start in : 3:50:11.834873
+Next Start in : 3:50:10.832979
+Next Start in : 3:50:09.831072
+Next Start in : 3:50:08.829196
+Next Start in : 3:50:07.827304
+Next Start in : 3:50:06.825326
+Next Start in : 3:50:05.823425
+Getting the upcoming events
+Next Start in : 3:50:04.821409
+Next Start in : 3:50:03.819513
+Next Start in : 3:50:02.817632
+Next Start in : 3:50:01.815737
+Next Start in : 3:50:00.813822
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 3:49:59.811905
+Next Start in : 3:49:58.810022
+Next Start in : 3:49:57.808121
+Next Start in : 3:49:56.806228
+Next Start in : 3:49:55.804305
+Next Start in : 3:49:54.802405
+Getting the upcoming events
+Next Start in : 3:49:53.800429
+Next Start in : 3:49:52.798546
+Next Start in : 3:49:51.796570
+Next Start in : 3:49:50.794649
+Next Start in : 3:49:49.792761
+Next Start in : 3:49:48.790841
+Next Start in : 3:49:47.788921
+Next Start in : 3:49:46.787003
+Next Start in : 3:49:45.785019
+Next Start in : 3:49:44.783122
+Next Start in : 3:49:43.781234
+Getting the upcoming events
+Next Start in : 3:49:42.779340
+Next Start in : 3:49:41.777447
+Next Start in : 3:49:40.775535
+Next Start in : 3:49:39.773611
+Next Start in : 3:49:38.771693
+Next Start in : 3:49:37.769786
+Next Start in : 3:49:36.767888
+Next Start in : 3:49:35.765984
+Next Start in : 3:49:34.764061
+Next Start in : 3:49:33.756442
+Next Start in : 3:49:32.754565
+Getting the upcoming events
+Next Start in : 3:49:31.752696
+Next Start in : 3:49:30.750826
+Next Start in : 3:49:29.748809
+Next Start in : 3:49:28.742194
+Next Start in : 3:49:27.740306
+Next Start in : 3:49:26.738420
+Next Start in : 3:49:25.736490
+Next Start in : 3:49:24.734600
+Next Start in : 3:49:23.726320
+Next Start in : 3:49:22.724429
+Next Start in : 3:49:21.722549
+Getting the upcoming events
+Next Start in : 3:49:20.720649
+Next Start in : 3:49:19.718747
+Next Start in : 3:49:18.712001
+Next Start in : 3:49:17.710113
+Next Start in : 3:49:16.708223
+Next Start in : 3:49:15.706339
+Next Start in : 3:49:14.704418
+Next Start in : 3:49:13.697234
+Next Start in : 3:49:12.695268
+Next Start in : 3:49:11.693387
+Next Start in : 3:49:10.691477
+Getting the upcoming events
+Next Start in : 3:49:09.689564
+Next Start in : 3:49:08.683016
+Next Start in : 3:49:07.681118
+Next Start in : 3:49:06.679216
+Next Start in : 3:49:05.677329
+Next Start in : 3:49:04.675320
+Next Start in : 3:49:03.673385
+Next Start in : 3:49:02.671458
+Next Start in : 3:49:01.669549
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 3:49:00.667682
+Next Start in : 3:48:59.665910
+Getting the upcoming events
+Next Start in : 3:48:58.664035
+Next Start in : 3:48:57.657028
+Next Start in : 3:48:56.655085
+Next Start in : 3:48:55.653234
+Next Start in : 3:48:54.651370
+Next Start in : 3:48:53.649536
+Next Start in : 3:48:52.647660
+Next Start in : 3:48:51.646476
+Next Start in : 3:48:50.644619
+Next Start in : 3:48:49.642777
+Getting the upcoming events
+Next Start in : 3:48:48.640605
+Next Start in : 3:48:47.638729
+Next Start in : 3:48:46.629986
+Next Start in : 3:48:45.628138
+Next Start in : 3:48:44.626268
+Next Start in : 3:48:43.624417
+Next Start in : 3:48:42.622567
+Next Start in : 3:48:41.616051
+Next Start in : 3:48:40.614167
+Next Start in : 3:48:39.612298
+Next Start in : 3:48:38.610433
+Getting the upcoming events
+Next Start in : 3:48:37.608615
+Next Start in : 3:48:36.601841
+Next Start in : 3:48:35.600007
+Next Start in : 3:48:34.598166
+Next Start in : 3:48:33.596330
+Next Start in : 3:48:32.594480
+Next Start in : 3:48:31.587770
+Next Start in : 3:48:30.585913
+Next Start in : 3:48:29.584043
+Next Start in : 3:48:28.582158
+Next Start in : 3:48:27.580238
+Getting the upcoming events
+Next Start in : 3:48:26.578360
+Next Start in : 3:48:25.576417
+Next Start in : 3:48:24.574512
+Next Start in : 3:48:23.572670
+Next Start in : 3:48:22.570773
+Next Start in : 3:48:21.568888
+Next Start in : 3:48:20.562202
+Next Start in : 3:48:19.560341
+Next Start in : 3:48:18.558480
+Next Start in : 3:48:17.556562
+Next Start in : 3:48:16.554655
+Getting the upcoming events
+Next Start in : 3:48:15.552748
+Next Start in : 3:48:14.550868
+Next Start in : 3:48:13.548964
+Next Start in : 3:48:12.547044
+Next Start in : 3:48:11.545099
+Next Start in : 3:48:10.543198
+Next Start in : 3:48:09.541279
+Next Start in : 3:48:08.539388
+Next Start in : 3:48:07.537490
+Next Start in : 3:48:06.536061
+Next Start in : 3:48:05.534197
+Getting the upcoming events
+Next Start in : 3:48:04.532274
+Next Start in : 3:48:03.530396
+Next Start in : 3:48:02.528506
+Next Start in : 3:48:01.526536
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 3:48:00.524637
+Next Start in : 3:47:59.522732
+Next Start in : 3:47:58.520799
+Next Start in : 3:47:57.518864
+Next Start in : 3:47:56.516999
+Next Start in : 3:47:55.515024
+Next Start in : 3:47:54.513131
+Getting the upcoming events
+Next Start in : 3:47:53.510579
+Next Start in : 3:47:52.508689
+Next Start in : 3:47:51.506742
+Next Start in : 3:47:50.504785
+Next Start in : 3:47:49.502895
+Next Start in : 3:47:48.501010
+Next Start in : 3:47:47.499147
+Next Start in : 3:47:46.497258
+Next Start in : 3:47:45.495225
+Next Start in : 3:47:44.493346
+Getting the upcoming events
+Next Start in : 3:47:43.491448
+Next Start in : 3:47:42.489537
+Next Start in : 3:47:41.487772
+Next Start in : 3:47:40.486437
+Next Start in : 3:47:39.484493
+Next Start in : 3:47:38.482707
+Next Start in : 3:47:37.480883
+Next Start in : 3:47:36.479075
+Next Start in : 3:47:35.477300
+Next Start in : 3:47:34.475406
+Next Start in : 3:47:33.473582
+Getting the upcoming events
+Next Start in : 3:47:32.471761
+Next Start in : 3:47:31.469875
+Next Start in : 3:47:30.468053
+Next Start in : 3:47:29.466260
+Next Start in : 3:47:28.464354
+Next Start in : 3:47:27.462441
+Next Start in : 3:47:26.460555
+Next Start in : 3:47:25.458671
+Next Start in : 3:47:24.456844
+Next Start in : 3:47:23.454903
+Next Start in : 3:47:22.453098
+Getting the upcoming events
+Next Start in : 3:47:21.451258
+Next Start in : 3:47:20.449529
+Next Start in : 3:47:19.447758
+Next Start in : 3:47:18.445895
+Next Start in : 3:47:17.444026
+Next Start in : 3:47:16.442144
+Next Start in : 3:47:15.440293
+Next Start in : 3:47:14.438497
+Next Start in : 3:47:13.436569
+Next Start in : 3:47:12.434711
+Getting the upcoming events
+Next Start in : 3:47:11.367811
+Next Start in : 3:47:10.365741
+Next Start in : 3:47:09.363870
+Next Start in : 3:47:08.361960
+Next Start in : 3:47:07.360061
+Next Start in : 3:47:06.358174
+Next Start in : 3:47:05.356267
+Next Start in : 3:47:04.354358
+Next Start in : 3:47:03.352455
+Next Start in : 3:47:02.350551
+Next Start in : 3:47:01.348658
+Getting the upcoming events
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 3:47:00.346759
+Next Start in : 3:46:59.344777
+Next Start in : 3:46:58.342865
+Next Start in : 3:46:57.340978
+Next Start in : 3:46:56.339088
+Next Start in : 3:46:55.337207
+Next Start in : 3:46:54.335240
+Next Start in : 3:46:53.333343
+Next Start in : 3:46:52.331466
+Next Start in : 3:46:51.329583
+Next Start in : 3:46:50.327694
+Getting the upcoming events
+Next Start in : 3:46:49.325814
+Next Start in : 3:46:48.323916
+Next Start in : 3:46:47.322012
+Next Start in : 3:46:46.320127
+Next Start in : 3:46:45.318244
+Next Start in : 3:46:44.316341
+Next Start in : 3:46:43.314457
+Next Start in : 3:46:42.312560
+Next Start in : 3:46:41.310661
+Next Start in : 3:46:40.308780
+Getting the upcoming eventsNext Start in :
+ 3:46:39.291049
+Next Start in : 3:46:38.192004
+Next Start in : 3:46:37.190116
+Next Start in : 3:46:36.188211
+Next Start in : 3:46:35.186248
+Next Start in : 3:46:34.184370
+Next Start in : 3:46:33.182478
+Next Start in : 3:46:32.180593
+Next Start in : 3:46:31.178717
+Next Start in : 3:46:30.176822
+Next Start in : 3:46:29.174873
+Getting the upcoming events
+Next Start in : 3:46:28.172986
+Next Start in : 3:46:27.171109
+Next Start in : 3:46:26.169229
+Next Start in : 3:46:25.167349
+Next Start in : 3:46:24.165400
+Next Start in : 3:46:23.163514
+Next Start in : 3:46:22.161634
+Next Start in : 3:46:21.159752
+Next Start in : 3:46:20.157877
+Next Start in : 3:46:19.155985
+Next Start in : 3:46:18.154080
+Getting the upcoming events
+Next Start in : 3:46:17.152184
+Next Start in : 3:46:16.150316
+Next Start in : 3:46:15.148441
+Next Start in : 3:46:14.146478
+Next Start in : 3:46:13.144596
+Next Start in : 3:46:12.142735
+Next Start in : 3:46:11.140865
+Next Start in : 3:46:10.139001
+Next Start in : 3:46:09.137118
+Next Start in : 3:46:08.135147
+Next Start in : 3:46:07.132752
+Getting the upcoming events
+Next Start in : 3:46:06.129248
+Next Start in : 3:46:05.127358
+Next Start in : 3:46:04.125410
+Next Start in : 3:46:03.123522
+Next Start in : 3:46:02.121627
+Next Start in : 3:46:01.119731
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 3:46:00.117853
+Next Start in : 3:45:59.115956
+Next Start in : 3:45:58.114070
+Next Start in : 3:45:57.108004
+Getting the upcoming events
+Next Start in : 3:45:56.106101
+Next Start in : 3:45:55.104217
+Next Start in : 3:45:54.102291
+Next Start in : 3:45:53.100402
+Next Start in : 3:45:52.098512
+Next Start in : 3:45:51.096551
+Next Start in : 3:45:50.089956
+Next Start in : 3:45:49.088069
+Next Start in : 3:45:48.086171
+Next Start in : 3:45:47.084268
+Next Start in : 3:45:46.082387
+Getting the upcoming events
+Next Start in : 3:45:45.073566
+Next Start in : 3:45:44.071668
+Next Start in : 3:45:43.069773
+Next Start in : 3:45:42.067872
+Next Start in : 3:45:41.065974
+Next Start in : 3:45:40.064059
+Next Start in : 3:45:39.062146
+Next Start in : 3:45:38.060220
+Next Start in : 3:45:37.058326
+Next Start in : 3:45:36.056424
+Next Start in : 3:45:35.054577
+Getting the upcoming events
+Next Start in : 3:45:34.047371
+Next Start in : 3:45:33.045385
+Next Start in : 3:45:32.043462
+Next Start in : 3:45:31.041569
+Next Start in : 3:45:30.039681
+Next Start in : 3:45:29.037787
+Next Start in : 3:45:28.035884
+Next Start in : 3:45:27.034240
+Next Start in : 3:45:26.032352
+Next Start in : 3:45:25.030452
+Getting the upcoming events
+Next Start in : 3:45:24.028482
+Next Start in : 3:45:23.021572
+Next Start in : 3:45:22.019675
+Next Start in : 3:45:21.017751
+Next Start in : 3:45:20.016416
+Next Start in : 3:45:19.014525
+Next Start in : 3:45:18.012626
+Next Start in : 3:45:17.010707
+Next Start in : 3:45:16.008810
+Next Start in : 3:45:15.006926
+Next Start in : 3:45:14.002541
+Getting the upcoming events
+Next Start in : 3:45:13.000700
+Next Start in : 3:45:11.993753
+Next Start in : 3:45:10.991868
+Next Start in : 3:45:09.989984
+Next Start in : 3:45:08.988108
+Next Start in : 3:45:07.986211
+Next Start in : 3:45:06.979172
+Next Start in : 3:45:05.977295
+Next Start in : 3:45:04.975316
+Next Start in : 3:45:03.973430
+Next Start in : 3:45:02.971526
+Getting the upcoming events
+Next Start in : 3:45:01.969601
+Next Start in : 3:45:00.967668
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 3:44:59.965778
+Next Start in : 3:44:58.963864
+Next Start in : 3:44:57.961965
+Next Start in : 3:44:56.960035
+Next Start in : 3:44:55.958100
+Next Start in : 3:44:54.956215
+Next Start in : 3:44:53.954723
+Next Start in : 3:44:52.952825
+Next Start in : 3:44:51.950941
+Getting the upcoming events
+Next Start in : 3:44:50.949020
+Next Start in : 3:44:49.947110
+Next Start in : 3:44:48.945140
+Next Start in : 3:44:47.943211
+Next Start in : 3:44:46.941308
+Next Start in : 3:44:45.939426
+Next Start in : 3:44:44.937530
+Next Start in : 3:44:43.935641
+Next Start in : 3:44:42.933753
+Next Start in : 3:44:41.931847
+Getting the upcoming eventsNext Start in :
+ 3:44:40.889263
+Next Start in : 3:44:39.787342
+Next Start in : 3:44:38.785335
+Next Start in : 3:44:37.783429
+Next Start in : 3:44:36.781515
+Next Start in : 3:44:35.779605
+Next Start in : 3:44:34.777645
+Next Start in : 3:44:33.775721
+Next Start in : 3:44:32.773823
+Next Start in : 3:44:31.771868
+Next Start in : 3:44:30.769985
+Getting the upcoming events
+Next Start in : 3:44:29.768050
+Next Start in : 3:44:28.766116
+Next Start in : 3:44:27.764217
+Next Start in : 3:44:26.762326
+Next Start in : 3:44:25.760434
+Next Start in : 3:44:24.758526
+Next Start in : 3:44:23.756504
+Next Start in : 3:44:22.754476
+Next Start in : 3:44:21.752592
+Next Start in : 3:44:20.750687
+Next Start in : 3:44:19.748812
+Getting the upcoming events
+Next Start in : 3:44:18.746943
+Next Start in : 3:44:17.744968
+Next Start in : 3:44:16.743067
+Next Start in : 3:44:15.741189
+Next Start in : 3:44:14.739260
+Next Start in : 3:44:13.737223
+Next Start in : 3:44:12.735277
+Next Start in : 3:44:11.733355
+Next Start in : 3:44:10.731447
+Next Start in : 3:44:09.729569
+Getting the upcoming events
+Next Start in : 3:44:08.679061
+Next Start in : 3:44:07.663881
+Next Start in : 3:44:06.661974
+Next Start in : 3:44:05.660079
+Next Start in : 3:44:04.658194
+Next Start in : 3:44:03.656397
+Next Start in : 3:44:02.649839
+Next Start in : 3:44:01.647942
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 3:44:00.646042
+Next Start in : 3:43:59.644166
+Next Start in : 3:43:58.642315
+Getting the upcoming events
+Next Start in : 3:43:57.640413
+Next Start in : 3:43:56.638543
+Next Start in : 3:43:55.636609
+Next Start in : 3:43:54.634689
+Next Start in : 3:43:53.632817
+Next Start in : 3:43:52.630961
+Next Start in : 3:43:51.629085
+Next Start in : 3:43:50.627198
+Next Start in : 3:43:49.625275
+Next Start in : 3:43:48.623378
+Next Start in : 3:43:47.621487
+Getting the upcoming events
+Next Start in : 3:43:46.619618
+Next Start in : 3:43:45.617735
+Next Start in : 3:43:44.615836
+Next Start in : 3:43:43.613983
+Next Start in : 3:43:42.612085
+Next Start in : 3:43:41.610191
+Next Start in : 3:43:40.608301
+Next Start in : 3:43:39.606372
+Next Start in : 3:43:38.604457
+Next Start in : 3:43:37.602601
+Next Start in : 3:43:36.600723
+Getting the upcoming events
+Next Start in : 3:43:35.598828
+Next Start in : 3:43:34.596969
+Next Start in : 3:43:33.594994
+Next Start in : 3:43:32.593083
+Next Start in : 3:43:31.591223
+Next Start in : 3:43:30.589332
+Next Start in : 3:43:29.587448
+Next Start in : 3:43:28.586457
+Next Start in : 3:43:27.584547
+Next Start in : 3:43:26.582642
+Getting the upcoming events
+Next Start in : 3:43:25.580805
+Next Start in : 3:43:24.578941
+Next Start in : 3:43:23.577072
+Next Start in : 3:43:22.575128
+Next Start in : 3:43:21.573248
+Next Start in : 3:43:20.571379
+Next Start in : 3:43:19.569535
+Next Start in : 3:43:18.567673
+Next Start in : 3:43:17.566470
+Next Start in : 3:43:16.564505
+Next Start in : 3:43:15.563010
+Getting the upcoming events
+Next Start in : 3:43:14.561155
+Next Start in : 3:43:13.559286
+Next Start in : 3:43:12.557418
+Next Start in : 3:43:11.555534
+Next Start in : 3:43:10.553665
+Next Start in : 3:43:09.551819
+Next Start in : 3:43:08.549974
+Next Start in : 3:43:07.548119
+Next Start in : 3:43:06.546734
+Next Start in : 3:43:05.544809
+Next Start in : 3:43:04.542942
+Getting the upcoming events
+Next Start in : 3:43:03.541080
+Next Start in : 3:43:02.539195
+Next Start in : 3:43:01.537353
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 3:43:00.535394
+Next Start in : 3:42:59.533483
+Next Start in : 3:42:58.531602
+Next Start in : 3:42:57.529725
+Next Start in : 3:42:56.527847
+Next Start in : 3:42:55.525975
+Next Start in : 3:42:54.524114
+Getting the upcoming events
+Next Start in : 3:42:53.522256
+Next Start in : 3:42:52.520404
+Next Start in : 3:42:51.518551
+Next Start in : 3:42:50.516672
+Next Start in : 3:42:49.514754
+Next Start in : 3:42:48.512880
+Next Start in : 3:42:47.510990
+Next Start in : 3:42:46.509131
+Next Start in : 3:42:45.507260
+Next Start in : 3:42:44.505313
+Next Start in : 3:42:43.503451
+Getting the upcoming events
+Next Start in : 3:42:42.501541
+Next Start in : 3:42:41.499650
+Next Start in : 3:42:40.497787
+Next Start in : 3:42:39.495900
+Next Start in : 3:42:38.494011
+Next Start in : 3:42:37.492140
+Next Start in : 3:42:36.490214
+Next Start in : 3:42:35.488276
+Next Start in : 3:42:34.486439
+Next Start in : 3:42:33.484540
+Next Start in : 3:42:32.482659
+Getting the upcoming events
+Next Start in : 3:42:31.480781
+Next Start in : 3:42:30.478881
+Next Start in : 3:42:29.476991
+Next Start in : 3:42:28.475026
+Next Start in : 3:42:27.473113
+Next Start in : 3:42:26.471954
+Next Start in : 3:42:25.470092
+Next Start in : 3:42:24.468197
+Next Start in : 3:42:23.466306
+Next Start in : 3:42:22.464413
+Next Start in : 3:42:21.462536
+Getting the upcoming events
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/force 1
+
+Callback sending force command to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_FORCE
+	msgvalue : FORCE_OFF
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+HeatMgr : ecsState ON
+Heat Manager : Forcing ECS OFF
+	Heat Manager : Switching ECS OFF
+HeatManager waiting for message
+Next Start in : 3:42:20.460646
+Next Start in : 3:42:19.458768
+Next Start in : 3:42:18.456853
+Next Start in : 3:42:17.454833
+Next Start in : 3:42:16.452956
+Next Start in : 3:42:15.451077
+Next Start in : 3:42:14.449216
+Next Start in : 3:42:13.447330
+Next Start in : 3:42:12.445358
+Next Start in : 3:42:11.443461
+Getting the upcoming events
+Next Start in : 3:42:10.441534
+Next Start in : 3:42:09.439611
+Next Start in : 3:42:08.437713
+Next Start in : 3:42:07.435833
+Next Start in : 3:42:06.433936
+Next Start in : 3:42:05.432050
+Next Start in : 3:42:04.430183
+Next Start in : 3:42:03.428300
+Next Start in : 3:42:02.426422
+Next Start in : 3:42:01.424543
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 3:42:00.422643
+Getting the upcoming events
+Next Start in : 3:41:59.420767
+Next Start in : 3:41:58.418882
+Next Start in : 3:41:57.417008
+Next Start in : 3:41:56.415057
+Next Start in : 3:41:55.413165
+Next Start in : 3:41:54.411265
+Next Start in : 3:41:53.409367
+Next Start in : 3:41:52.407492
+Next Start in : 3:41:51.405607
+Next Start in : 3:41:50.403740
+Next Start in : 3:41:49.402140
+Getting the upcoming events
+Next Start in : 3:41:48.400217
+Next Start in : 3:41:47.398331
+Next Start in : 3:41:46.396472
+Next Start in : 3:41:45.394606
+Next Start in : 3:41:44.392738
+Next Start in : 3:41:43.390871
+Next Start in : 3:41:42.388980
+Next Start in : 3:41:41.387103
+Next Start in : 3:41:40.385156
+Next Start in : 3:41:39.383264
+Getting the upcoming events
+Next Start in : 3:41:38.381389
+Next Start in : 3:41:37.379267
+Next Start in : 3:41:36.377118
+Next Start in : 3:41:35.375157
+Next Start in : 3:41:34.373265
+Next Start in : 3:41:33.371351
+Next Start in : 3:41:32.369448
+Next Start in : 3:41:31.367543
+Next Start in : 3:41:30.365630
+Next Start in : 3:41:29.363727
+Next Start in : 3:41:28.361808
+Getting the upcoming events
+Next Start in : 3:41:27.359903
+Next Start in : 3:41:26.358005
+Next Start in : 3:41:25.356431
+Next Start in : 3:41:24.354517
+Next Start in : 3:41:23.352605
+Next Start in : 3:41:22.350676
+Next Start in : 3:41:21.348728
+Next Start in : 3:41:20.342149
+Next Start in : 3:41:19.340247
+Next Start in : 3:41:18.338316
+Next Start in : 3:41:17.336452
+Getting the upcoming events
+Next Start in : 3:41:16.334552
+Next Start in : 3:41:15.332428
+Next Start in : 3:41:14.330455
+Next Start in : 3:41:13.328500
+Next Start in : 3:41:12.326538
+Next Start in : 3:41:11.324642
+Next Start in : 3:41:10.322698
+Next Start in : 3:41:09.320805
+Next Start in : 3:41:08.318884
+Next Start in : 3:41:07.316976
+Next Start in : 3:41:06.315016
+Getting the upcoming events
+Next Start in : 3:41:05.313107
+Next Start in : 3:41:04.311150
+Next Start in : 3:41:03.309155
+Next Start in : 3:41:02.307226
+Next Start in : 3:41:01.305219
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 3:41:00.303301
+Next Start in : 3:40:59.301394
+Next Start in : 3:40:58.299493
+Next Start in : 3:40:57.297597
+Next Start in : 3:40:56.295712
+Getting the upcoming events
+Next Start in : 3:40:55.293635
+Next Start in : 3:40:54.291716
+Next Start in : 3:40:53.289812
+Next Start in : 3:40:52.282890
+Next Start in : 3:40:51.281002
+Next Start in : 3:40:50.279119
+Next Start in : 3:40:49.277235
+Next Start in : 3:40:48.275247
+Next Start in : 3:40:47.273359
+Next Start in : 3:40:46.271461
+Next Start in : 3:40:45.269555
+Getting the upcoming events
+Next Start in : 3:40:44.267646
+Next Start in : 3:40:43.265735
+Next Start in : 3:40:42.263816
+Next Start in : 3:40:41.261893
+Next Start in : 3:40:40.259990
+Next Start in : 3:40:39.258081
+Next Start in : 3:40:38.256151
+Next Start in : 3:40:37.254252
+Next Start in : 3:40:36.252337
+Next Start in : 3:40:35.250430
+Next Start in : 3:40:34.248554
+Getting the upcoming events
+Next Start in : 3:40:33.246589
+Next Start in : 3:40:32.245483
+Next Start in : 3:40:31.243494
+Next Start in : 3:40:30.241582
+Next Start in : 3:40:29.239680
+Next Start in : 3:40:28.237793
+Next Start in : 3:40:27.235889
+Next Start in : 3:40:26.233967
+Next Start in : 3:40:25.232053
+Next Start in : 3:40:24.230160
+Next Start in : 3:40:23.228293
+Getting the upcoming events
+Next Start in : 3:40:22.226421
+Next Start in : 3:40:21.224536
+Next Start in : 3:40:20.223248
+Next Start in : 3:40:19.221404
+Next Start in : 3:40:18.219572
+Next Start in : 3:40:17.217739
+Next Start in : 3:40:16.215852
+Next Start in : 3:40:15.213936
+Next Start in : 3:40:14.211965
+Next Start in : 3:40:13.210064
+Getting the upcoming eventsNext Start in :
+ 3:40:12.182211
+Next Start in : 3:40:11.085524
+Next Start in : 3:40:10.083624
+Next Start in : 3:40:09.081723
+Next Start in : 3:40:08.079814
+Next Start in : 3:40:07.077920
+Next Start in : 3:40:06.076426
+Next Start in : 3:40:05.074530
+Next Start in : 3:40:04.072640
+Next Start in : 3:40:03.070730
+Next Start in : 3:40:02.068820
+Getting the upcoming events
+Next Start in : 3:40:01.066901
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 3:40:00.064919
+Next Start in : 3:39:59.063027
+Next Start in : 3:39:58.061129
+Next Start in : 3:39:57.059221
+Next Start in : 3:39:56.057329
+Next Start in : 3:39:55.055352
+Next Start in : 3:39:54.053448
+Next Start in : 3:39:53.051541
+Next Start in : 3:39:52.049631
+Next Start in : 3:39:51.047716
+Getting the upcoming events
+Next Start in : 3:39:50.045791
+Next Start in : 3:39:49.043883
+Next Start in : 3:39:48.041982
+Next Start in : 3:39:47.040096
+Next Start in : 3:39:46.038211
+Next Start in : 3:39:45.036311
+Next Start in : 3:39:44.034414
+Next Start in : 3:39:43.032531
+Next Start in : 3:39:42.030647
+Next Start in : 3:39:41.028759
+Next Start in : 3:39:40.026861
+Getting the upcoming events
+Next Start in : 3:39:39.024847
+Next Start in : 3:39:38.022942
+Next Start in : 3:39:37.021054
+Next Start in : 3:39:36.019169
+Next Start in : 3:39:35.017271
+Next Start in : 3:39:34.015288
+Next Start in : 3:39:33.013368
+Next Start in : 3:39:32.011454
+Next Start in : 3:39:31.009558
+Next Start in : 3:39:30.007667
+Getting the upcoming events
+Next Start in : 3:39:28.969095
+Next Start in : 3:39:27.967016
+Next Start in : 3:39:26.965005
+Next Start in : 3:39:25.963076
+Next Start in : 3:39:24.961157
+Next Start in : 3:39:23.959254
+Next Start in : 3:39:22.957360
+Next Start in : 3:39:21.955417
+Next Start in : 3:39:20.953499
+Next Start in : 3:39:19.951581
+Next Start in : 3:39:18.949676
+Getting the upcoming events
+Next Start in : 3:39:17.947789
+Next Start in : 3:39:16.945894
+Next Start in : 3:39:15.943995
+Next Start in : 3:39:14.942083
+Next Start in : 3:39:13.940156
+Next Start in : 3:39:12.938258
+Next Start in : 3:39:11.936354
+Next Start in : 3:39:10.934452
+Next Start in : 3:39:09.932568
+Next Start in : 3:39:08.930667
+Next Start in : 3:39:07.928803
+Getting the upcoming events
+Next Start in : 3:39:06.926922
+Next Start in : 3:39:05.924968
+Next Start in : 3:39:04.923065
+Next Start in : 3:39:03.921162
+Next Start in : 3:39:02.919259
+Next Start in : 3:39:01.917349
+Next Start in : 3:39:00.915384
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 3:38:59.913482
+Next Start in : 3:38:58.911558
+Next Start in : 3:38:57.909652
+Getting the upcoming events
+Next Start in : 3:38:56.889767
+Next Start in : 3:38:55.887681
+Next Start in : 3:38:54.886429
+Next Start in : 3:38:53.884517
+Next Start in : 3:38:52.882627
+Next Start in : 3:38:51.880727
+Next Start in : 3:38:50.878833
+Next Start in : 3:38:49.876929
+Next Start in : 3:38:48.874970
+Next Start in : 3:38:47.873084
+Next Start in : 3:38:46.871204
+Getting the upcoming events
+Next Start in : 3:38:45.869308
+Next Start in : 3:38:44.867399
+Next Start in : 3:38:43.865501
+Next Start in : 3:38:42.863582
+Next Start in : 3:38:41.861715
+Next Start in : 3:38:40.859840
+Next Start in : 3:38:39.857975
+Next Start in : 3:38:38.856084
+Next Start in : 3:38:37.854179
+Next Start in : 3:38:36.852320
+Next Start in : 3:38:35.850442
+Getting the upcoming events
+Next Start in : 3:38:34.848570
+Next Start in : 3:38:33.846678
+Next Start in : 3:38:32.844677
+Next Start in : 3:38:31.842780
+Next Start in : 3:38:30.841056
+Next Start in : 3:38:29.839187
+Next Start in : 3:38:28.837314
+Next Start in : 3:38:27.835342
+Next Start in : 3:38:26.833431
+Next Start in : 3:38:25.831545
+Next Start in : 3:38:24.829667
+Getting the upcoming events
+Next Start in : 3:38:23.827782
+Next Start in : 3:38:22.825900
+Next Start in : 3:38:21.824023
+Next Start in : 3:38:20.822137
+Next Start in : 3:38:19.820246
+Next Start in : 3:38:18.818365
+Next Start in : 3:38:17.816473
+Next Start in : 3:38:16.814589
+Next Start in : 3:38:15.812696
+Next Start in : 3:38:14.804632
+Getting the upcoming events
+Next Start in : 3:38:13.802742
+Next Start in : 3:38:12.800851
+Next Start in : 3:38:11.798963
+Next Start in : 3:38:10.797069
+Next Start in : 3:38:09.795112
+Next Start in : 3:38:08.793197
+Next Start in : 3:38:07.791311
+Next Start in : 3:38:06.789386
+Next Start in : 3:38:05.787500
+Next Start in : 3:38:04.785451
+Next Start in : 3:38:03.783546
+Getting the upcoming events
+Next Start in : 3:38:02.781645
+Next Start in : 3:38:01.779742
+Next Start in : 3:38:00.777820
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 3:37:59.775904
+Next Start in : 3:37:58.774013
+Next Start in : 3:37:57.772118
+Next Start in : 3:37:56.770186
+Next Start in : 3:37:55.768256
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/force 2
+
+Callback sending force command to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_FORCE
+	msgvalue : FORCE_ON
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+HeatMgr : ecsState OFF
+Heat Manager : Forcing ECS ON
+	Heat Manager : Switching ECS ON
+HeatManager waiting for message
+Callback payload 2
+Next Start in : 3:37:54.766320
+Next Start in : 3:37:53.764405
+Next Start in : 3:37:52.762519
+Getting the upcoming events
+Next Start in : 3:37:51.760613
+Next Start in : 3:37:50.758715
+Next Start in : 3:37:49.756817
+Next Start in : 3:37:48.749702
+Next Start in : 3:37:47.747801
+Next Start in : 3:37:46.745900
+Next Start in : 3:37:45.743997
+Next Start in : 3:37:44.742096
+Next Start in : 3:37:43.740186
+Next Start in : 3:37:42.738299
+Getting the upcoming eventsNext Start in :
+ 3:37:41.715390
+Next Start in : 3:37:40.619596
+Next Start in : 3:37:39.617682
+Next Start in : 3:37:38.615758
+Next Start in : 3:37:37.613839
+Next Start in : 3:37:36.612010
+Next Start in : 3:37:35.610371
+Next Start in : 3:37:34.608474
+Next Start in : 3:37:33.606514
+Next Start in : 3:37:32.604591
+Next Start in : 3:37:31.602644
+Getting the upcoming events
+Next Start in : 3:37:30.600728
+Next Start in : 3:37:29.598841
+Next Start in : 3:37:28.596949
+Next Start in : 3:37:27.595000
+Next Start in : 3:37:26.593116
+Next Start in : 3:37:25.591224
+Next Start in : 3:37:24.589304
+Next Start in : 3:37:23.587434
+Next Start in : 3:37:22.585539
+Next Start in : 3:37:21.583611
+Next Start in : 3:37:20.581668
+Getting the upcoming events
+Next Start in : 3:37:19.579330
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 21.0
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 21.0
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  21.0
+HeatManager waiting for message
+Next Start in : 3:37:18.577419
+Next Start in : 3:37:17.576350
+Next Start in : 3:37:16.574440
+Next Start in : 3:37:15.572516
+Next Start in : 3:37:14.564810
+Next Start in : 3:37:13.562917
+Next Start in : 3:37:12.561011
+Next Start in : 3:37:11.559114
+Next Start in : 3:37:10.557218
+Next Start in : 3:37:09.555164
+Getting the upcoming events
+Next Start in : 3:37:08.553256
+Next Start in : 3:37:07.551351
+Next Start in : 3:37:06.549426
+Next Start in : 3:37:05.547502
+Next Start in : 3:37:04.545595
+Next Start in : 3:37:03.543687
+Next Start in : 3:37:02.541795
+Next Start in : 3:37:01.539862
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :21.0
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 3:37:00.537935
+Next Start in : 3:36:59.536020
+Getting the upcoming events
+Next Start in : 3:36:58.534097
+Next Start in : 3:36:57.532171
+Next Start in : 3:36:56.530276
+Next Start in : 3:36:55.528399
+Next Start in : 3:36:54.526447
+Next Start in : 3:36:53.524552
+Next Start in : 3:36:52.522634
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/force 1
+
+Callback sending force command to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_FORCE
+	msgvalue : FORCE_OFF
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+HeatMgr : ecsState ON
+Heat Manager : Forcing ECS OFF
+	Heat Manager : Switching ECS OFF
+HeatManager waiting for message
+Next Start in : 3:36:51.520733
+Next Start in : 3:36:50.518832
+Next Start in : 3:36:49.516945
+Next Start in : 3:36:48.514956
+Getting the upcoming events
+Next Start in : 3:36:47.513010
+Next Start in : 3:36:46.511103
+Next Start in : 3:36:45.509142
+Next Start in : 3:36:44.507237
+Next Start in : 3:36:43.505271
+Next Start in : 3:36:42.503361
+Next Start in : 3:36:41.501427
+Next Start in : 3:36:40.499521
+Next Start in : 3:36:39.497612
+Next Start in : 3:36:38.495702
+Getting the upcoming events
+Next Start in : 3:36:37.418308
+Next Start in : 3:36:36.411500
+Next Start in : 3:36:35.409629
+Next Start in : 3:36:34.407766
+Next Start in : 3:36:33.406459
+Next Start in : 3:36:32.404578
+Next Start in : 3:36:31.402686
+Next Start in : 3:36:30.400798
+Next Start in : 3:36:29.398926
+Next Start in : 3:36:28.397058
+Next Start in : 3:36:27.395094
+Getting the upcoming events
+Next Start in : 3:36:26.393212
+Next Start in : 3:36:25.391315
+Next Start in : 3:36:24.389413
+Next Start in : 3:36:23.387526
+Next Start in : 3:36:22.385658
+Next Start in : 3:36:21.383790
+Next Start in : 3:36:20.381883
+Next Start in : 3:36:19.373716
+Next Start in : 3:36:18.371849
+Next Start in : 3:36:17.369976
+Next Start in : 3:36:16.368106
+Getting the upcoming events
+Next Start in : 3:36:15.366227
+Next Start in : 3:36:14.359458
+Next Start in : 3:36:13.357579
+Next Start in : 3:36:12.355695
+Next Start in : 3:36:11.353830
+Next Start in : 3:36:10.351954
+Next Start in : 3:36:09.350055
+Next Start in : 3:36:08.348168
+Next Start in : 3:36:07.346293
+Next Start in : 3:36:06.344422
+Next Start in : 3:36:05.342553
+Getting the upcoming events
+Next Start in : 3:36:04.340676
+Next Start in : 3:36:03.333515
+Next Start in : 3:36:02.331642
+Next Start in : 3:36:01.329756
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 3:36:00.327866
+Next Start in : 3:35:59.325987
+Next Start in : 3:35:58.318865
+Next Start in : 3:35:57.317009
+Next Start in : 3:35:56.315089
+Next Start in : 3:35:55.313244
+Next Start in : 3:35:54.311360
+Getting the upcoming events
+Next Start in : 3:35:53.303977
+Next Start in : 3:35:52.302104
+Next Start in : 3:35:51.300235
+Next Start in : 3:35:50.298374
+Next Start in : 3:35:49.296452
+Next Start in : 3:35:48.287762
+Next Start in : 3:35:47.285890
+Next Start in : 3:35:46.284014
+Next Start in : 3:35:45.282154
+Next Start in : 3:35:44.280278
+Getting the upcoming events
+Next Start in : 3:35:43.278396
+Next Start in : 3:35:42.276448
+Next Start in : 3:35:41.274549
+Next Start in : 3:35:40.272665
+Next Start in : 3:35:39.270797
+Next Start in : 3:35:38.268919
+Next Start in : 3:35:37.262413
+Next Start in : 3:35:36.260551
+Next Start in : 3:35:35.258677
+Next Start in : 3:35:34.256774
+Next Start in : 3:35:33.254791
+Getting the upcoming events
+Next Start in : 3:35:32.252880
+Next Start in : 3:35:31.250998
+Next Start in : 3:35:30.249100
+Next Start in : 3:35:29.247202
+Next Start in : 3:35:28.245244
+Next Start in : 3:35:27.243373
+Next Start in : 3:35:26.236425
+Next Start in : 3:35:25.234561
+Next Start in : 3:35:24.232681
+Next Start in : 3:35:23.230795
+Next Start in : 3:35:22.228928
+Getting the upcoming events
+Next Start in : 3:35:21.222331
+Next Start in : 3:35:20.220454
+Next Start in : 3:35:19.218582
+Next Start in : 3:35:18.216690
+Next Start in : 3:35:17.214711
+Next Start in : 3:35:16.212805
+Next Start in : 3:35:15.210898
+Next Start in : 3:35:14.209019
+Next Start in : 3:35:13.207137
+Next Start in : 3:35:12.205142
+Getting the upcoming events
+Next Start in : 3:35:11.202877
+Next Start in : 3:35:10.195531
+Next Start in : 3:35:09.193627
+Next Start in : 3:35:08.191747
+Next Start in : 3:35:07.189866
+Next Start in : 3:35:06.187981
+Next Start in : 3:35:05.180771
+Next Start in : 3:35:04.178898
+Next Start in : 3:35:03.177000
+Next Start in : 3:35:02.175019
+Next Start in : 3:35:01.173133
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Getting the upcoming events
+Next Start in : 3:35:00.171258
+Next Start in : 3:34:59.169419
+Next Start in : 3:34:58.167512
+Next Start in : 3:34:57.165606
+Next Start in : 3:34:56.163717
+Next Start in : 3:34:55.161834
+Next Start in : 3:34:54.159954
+Next Start in : 3:34:53.158060
+Next Start in : 3:34:52.156173
+Next Start in : 3:34:51.154294
+Next Start in : 3:34:50.147520
+Getting the upcoming events
+Next Start in : 3:34:49.138864
+Next Start in : 3:34:48.136971
+Next Start in : 3:34:47.134992
+Next Start in : 3:34:46.133119
+Next Start in : 3:34:45.131234
+Next Start in : 3:34:44.122065
+Next Start in : 3:34:43.120180
+Next Start in : 3:34:42.118281
+Next Start in : 3:34:41.116380
+Next Start in : 3:34:40.114485
+Getting the upcoming events
+Next Start in : 3:34:39.112284
+Next Start in : 3:34:38.110385
+Next Start in : 3:34:37.108498
+Next Start in : 3:34:36.106541
+Next Start in : 3:34:35.104645
+Next Start in : 3:34:34.102741
+Next Start in : 3:34:33.100823
+Next Start in : 3:34:32.098925
+Next Start in : 3:34:31.097033
+Next Start in : 3:34:30.095037
+Next Start in : 3:34:29.093137
+Getting the upcoming events
+Next Start in : 3:34:28.091252
+Next Start in : 3:34:27.084492
+Next Start in : 3:34:26.082605
+Next Start in : 3:34:25.080732
+Next Start in : 3:34:24.078843
+Next Start in : 3:34:23.076935
+Next Start in : 3:34:22.070095
+Next Start in : 3:34:21.068158
+Next Start in : 3:34:20.066289
+Next Start in : 3:34:19.064409
+Next Start in : 3:34:18.062512
+Getting the upcoming events
+Next Start in : 3:34:17.055262
+Next Start in : 3:34:16.053391
+Next Start in : 3:34:15.051530
+Next Start in : 3:34:14.049586
+Next Start in : 3:34:13.047712
+Next Start in : 3:34:12.041146
+Next Start in : 3:34:11.039288
+Next Start in : 3:34:10.037425
+Next Start in : 3:34:09.035556
+Next Start in : 3:34:08.033696
+Next Start in : 3:34:07.025943
+Getting the upcoming events
+Next Start in : 3:34:06.024066
+Next Start in : 3:34:05.022186
+Next Start in : 3:34:04.020309
+Next Start in : 3:34:03.018424
+Next Start in : 3:34:02.011425
+Next Start in : 3:34:01.009527
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 3:34:00.007635
+Next Start in : 3:33:59.005740
+Next Start in : 3:33:58.003842
+Next Start in : 3:33:57.001935
+Getting the upcoming events
+Next Start in : 3:33:56.000066
+Next Start in : 3:33:54.998207
+Next Start in : 3:33:53.996312
+Next Start in : 3:33:52.994424
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/force 2
+
+Callback sending force command to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_FORCE
+	msgvalue : FORCE_ON
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+HeatMgr : ecsState OFF
+Heat Manager : Forcing ECS ON
+	Heat Manager : Switching ECS ON
+HeatManager waiting for message
+Callback payload 2
+Next Start in : 3:33:51.992530
+Next Start in : 3:33:50.990640
+Next Start in : 3:33:49.988747
+Next Start in : 3:33:48.986867
+Next Start in : 3:33:47.984914
+Next Start in : 3:33:46.983018
+Next Start in : 3:33:45.981121
+Getting the upcoming events
+Next Start in : 3:33:44.979232
+Next Start in : 3:33:43.977342
+Next Start in : 3:33:42.975402
+Next Start in : 3:33:41.973516
+Next Start in : 3:33:40.971598
+Next Start in : 3:33:39.969661
+Next Start in : 3:33:38.967758
+Next Start in : 3:33:37.965877
+Next Start in : 3:33:36.963995
+Next Start in : 3:33:35.962099
+Next Start in : 3:33:34.960196
+Getting the upcoming events
+Next Start in : 3:33:33.958150
+Next Start in : 3:33:32.956247
+Next Start in : 3:33:31.954348
+Next Start in : 3:33:30.952453
+Next Start in : 3:33:29.950557
+Next Start in : 3:33:28.948643
+Next Start in : 3:33:27.946742
+Next Start in : 3:33:26.944792
+Next Start in : 3:33:25.942896
+Next Start in : 3:33:24.940984
+Getting the upcoming events
+Next Start in : 3:33:23.938850
+Next Start in : 3:33:22.930668
+Next Start in : 3:33:21.928790
+Next Start in : 3:33:20.926902
+Next Start in : 3:33:19.924930
+Next Start in : 3:33:18.922849
+Next Start in : 3:33:17.920652
+Next Start in : 3:33:16.918741
+Next Start in : 3:33:15.916821
+Next Start in : 3:33:14.914827
+Next Start in : 3:33:13.912882
+Getting the upcoming events
+Next Start in : 3:33:12.910377
+Next Start in : 3:33:11.908453
+Next Start in : 3:33:10.906476
+Next Start in : 3:33:09.904561
+Next Start in : 3:33:08.902641
+Next Start in : 3:33:07.900704
+Next Start in : 3:33:06.898769
+Next Start in : 3:33:05.896848
+Next Start in : 3:33:04.894834
+Next Start in : 3:33:03.892924
+Next Start in : 3:33:02.891013
+Getting the upcoming events
+Next Start in : 3:33:01.889084
+Next Start in : 3:33:00.887159
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 3:32:59.885150
+Next Start in : 3:32:58.883267
+Next Start in : 3:32:57.882055
+Next Start in : 3:32:56.880156
+Next Start in : 3:32:55.878377
+Next Start in : 3:32:54.876436
+Next Start in : 3:32:53.874557
+Next Start in : 3:32:52.872704
+Next Start in : 3:32:51.870702
+Getting the upcoming events
+Next Start in : 3:32:50.868835
+Next Start in : 3:32:49.866959
+Next Start in : 3:32:48.864991
+Next Start in : 3:32:47.863117
+Next Start in : 3:32:46.861192
+Next Start in : 3:32:45.859308
+Next Start in : 3:32:44.857420
+Next Start in : 3:32:43.855555
+Next Start in : 3:32:42.853682
+Next Start in : 3:32:41.851758
+Getting the upcoming events
+Next Start in : 3:32:40.849884
+Next Start in : 3:32:39.848014
+Next Start in : 3:32:38.846117
+Next Start in : 3:32:37.844232
+Next Start in : 3:32:36.842307
+Next Start in : 3:32:35.840423
+Next Start in : 3:32:34.838531
+Next Start in : 3:32:33.836536
+Next Start in : 3:32:32.834638
+Next Start in : 3:32:31.832789
+Next Start in : 3:32:30.831019
+Getting the upcoming events
+Next Start in : 3:32:29.829232
+Next Start in : 3:32:28.827365
+Next Start in : 3:32:27.825431
+Next Start in : 3:32:26.823574
+Next Start in : 3:32:25.821696
+Next Start in : 3:32:24.819812
+Next Start in : 3:32:23.817942
+Next Start in : 3:32:22.816464
+Next Start in : 3:32:21.814590
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/force 1
+
+Callback sending force command to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_FORCE
+	msgvalue : FORCE_OFF
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+HeatMgr : ecsState ON
+Heat Manager : Forcing ECS OFF
+	Heat Manager : Switching ECS OFF
+HeatManager waiting for message
+Next Start in : 3:32:20.812703
+Next Start in : 3:32:19.810813
+Getting the upcoming events
+Next Start in : 3:32:18.808924
+Next Start in : 3:32:17.807042
+Next Start in : 3:32:16.805073
+Next Start in : 3:32:15.803192
+Next Start in : 3:32:14.801311
+Next Start in : 3:32:13.799413
+Next Start in : 3:32:12.797526
+Next Start in : 3:32:11.795647
+Next Start in : 3:32:10.793705
+Next Start in : 3:32:09.791813
+Getting the upcoming eventsNext Start in :
+ 3:32:08.737382
+Next Start in : 3:32:07.637600
+Next Start in : 3:32:06.635702
+Next Start in : 3:32:05.633801
+Next Start in : 3:32:04.631905
+Next Start in : 3:32:03.630002
+Next Start in : 3:32:02.628092
+Next Start in : 3:32:01.626186
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 3:32:00.624324
+Next Start in : 3:31:59.622516
+Next Start in : 3:31:58.620656
+Getting the upcoming events
+Next Start in : 3:31:57.618780
+Next Start in : 3:31:56.616879
+Next Start in : 3:31:55.614929
+Next Start in : 3:31:54.613064
+Next Start in : 3:31:53.611204
+Next Start in : 3:31:52.609338
+Next Start in : 3:31:51.607441
+Next Start in : 3:31:50.605573
+Next Start in : 3:31:49.603709
+Next Start in : 3:31:48.601844
+Next Start in : 3:31:47.599964
+Getting the upcoming events
+Next Start in : 3:31:46.598064
+Next Start in : 3:31:45.596170
+Next Start in : 3:31:44.594286
+Next Start in : 3:31:43.592399
+Next Start in : 3:31:42.590530
+Next Start in : 3:31:41.588647
+Next Start in : 3:31:40.586772
+Next Start in : 3:31:39.584827
+Next Start in : 3:31:38.582917
+Next Start in : 3:31:37.581031
+Next Start in : 3:31:36.579143
+Getting the upcoming events
+Next Start in : 3:31:35.577256
+Next Start in : 3:31:34.575299
+Next Start in : 3:31:33.573352
+Next Start in : 3:31:32.571470
+Next Start in : 3:31:31.569588
+Next Start in : 3:31:30.567707
+Next Start in : 3:31:29.565932
+Next Start in : 3:31:28.564056
+Next Start in : 3:31:27.562185
+Next Start in : 3:31:26.560298
+Getting the upcoming eventsNext Start in :
+ 3:31:25.520953
+Next Start in : 3:31:24.424025
+Next Start in : 3:31:23.422136
+Next Start in : 3:31:22.420248
+Next Start in : 3:31:21.418349
+Next Start in : 3:31:20.416468
+Next Start in : 3:31:19.414592
+Next Start in : 3:31:18.412689
+Next Start in : 3:31:17.410806
+Next Start in : 3:31:16.408905
+Next Start in : 3:31:15.407017
+Getting the upcoming events
+Next Start in : 3:31:14.405065
+Next Start in : 3:31:13.403182
+Next Start in : 3:31:12.401291
+Next Start in : 3:31:11.399411
+Next Start in : 3:31:10.397519
+Next Start in : 3:31:09.395625
+Next Start in : 3:31:08.393738
+Next Start in : 3:31:07.391843
+Next Start in : 3:31:06.389945
+Next Start in : 3:31:05.388049
+Next Start in : 3:31:04.386169
+Getting the upcoming events
+Next Start in : 3:31:03.384264
+Next Start in : 3:31:02.382343
+Next Start in : 3:31:01.380430
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 3:31:00.378501
+Next Start in : 3:30:59.376476
+Next Start in : 3:30:58.374564
+Next Start in : 3:30:57.372652
+Next Start in : 3:30:56.370741
+Next Start in : 3:30:55.368840
+Next Start in : 3:30:54.366927
+Getting the upcoming events
+Next Start in : 3:30:53.278135
+Next Start in : 3:30:52.276036
+Next Start in : 3:30:51.274127
+Next Start in : 3:30:50.272224
+Next Start in : 3:30:49.270306
+Next Start in : 3:30:48.268386
+Next Start in : 3:30:47.266449
+Next Start in : 3:30:46.264535
+Next Start in : 3:30:45.262640
+Next Start in : 3:30:44.260723
+Next Start in : 3:30:43.258814
+Getting the upcoming events
+Next Start in : 3:30:42.256935
+Next Start in : 3:30:41.255003
+Next Start in : 3:30:40.253101
+Next Start in : 3:30:39.251199
+Next Start in : 3:30:38.249296
+Next Start in : 3:30:37.247378
+Next Start in : 3:30:36.245408
+Next Start in : 3:30:35.243483
+Next Start in : 3:30:34.242066
+Next Start in : 3:30:33.240786
+Next Start in : 3:30:32.239546
+Getting the upcoming events
+Next Start in : 3:30:31.238061
+Next Start in : 3:30:30.236428
+Next Start in : 3:30:29.234512
+Next Start in : 3:30:28.232615
+Next Start in : 3:30:27.230724
+Next Start in : 3:30:26.228811
+Next Start in : 3:30:25.226833
+Next Start in : 3:30:24.224831
+Next Start in : 3:30:23.222922
+Next Start in : 3:30:22.221027
+Next Start in : 3:30:21.219133
+Getting the upcoming events
+Next Start in : 3:30:20.217158
+Next Start in : 3:30:19.215180
+Next Start in : 3:30:18.213271
+Next Start in : 3:30:17.211358
+Next Start in : 3:30:16.209454
+Next Start in : 3:30:15.207535
+Next Start in : 3:30:14.205794
+Next Start in : 3:30:13.203899
+Next Start in : 3:30:12.201993
+Next Start in : 3:30:11.200080
+Getting the upcoming events
+Next Start in : 3:30:10.198216
+Next Start in : 3:30:09.196348
+Next Start in : 3:30:08.194423
+Next Start in : 3:30:07.192526
+Next Start in : 3:30:06.190613
+Next Start in : 3:30:05.188700
+Next Start in : 3:30:04.186795
+Next Start in : 3:30:03.184743
+Next Start in : 3:30:02.182832
+Next Start in : 3:30:01.180930
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 3:30:00.179018
+Getting the upcoming events
+Next Start in : 3:29:59.177105
+Next Start in : 3:29:58.174978
+Next Start in : 3:29:57.173042
+Next Start in : 3:29:56.171157
+Next Start in : 3:29:55.169272
+Next Start in : 3:29:54.167367
+Next Start in : 3:29:53.165851
+Next Start in : 3:29:52.163931
+Next Start in : 3:29:51.162028
+Next Start in : 3:29:50.160136
+Next Start in : 3:29:49.158257
+Getting the upcoming events
+Next Start in : 3:29:48.156339
+Next Start in : 3:29:47.154415
+Next Start in : 3:29:46.152507
+Next Start in : 3:29:45.150610
+Next Start in : 3:29:44.148699
+Next Start in : 3:29:43.146792
+Next Start in : 3:29:42.144804
+Next Start in : 3:29:41.142889
+Next Start in : 3:29:40.140997
+Next Start in : 3:29:39.139085
+Getting the upcoming events
+Next Start in : 3:29:38.137201
+Next Start in : 3:29:37.135233
+Next Start in : 3:29:36.133323
+Next Start in : 3:29:35.131414
+Next Start in : 3:29:34.129520
+Next Start in : 3:29:33.127617
+Next Start in : 3:29:32.126461
+Next Start in : 3:29:31.124494
+Next Start in : 3:29:30.122554
+Next Start in : 3:29:29.120627
+Next Start in : 3:29:28.118705
+Getting the upcoming events
+Next Start in : 3:29:27.116787
+Next Start in : 3:29:26.114822
+Next Start in : 3:29:25.112929
+Next Start in : 3:29:24.111018
+Next Start in : 3:29:23.109104
+Next Start in : 3:29:22.107203
+Next Start in : 3:29:21.105216
+Next Start in : 3:29:20.103299
+Next Start in : 3:29:19.101396
+Next Start in : 3:29:18.099465
+Next Start in : 3:29:17.097520
+Getting the upcoming events
+Next Start in : 3:29:16.095600
+Next Start in : 3:29:15.093677
+Next Start in : 3:29:14.091750
+Next Start in : 3:29:13.089849
+Next Start in : 3:29:12.087929
+Next Start in : 3:29:11.086438
+Next Start in : 3:29:10.084496
+Next Start in : 3:29:09.082565
+Next Start in : 3:29:08.080643
+Next Start in : 3:29:07.078735
+Getting the upcoming events
+Next Start in : 3:29:06.025543
+Next Start in : 3:29:04.981027
+Next Start in : 3:29:03.979090
+Next Start in : 3:29:02.972053
+Next Start in : 3:29:01.970123
+Next Start in : 3:29:00.968189
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 3:28:59.966427
+Next Start in : 3:28:58.964509
+Next Start in : 3:28:57.962573
+Next Start in : 3:28:56.960649
+Next Start in : 3:28:55.958713
+Getting the upcoming events
+Next Start in : 3:28:54.956819
+Next Start in : 3:28:53.954850
+Next Start in : 3:28:52.952949
+Next Start in : 3:28:51.951056
+Next Start in : 3:28:50.949174
+Next Start in : 3:28:49.947288
+Next Start in : 3:28:48.945328
+Next Start in : 3:28:47.943415
+Next Start in : 3:28:46.941488
+Next Start in : 3:28:45.939588
+Next Start in : 3:28:44.937690
+Getting the upcoming events
+Next Start in : 3:28:43.935812
+Next Start in : 3:28:42.933911
+Next Start in : 3:28:41.932000
+Next Start in : 3:28:40.930081
+Next Start in : 3:28:39.928337
+Next Start in : 3:28:38.926451
+Next Start in : 3:28:37.924560
+Next Start in : 3:28:36.922663
+Next Start in : 3:28:35.920750
+Next Start in : 3:28:34.918800
+Next Start in : 3:28:33.916911
+Getting the upcoming events
+Next Start in : 3:28:32.914902
+Next Start in : 3:28:31.912960
+Next Start in : 3:28:30.911050
+Next Start in : 3:28:29.909128
+Next Start in : 3:28:28.907184
+Next Start in : 3:28:27.905187
+Next Start in : 3:28:26.903260
+Next Start in : 3:28:25.901315
+Next Start in : 3:28:24.899397
+Next Start in : 3:28:23.897427
+Getting the upcoming events
+Next Start in : 3:28:22.895516
+Next Start in : 3:28:21.893622
+Next Start in : 3:28:20.891722
+Next Start in : 3:28:19.889826
+Next Start in : 3:28:18.887942
+Next Start in : 3:28:17.886022
+Next Start in : 3:28:16.884124
+Next Start in : 3:28:15.882242
+Next Start in : 3:28:14.880299
+Next Start in : 3:28:13.878434
+Next Start in : 3:28:12.876499
+Getting the upcoming events
+Next Start in : 3:28:11.874590
+Next Start in : 3:28:10.872719
+Next Start in : 3:28:09.870846
+Next Start in : 3:28:08.868969
+Next Start in : 3:28:07.867072
+Next Start in : 3:28:06.865076
+Next Start in : 3:28:05.863157
+Next Start in : 3:28:04.861285
+Next Start in : 3:28:03.859405
+Next Start in : 3:28:02.857514
+Next Start in : 3:28:01.855614
+Getting the upcoming events
+Next Start in : 3:28:00.853719
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 3:27:59.851802
+Next Start in : 3:27:58.845461
+Next Start in : 3:27:57.843533
+Next Start in : 3:27:56.841658
+Next Start in : 3:27:55.839745
+Next Start in : 3:27:54.837802
+Next Start in : 3:27:53.835883
+Next Start in : 3:27:52.833972
+Next Start in : 3:27:51.832047
+Next Start in : 3:27:50.830127
+Getting the upcoming events
+Next Start in : 3:27:49.828088
+Next Start in : 3:27:48.826433
+Next Start in : 3:27:47.824522
+Next Start in : 3:27:46.822654
+Next Start in : 3:27:45.820762
+Next Start in : 3:27:44.818866
+Next Start in : 3:27:43.816952
+Next Start in : 3:27:42.814966
+Next Start in : 3:27:41.813055
+Next Start in : 3:27:40.811157
+Getting the upcoming events
+Next Start in : 3:27:39.809239
+Next Start in : 3:27:38.807188
+Next Start in : 3:27:37.805200
+Next Start in : 3:27:36.803297
+Next Start in : 3:27:35.801369
+Next Start in : 3:27:34.799478
+Next Start in : 3:27:33.797460
+Next Start in : 3:27:32.795527
+Next Start in : 3:27:31.793600
+Next Start in : 3:27:30.791678
+Next Start in : 3:27:29.789832
+Getting the upcoming events
+Next Start in : 3:27:28.782751
+Next Start in : 3:27:27.780860
+Next Start in : 3:27:26.778960
+Next Start in : 3:27:25.777062
+Next Start in : 3:27:24.775091
+Next Start in : 3:27:23.773148
+Next Start in : 3:27:22.771193
+Next Start in : 3:27:21.769253
+Next Start in : 3:27:20.767713
+Next Start in : 3:27:19.765769
+Next Start in : 3:27:18.763751
+Getting the upcoming events
+Next Start in : 3:27:17.761816
+Next Start in : 3:27:16.759910
+Next Start in : 3:27:15.757991
+Next Start in : 3:27:14.756096
+Next Start in : 3:27:13.754184
+Next Start in : 3:27:12.752211
+Next Start in : 3:27:11.750310
+Next Start in : 3:27:10.748377
+Next Start in : 3:27:09.746457
+Next Start in : 3:27:08.744541
+Getting the upcoming events
+Next Start in : 3:27:07.742655
+Next Start in : 3:27:06.740805
+Next Start in : 3:27:05.738900
+Next Start in : 3:27:04.737004
+Next Start in : 3:27:03.734995
+Next Start in : 3:27:02.733050
+Next Start in : 3:27:01.731138
+Next Start in : 3:27:00.729241
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 3:26:59.727330
+Next Start in : 3:26:58.725355
+Next Start in : 3:26:57.723431
+Getting the upcoming events
+Next Start in : 3:26:56.719509
+Next Start in : 3:26:55.717596
+Next Start in : 3:26:54.716461
+Next Start in : 3:26:53.714562
+Next Start in : 3:26:52.712652
+Next Start in : 3:26:51.710746
+Next Start in : 3:26:50.708832
+Next Start in : 3:26:49.706916
+Next Start in : 3:26:48.704935
+Next Start in : 3:26:47.703031
+Getting the upcoming events
+Next Start in : 3:26:46.613475
+Next Start in : 3:26:45.553030
+Next Start in : 3:26:44.551088
+Next Start in : 3:26:43.549216
+Next Start in : 3:26:42.547343
+Next Start in : 3:26:41.545381
+Next Start in : 3:26:40.543506
+Next Start in : 3:26:39.541591
+Next Start in : 3:26:38.539657
+Next Start in : 3:26:37.537757
+Next Start in : 3:26:36.535862
+Getting the upcoming events
+Next Start in : 3:26:35.533946
+Next Start in : 3:26:34.532064
+Next Start in : 3:26:33.530206
+Next Start in : 3:26:32.528340
+Next Start in : 3:26:31.526445
+Next Start in : 3:26:30.524556
+Next Start in : 3:26:29.522663
+Next Start in : 3:26:28.520779
+Next Start in : 3:26:27.519022
+Next Start in : 3:26:26.517278
+Next Start in : 3:26:25.515385
+Getting the upcoming events
+Next Start in : 3:26:24.513467
+Next Start in : 3:26:23.511573
+Next Start in : 3:26:22.509652
+Next Start in : 3:26:21.507755
+Next Start in : 3:26:20.506441
+Next Start in : 3:26:19.504538
+Next Start in : 3:26:18.502623
+Next Start in : 3:26:17.500724
+Next Start in : 3:26:16.498831
+Next Start in : 3:26:15.496961
+Next Start in : 3:26:14.494751
+Getting the upcoming events
+Next Start in : 3:26:13.492855
+Next Start in : 3:26:12.490950
+Next Start in : 3:26:11.489044
+Next Start in : 3:26:10.487159
+Next Start in : 3:26:09.485212
+Next Start in : 3:26:08.483320
+Next Start in : 3:26:07.481400
+Next Start in : 3:26:06.479481
+Next Start in : 3:26:05.477586
+Next Start in : 3:26:04.475703
+Getting the upcoming events
+Next Start in : 3:26:03.473838
+Next Start in : 3:26:02.471915
+Next Start in : 3:26:01.470004
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 3:26:00.468094
+Next Start in : 3:25:59.466193
+Next Start in : 3:25:58.464290
+Next Start in : 3:25:57.462399
+Next Start in : 3:25:56.460483
+Next Start in : 3:25:55.458604
+Next Start in : 3:25:54.456725
+Next Start in : 3:25:53.454796
+Getting the upcoming events
+Next Start in : 3:25:52.452883
+Next Start in : 3:25:51.450972
+Next Start in : 3:25:50.449090
+Next Start in : 3:25:49.447209
+Next Start in : 3:25:48.445207
+Next Start in : 3:25:47.443311
+Next Start in : 3:25:46.441429
+Next Start in : 3:25:45.439571
+Next Start in : 3:25:44.437678
+Next Start in : 3:25:43.435785
+Next Start in : 3:25:42.433897
+Getting the upcoming events
+Next Start in : 3:25:41.432004
+Next Start in : 3:25:40.430121
+Next Start in : 3:25:39.428249
+Next Start in : 3:25:38.426367
+Next Start in : 3:25:37.424494
+Next Start in : 3:25:36.422614
+Next Start in : 3:25:35.420736
+Next Start in : 3:25:34.418847
+Next Start in : 3:25:33.416953
+Next Start in : 3:25:32.414956
+Getting the upcoming events
+Next Start in : 3:25:31.413084
+Next Start in : 3:25:30.411202
+Next Start in : 3:25:29.409310
+Next Start in : 3:25:28.407421
+Next Start in : 3:25:27.400154
+Next Start in : 3:25:26.398262
+Next Start in : 3:25:25.396336
+Next Start in : 3:25:24.394409
+Next Start in : 3:25:23.392489
+Next Start in : 3:25:22.390577
+Next Start in : 3:25:21.388664
+Getting the upcoming events
+Next Start in : 3:25:20.386751
+Next Start in : 3:25:19.384789
+Next Start in : 3:25:18.382864
+Next Start in : 3:25:17.380933
+Next Start in : 3:25:16.379014
+Next Start in : 3:25:15.377115
+Next Start in : 3:25:14.375153
+Next Start in : 3:25:13.373180
+Next Start in : 3:25:12.371234
+Next Start in : 3:25:11.369321
+Next Start in : 3:25:10.367398
+Getting the upcoming events
+Next Start in : 3:25:09.365327
+Next Start in : 3:25:08.364033
+Next Start in : 3:25:07.362143
+Next Start in : 3:25:06.360314
+Next Start in : 3:25:05.358411
+Next Start in : 3:25:04.356415
+Next Start in : 3:25:03.354489
+Next Start in : 3:25:02.352562
+Next Start in : 3:25:01.350614
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 3:25:00.348494
+Getting the upcoming events
+Next Start in : 3:24:59.346546
+Next Start in : 3:24:58.344643
+Next Start in : 3:24:57.342759
+Next Start in : 3:24:56.340844
+Next Start in : 3:24:55.338927
+Next Start in : 3:24:54.337037
+Next Start in : 3:24:53.335077
+Next Start in : 3:24:52.333184
+Next Start in : 3:24:51.331280
+Next Start in : 3:24:50.329390
+Next Start in : 3:24:49.327496
+Getting the upcoming events
+Next Start in : 3:24:48.325613
+Next Start in : 3:24:47.323723
+Next Start in : 3:24:46.321816
+Next Start in : 3:24:45.319903
+Next Start in : 3:24:44.318005
+Next Start in : 3:24:43.316430
+Next Start in : 3:24:42.314541
+Next Start in : 3:24:41.312624
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/force 2
+
+Callback sending force command to heatManager
+Callback payload 2
+HeatManager waking up. message received
+	msgtype :  ECS_FORCE
+	msgvalue : FORCE_ON
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+HeatMgr : ecsState OFF
+Heat Manager : Forcing ECS ON
+	Heat Manager : Switching ECS ON
+HeatManager waiting for message
+Next Start in : 3:24:40.310716
+Next Start in : 3:24:39.308799
+Next Start in : 3:24:38.306890
+Getting the upcoming events
+Next Start in : 3:24:37.304909
+Next Start in : 3:24:36.303018
+Next Start in : 3:24:35.301100
+Next Start in : 3:24:34.299190
+Next Start in : 3:24:33.292311
+Next Start in : 3:24:32.290419
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 32.0
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 32.0
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  32.0
+HeatManager waiting for message
+Next Start in : 3:24:31.288528
+Next Start in : 3:24:30.286568
+Next Start in : 3:24:29.284653
+Next Start in : 3:24:28.282705
+Next Start in : 3:24:27.280828
+Getting the upcoming events
+Next Start in : 3:24:26.278943
+Next Start in : 3:24:25.277008
+Next Start in : 3:24:24.275023
+Next Start in : 3:24:23.273131
+Next Start in : 3:24:22.267014
+Next Start in : 3:24:21.265016
+Next Start in : 3:24:20.263115
+Next Start in : 3:24:19.261222
+Next Start in : 3:24:18.259326
+Next Start in : 3:24:17.257266
+Getting the upcoming events
+Next Start in : 3:24:16.255273
+Next Start in : 3:24:15.253353
+Next Start in : 3:24:14.251418
+Next Start in : 3:24:13.249515
+Next Start in : 3:24:12.248034
+Next Start in : 3:24:11.246106
+Next Start in : 3:24:10.244211
+Next Start in : 3:24:09.242306
+Next Start in : 3:24:08.240442
+Next Start in : 3:24:07.238573
+Next Start in : 3:24:06.236689
+Getting the upcoming events
+Next Start in : 3:24:05.234703
+Next Start in : 3:24:04.232670
+Next Start in : 3:24:03.230782
+Next Start in : 3:24:02.228871
+Next Start in : 3:24:01.226998
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :32.0
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 3:24:00.225029
+Next Start in : 3:23:59.223147
+Next Start in : 3:23:58.221278
+Next Start in : 3:23:57.219103
+Next Start in : 3:23:56.217201
+Next Start in : 3:23:55.215194
+Getting the upcoming events
+Next Start in : 3:23:54.213235
+Next Start in : 3:23:53.211353
+Next Start in : 3:23:52.209449
+Next Start in : 3:23:51.207589
+Next Start in : 3:23:50.205719
+Next Start in : 3:23:49.203845
+Next Start in : 3:23:48.201937
+Next Start in : 3:23:47.200015
+Next Start in : 3:23:46.198130
+Next Start in : 3:23:45.196256
+Next Start in : 3:23:44.194381
+Getting the upcoming events
+Next Start in : 3:23:43.192504
+Next Start in : 3:23:42.190611
+Next Start in : 3:23:41.188722
+Next Start in : 3:23:40.186853
+Next Start in : 3:23:39.184883
+Next Start in : 3:23:38.182984
+Next Start in : 3:23:37.181092
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 41.0
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 41.0
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+updating temperature :  41.0
+HeatManager waiting for message
+Next Start in : 3:23:36.179180
+Next Start in : 3:23:35.177295
+Next Start in : 3:23:34.175317
+Getting the upcoming events
+Next Start in : 3:23:33.173435
+Next Start in : 3:23:32.171553
+Next Start in : 3:23:31.169665
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/force 1
+
+Callback sending force command to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_FORCE
+	msgvalue : FORCE_OFF
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :True
+	ECS temperature :41.0
+	Target temperature : 0
+=====================
+HeatMgr : ecsState ON
+Heat Manager : Forcing ECS OFF
+	Heat Manager : Switching ECS OFF
+HeatManager waiting for message
+Next Start in : 3:23:30.167740
+Next Start in : 3:23:29.166412
+Next Start in : 3:23:28.164622
+Next Start in : 3:23:27.162728
+Next Start in : 3:23:26.160837
+Next Start in : 3:23:25.158939
+Next Start in : 3:23:24.157036
+Next Start in : 3:23:23.155066
+Getting the upcoming events
+Next Start in : 3:23:22.153193
+Next Start in : 3:23:21.151320
+Next Start in : 3:23:20.149421
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/force 0
+
+Callback sending force command to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_FORCE
+	msgvalue : FORCE_DISABLED
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :True
+	ECS temperature :41.0
+	Target temperature : 0
+=====================
+HeatMgr : ecsState OFF
+Heat Manager : Disabling Forcing ECS
+HeatManager waiting for message
+Next Start in : 3:23:19.147550
+Next Start in : 3:23:18.145683
+Next Start in : 3:23:17.143792
+Next Start in : 3:23:16.141915
+Next Start in : 3:23:15.140039
+Next Start in : 3:23:14.138167
+Next Start in : 3:23:13.136297
+Next Start in : 3:23:12.134400
+Getting the upcoming events
+Next Start in : 3:23:11.132503
+Next Start in : 3:23:10.130626
+Next Start in : 3:23:09.128764
+Next Start in : 3:23:08.126902
+Next Start in : 3:23:07.124915
+Next Start in : 3:23:06.123005
+Next Start in : 3:23:05.121109
+Next Start in : 3:23:04.119239
+Next Start in : 3:23:03.117374
+Next Start in : 3:23:02.115501
+Next Start in : 3:23:01.113631
+Getting the upcoming events
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :False
+	ECS temperature :41.0
+	Target temperature : 0
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 3:23:00.110049
+Next Start in : 3:22:59.107856
+Next Start in : 3:22:58.105952
+Next Start in : 3:22:57.104059
+Next Start in : 3:22:56.102177
+Next Start in : 3:22:55.100294
+Next Start in : 3:22:54.098353
+Next Start in : 3:22:53.096464
+Next Start in : 3:22:52.094561
+Next Start in : 3:22:51.092681
+Getting the upcoming events
+Next End in : 0:52:50.090729
+HeatManager waking up. message received
+	msgtype :  ECS_STATE_CHANGE
+	msgvalue : ON
+	msgheatprofile : LOW
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :OFF
+	ECS force state :False
+	ECS temperature :23.6
+	Target temperature : 0
+=====================
+Heat Manager : turning ECS ON
+HeatManager waiting for message
+Switching ECS STATE : ON
+Next End in : 0:52:49.085888
+Next End in : 0:52:48.083959
+Next End in : 0:52:47.081815
+Next End in : 0:52:46.080543
+Next End in : 0:52:45.079256
+Next End in : 0:52:44.077986
+Next End in : 0:52:43.076710
+Next End in : 0:52:42.075426
+Next End in : 0:52:41.074161
+Next End in : 0:52:40.072810
+Getting the upcoming events
+Next End in : 0:52:39.071549
+Next End in : 0:52:38.070284
+Next End in : 0:52:37.069004
+Next End in : 0:52:36.067724
+Next End in : 0:52:35.066386
+Next End in : 0:52:34.065105
+Next End in : 0:52:33.063824
+Next End in : 0:52:32.062553
+Next End in : 0:52:31.061287
+Next End in : 0:52:30.060015
+Next End in : 0:52:29.058761
+Getting the upcoming events
+Next End in : 0:52:28.057412
+Next End in : 0:52:27.056154
+Next End in : 0:52:26.054889
+Next End in : 0:52:25.053615
+Next End in : 0:52:24.052345
+Next End in : 0:52:23.051078
+Next End in : 0:52:22.049806
+Next End in : 0:52:21.048538
+Next End in : 0:52:20.047246
+Next End in : 0:52:19.045970
+Getting the upcoming events
+Next End in : 0:52:18.000090
+Next End in : 0:52:16.998228
+Next End in : 0:52:15.991719
+Next End in : 0:52:14.989844
+Next End in : 0:52:13.987961
+Next End in : 0:52:12.986479
+Next End in : 0:52:11.984592
+Next End in : 0:52:10.982706
+Next End in : 0:52:09.980831
+Next End in : 0:52:08.978936
+Next End in : 0:52:07.977007
+Getting the upcoming events
+Next End in : 0:52:06.975012
+Next End in : 0:52:05.973128
+Next End in : 0:52:04.971245
+Next End in : 0:52:03.969375
+Next End in : 0:52:02.967482
+Next End in : 0:52:01.966478
+Next End in : 0:52:00.964597
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :False
+	ECS temperature :23.6
+	Target temperature : 48
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next End in : 0:51:59.962700
+Next End in : 0:51:58.960769
+Next End in : 0:51:57.958842
+Next End in : 0:51:56.956898
+Getting the upcoming events
+Next End in : 0:51:55.954660
+Next End in : 0:51:54.952713
+Next End in : 0:51:53.950788
+Next End in : 0:51:52.948862
+Next End in : 0:51:51.946942
+Next End in : 0:51:50.944921
+Next End in : 0:51:49.942973
+Next End in : 0:51:48.941037
+Next End in : 0:51:47.939131
+Next End in : 0:51:46.937211
+Next End in : 0:51:45.935166
+Getting the upcoming events
+Next End in : 0:51:44.921524
+Next End in : 0:51:43.919623
+Next End in : 0:51:42.917679
+Next End in : 0:51:41.915735
+Next End in : 0:51:40.913913
+Next End in : 0:51:39.899657
+Next End in : 0:51:38.897721
+Next End in : 0:51:37.895814
+Next End in : 0:51:36.893878
+Next End in : 0:51:35.891957
+Getting the upcoming events
+Next End in : 0:51:34.890016
+Next End in : 0:51:33.888062
+Next End in : 0:51:32.886426
+Next End in : 0:51:31.884494
+Next End in : 0:51:30.882580
+Next End in : 0:51:29.880670
+Next End in : 0:51:28.878742
+Next End in : 0:51:27.876810
+Next End in : 0:51:26.874809
+Next End in : 0:51:25.872908
+Next End in : 0:51:24.870959
+Getting the upcoming events
+Next End in : 0:51:23.869034
+Next End in : 0:51:22.867133
+Next End in : 0:51:21.865166
+Next End in : 0:51:20.863267
+Next End in : 0:51:19.861332
+Next End in : 0:51:18.859292
+Next End in : 0:51:17.857259
+Next End in : 0:51:16.855177
+Next End in : 0:51:15.853344
+Next End in : 0:51:14.851400
+Next End in : 0:51:13.849489
+Getting the upcoming events
+Next End in : 0:51:12.847555
+Next End in : 0:51:11.845645
+Next End in : 0:51:10.843872
+Next End in : 0:51:09.841946
+Next End in : 0:51:08.840179
+Next End in : 0:51:07.838376
+Next End in : 0:51:06.836539
+Next End in : 0:51:05.834702
+Next End in : 0:51:04.832917
+Next End in : 0:51:03.831186
+Getting the upcoming events
+Next End in : 0:51:02.751596
+Next End in : 0:51:01.739191
+Next End in : 0:51:00.737275
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :False
+	ECS temperature :23.6
+	Target temperature : 48
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next End in : 0:50:59.735462
+Next End in : 0:50:58.733564
+Next End in : 0:50:57.731665
+Next End in : 0:50:56.729747
+Next End in : 0:50:55.727828
+Next End in : 0:50:54.725925
+Next End in : 0:50:53.724031
+Next End in : 0:50:52.722128
+Getting the upcoming events
+Next End in : 0:50:51.720250
+Next End in : 0:50:50.718363
+Next End in : 0:50:49.716436
+Next End in : 0:50:48.714612
+Next End in : 0:50:47.713619
+Next End in : 0:50:46.711854
+Next End in : 0:50:45.710099
+Next End in : 0:50:44.708328
+Next End in : 0:50:43.706450
+Next End in : 0:50:42.704669
+Next End in : 0:50:41.702914
+Getting the upcoming events
+Next Start in : 3:20:40.701043
+HeatManager waking up. message received
+	msgtype :  ECS_STATE_CHANGE
+	msgvalue : OFF
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :ON
+	ECS remote state :ON
+	ECS force state :False
+	ECS temperature :23.6
+	Target temperature : 48
+=====================
+Heat Manager : turning ECS OFF
+Switching ECS STATE :HeatManager waiting for message OFF
+
+Next Start in : 3:20:39.696384
+Next Start in : 3:20:38.694474
+Next Start in : 3:20:37.692562
+Next Start in : 3:20:36.690447
+Next Start in : 3:20:35.689174
+Next Start in : 3:20:34.687885
+Next Start in : 3:20:33.686551
+Next Start in : 3:20:32.685325
+Next Start in : 3:20:31.684023
+Next Start in : 3:20:30.682724
+Getting the upcoming events
+Next Start in : 3:20:29.681429
+Next Start in : 3:20:28.680162
+Next Start in : 3:20:27.678886
+Next Start in : 3:20:26.677587
+Next Start in : 3:20:25.676225
+Next Start in : 3:20:24.674944
+Next Start in : 3:20:23.673657
+Next Start in : 3:20:22.672378
+Next Start in : 3:20:21.671068
+Next Start in : 3:20:20.669780
+Getting the upcoming events
+Next Start in : 3:20:19.668513
+Next Start in : 3:20:18.666853
+Next Start in : 3:20:17.664931
+Next Start in : 3:20:16.663080
+Next Start in : 3:20:15.661235
+Next Start in : 3:20:14.659405
+Next Start in : 3:20:13.657559
+Next Start in : 3:20:12.655723
+Next Start in : 3:20:11.653869
+Next Start in : 3:20:10.651974
+Next Start in : 3:20:09.650136
+Getting the upcoming events
+Next Start in : 3:20:08.648277
+Next Start in : 3:20:07.646431
+Next Start in : 3:20:06.644562
+Next Start in : 3:20:05.642703
+Next Start in : 3:20:04.640834
+Next Start in : 3:20:03.638970
+Next Start in : 3:20:02.637114
+Next Start in : 3:20:01.635184
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :ON
+	ECS force state :False
+	ECS temperature :23.6
+	Target temperature : 48
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 3:20:00.633179
+Next Start in : 3:19:59.624352
+Next Start in : 3:19:58.620407
+Getting the upcoming events
+Next Start in : 3:19:57.619116
+Next Start in : 3:19:56.617854
+Next Start in : 3:19:55.616537
+Next Start in : 3:19:54.615287
+Next Start in : 3:19:53.614004
+Next Start in : 3:19:52.612734
+Next Start in : 3:19:51.611463
+Next Start in : 3:19:50.610186
+Next Start in : 3:19:49.608918
+Next Start in : 3:19:48.607620
+Next Start in : 3:19:47.606281
+Getting the upcoming events
+Next Start in : 3:19:46.604996
+Next Start in : 3:19:45.603718
+Next Start in : 3:19:44.602435
+Next Start in : 3:19:43.601127
+Next Start in : 3:19:42.599845
+Next Start in : 3:19:41.598567
+Next Start in : 3:19:40.596700
+Next Start in : 3:19:39.594103
+Next Start in : 3:19:38.592821
+Next Start in : 3:19:37.591507
+Next Start in : 3:19:36.590167
+Getting the upcoming events
+Next Start in : 3:19:35.588879
+Next Start in : 3:19:34.587573
+Next Start in : 3:19:33.586222
+Next Start in : 3:19:32.584922
+Next Start in : 3:19:31.583629
+Next Start in : 3:19:30.582365
+Next Start in : 3:19:29.581054
+Next Start in : 3:19:28.579740
+Next Start in : 3:19:27.578412
+Next Start in : 3:19:26.577114
+Getting the upcoming events
+Next Start in : 3:19:25.575832
+Next Start in : 3:19:24.574524
+Next Start in : 3:19:23.573253
+Next Start in : 3:19:22.571957
+Next Start in : 3:19:21.570639
+Next Start in : 3:19:20.569327
+Next Start in : 3:19:19.568037
+Next Start in : 3:19:18.566736
+Next Start in : 3:19:17.565414
+Next Start in : 3:19:16.564148
+Next Start in : 3:19:15.562869
+Getting the upcoming events
+Next Start in : 3:19:14.561542
+Next Start in : 3:19:13.560281
+Next Start in : 3:19:12.558975
+Next Start in : 3:19:11.557691
+Next Start in : 3:19:10.556356
+Next Start in : 3:19:09.555065
+Next Start in : 3:19:08.553798
+Next Start in : 3:19:07.552489
+Next Start in : 3:19:06.551170
+Next Start in : 3:19:05.549904
+Next Start in : 3:19:04.548634
+Getting the upcoming events
+Next Start in : 3:19:03.547338
+Next Start in : 3:19:02.545412
+Next Start in : 3:19:01.543529
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp1 23.1
+
+Callback tmpQueue : 
+<Queue.Queue instance at 0x76208e68>
+ECS/temp2 23.6
+
+Callback sending temperature to heatManager
+HeatManager waking up. message received
+	msgtype :  ECS_TEMPERATURE
+	msgvalue : 23.6
+	msgheatprofile : MEDIUM
+
+
+=====================
+	ECS state :OFF
+	ECS remote state :ON
+	ECS force state :False
+	ECS temperature :23.6
+	Target temperature : 48
+=====================
+updating temperature :  23.6
+HeatManager waiting for message
+Next Start in : 3:19:00.541655
+Next Start in : 3:18:59.539778
+Next Start in : 3:18:58.537894
+Next Start in : 3:18:57.535978
+Next Start in : 3:18:56.534071
+Next Start in : 3:18:55.532098
+Next Start in : 3:18:54.530121
+Next Start in : 3:18:53.527798
+Getting the upcoming events
+Next Start in : 3:18:52.524412
+Next Start in : 3:18:51.522537
+Next Start in : 3:18:50.520652
+Next Start in : 3:18:49.518719
+Next Start in : 3:18:48.516746
+Next Start in : 3:18:47.514704
+Next Start in : 3:18:46.512821
+Next Start in : 3:18:45.510948
+Next Start in : 3:18:44.509061
+Next Start in : 3:18:43.507155

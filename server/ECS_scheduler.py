@@ -209,7 +209,7 @@ def getTargetTemperature(profile):
     if (profile == ECS_HEAT_PROFILE_HIGH):
         return 60
     elif (profile == ECS_HEAT_PROFILE_MEDIUM):
-        return 53
+        return 55
     elif (profile == ECS_HEAT_PROFILE_LOW):
         return 48
     else:
@@ -294,6 +294,7 @@ def heatManager(msqQueue, mqttClient):
                     print("Heat Manager : turning ECS OFF")
                     ecsState = ECS_STATE_OFF 
                     mqttClient.publish("ECS/state", payload='1', qos=1, retain=False)
+		    mqttClient.publish("ECS/target", payload='0', qos=1, retain=False)
 
                 elif (msgValue == ECS_STATE_ON):
                     ecsState = ECS_STATE_ON
@@ -311,6 +312,8 @@ def heatManager(msqQueue, mqttClient):
                     if(ecsTemperature < ecsHeatTarget):
                         print("Heat Manager : turning ECS ON")
                         mqttClient.publish("ECS/state", payload='2', qos=1, retain=False)
+			mqttClient.publish("ECS/target", payload=ecsHeatTarget, qos=1, retain=False)
+			
                         ecsRemoteState  = ECS_STATE_ON
                     else:
                         print("Heat Manager : No ECS ON despite calendar, due to target temperature already reached")
@@ -340,6 +343,8 @@ def heatManager(msqQueue, mqttClient):
                     print("Heat Manager : Switching ECS OFF despite calendar, due to target temperature reached")
                     ecsState = ECS_STATE_OFF
                     mqttClient.publish("ECS/state", payload='1', qos=1, retain=True)
+		    mqttClient.publish("ECS/target", payload='0', qos=1, retain=False)
+
                     ecsRemoteState  = ECS_STATE_OFF
  
         elif(msgType == "ECS_FORCE"):   
@@ -350,6 +355,8 @@ def heatManager(msqQueue, mqttClient):
                 if (ecsState == ECS_STATE_ON):
                     print("\tHeat Manager : Switching ECS OFF") 
                     mqttClient.publish("ECS/state", payload='1', qos=1, retain=False)
+		    mqttClient.publish("ECS/target", payload='0', qos=1, retain=False)
+
                     ecsState = ECS_STATE_OFF
                     ecsRemoteState  = ECS_STATE_OFF
             elif (msgValue == ECS_FORCE_ON):
@@ -358,6 +365,8 @@ def heatManager(msqQueue, mqttClient):
                 if (ecsState == ECS_STATE_OFF):
                     print("\tHeat Manager : Switching ECS ON") 
                     mqttClient.publish("ECS/state", payload='2', qos=1, retain=False)
+		    mqttClient.publish("ECS/target", payload='100', qos=1, retain=False)
+
                     ecsState = ECS_STATE_ON
                     ecsRemoteState  = ECS_STATE_ON
             elif (msgValue == ECS_FORCE_DISABLED):
