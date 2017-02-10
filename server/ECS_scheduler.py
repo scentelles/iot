@@ -43,6 +43,7 @@ lastTemperatureUpdate = datetime.datetime.now()
 currentTemperatureUpdate = datetime.datetime.now()
 global configWarningSender, configWarningRecipient, configSmtpLogin, configSmtpPassword
 global ecsState, ecsRemoteState, ecsStateForced, ecsTemperature, ecsHeatTarget      
+global calendarId
 
 #defines
 ECS_HEAT_PROFILE_LOW         = "LOW"
@@ -79,7 +80,7 @@ APPLICATION_NAME = 'Client ECS'
 
 HEAT_MANAGER_PERIOD         = 1
 DELAY_BETWEEN_SCHED_CHECK   = 1
-DELAY_BETWEEN_AGENDA_CHECK  = 10  # in multiples of SCHED check
+DELAY_BETWEEN_AGENDA_CHECK  = 10000  # in multiples of SCHED check
 NB_EVENTS_TO_GET_FROM_CALENDAR  = 1
 DELAY_BETWEEN_TEMPERATURE_UPDATE = 60
 
@@ -126,8 +127,10 @@ def on_message(client, userdata, msg):
         print("Callback sending temperature to heatManager")
         tempMsg = heatMgrMessage('ECS_TEMPERATURE', msg.payload)
         tmpQueue.put(tempMsg)
-    if msg.payload == "2":
-        print ("Callback payload 2")
+    if msg.topic == "ECS/calendar_update":
+    	if(msg.payload == '1'):
+            getNextEventFromCalendar()
+
 
 #=========================================================================#   
 #           helper functions for timezone and format conversion           #
@@ -176,7 +179,7 @@ def get_credentials():
 
 def turnEcsOn(): print ("Turning ECS ON :", time.time())
 
-#TODO retrieve weekly calendar on demand and once for all
+#TODO retrieve weekly calendar once for all
 def getEventsFromCalendar(calendarId):
     credentials = get_credentials()
     http = credentials.authorize(httplib2.Http())
@@ -378,25 +381,31 @@ def heatManager(msqQueue, mqttClient):
         else:
             print("Heat Manager : Unknown message type %s " % msgType)
 
+
+
+
+def getNextEventFromCalendar():
+    global nextEventfromCalendar 
+    global calendarId
+    events = getEventsFromCalendar(calendarId)
+    nextEventfromCalendar = None
+    if not events:
+        print('No upcoming events found.')
+    else:
+        myevent = events[0]
+        title = myevent['summary']
+        content = ""
+        start = get_date_object(myevent['start'].get('dateTime'))
+        end   = get_date_object(myevent['end'].get('dateTime'))
+        nextEventfromCalendar = ThermoEvent(title, content, start, end)
+ 
 #=========================================================================#
 # Calendar monitor thread body                                            #
 # Periodically checks for events defined in cloud                         # 
 #=========================================================================#
 def calendarMonitor(calendarId):
-    global nextEventfromCalendar 
     while True:
-        events = getEventsFromCalendar(calendarId)
-        nextEventfromCalendar = None
-        if not events:
-            print('No upcoming events found.')
-        else:
-            myevent = events[0]
-            title = myevent['summary']
-            content = ""
-            start = get_date_object(myevent['start'].get('dateTime'))
-            end   = get_date_object(myevent['end'].get('dateTime'))
-            nextEventfromCalendar = ThermoEvent(title, content, start, end)
-              
+        getNextEventFromCalendar()
         time.sleep(DELAY_BETWEEN_AGENDA_CHECK)
 
 
@@ -406,7 +415,7 @@ def calendarMonitor(calendarId):
 # Sends commands to heatManager based on periodical checks of             #
 # next event defined by Calendar monitor                                  # 
 #=========================================================================#
-def ecsStateScheduler(heatMgrQueue):
+def ecsStateScheduler(heatMgrQueue, mqttClient):
     logNoEventDisplayed     = False
     ecsState = ECS_STATE_OFF
     nextStartTime = ""
@@ -422,12 +431,22 @@ def ecsStateScheduler(heatMgrQueue):
                 if(logNoEventDisplayed == False):
                     print("No event Scheduled")
                     logNoEventDisplayed = True
+		#only retrieve next event if we are out of an ongoing event
+		if(nextEventfromCalendar.end < now):    
+		    getNextEventFromCalendar()
             else:
                 print("Next Start in :", nextStartTime)
+		totalSeconds = nextStartTime.seconds
+		hours, remainder = divmod(totalSeconds, 3600)
+		minutes, seconds = divmod(remainder, 60)
+		timeString = str(hours) + ":" + str(minutes) + ":" + str(seconds)
+		mqttClient.publish("ECS/next_start", payload=str(timeString), qos=0, retain=True)
 
             
             if (now > nextEventfromCalendar.start) and  (now < nextEventfromCalendar.end): 
                 nextEndTime = nextEventfromCalendar.end - now
+		mqttClient.publish("ECS/next_start", payload="started", qos=0, retain=True)
+
                 print("Next End in :", nextEndTime)
                 if(ecsState == ECS_STATE_OFF):
                     ecsState = ECS_STATE_ON
@@ -468,6 +487,7 @@ def ecsStateScheduler(heatMgrQueue):
 # Main...                                                                 #
 #=========================================================================#  
 def main():
+    global calendarId
     config = ConfigParser.ConfigParser()
     config.read('myconf.conf')
     calendarId = config.get('Calendar', 'calendarId')
@@ -493,10 +513,11 @@ def main():
     mqttClient.subscribe("ECS/temp1")
     mqttClient.subscribe("ECS/temp2")
     mqttClient.subscribe("ECS/force")
+    mqttClient.subscribe("ECS/calendar_update")
     
     CalendarMonitorThread = Thread(target=calendarMonitor, args=(calendarId,))
     CalendarMonitorThread.start()
-    EcsStateSchedulerThread = Thread(target=ecsStateScheduler, args=(heatMgrQueue,))
+    EcsStateSchedulerThread = Thread(target=ecsStateScheduler, args=(heatMgrQueue,mqttClient,))
     EcsStateSchedulerThread.start() 
     HeatManagerThread = Thread(target=heatManager, args=(heatMgrQueue,mqttClient,))    
     HeatManagerThread.start() 
