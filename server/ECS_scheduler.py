@@ -435,7 +435,7 @@ def ecsStateScheduler(heatMgrQueue, mqttClient):
 		if(nextEventfromCalendar.end < now):    
 		    getNextEventFromCalendar()
             else:
-                print("Next Start in :", nextStartTime)
+                #print("Next Start in :", nextStartTime)
 		totalSeconds = nextStartTime.seconds
 		hours, remainder = divmod(totalSeconds, 3600)
 		minutes, seconds = divmod(remainder, 60)
