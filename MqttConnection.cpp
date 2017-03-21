@@ -69,6 +69,18 @@ void MqttConnection::registerCustomProcessing(void (*myFunc)(char* topic, byte* 
 
 }
 
+void MqttConnection::publishValue(const char * leafTopic, const char* msg)
+{
+    Serial.print("Publish message: ");
+    Serial.println(msg);
+    
+    
+    String outTopic = sensorId_ + "/";
+    outTopic += leafTopic;
+    Serial.print("on topic: ");
+    Serial.println(outTopic.c_str());
+    publish(outTopic.c_str(), msg);
+}
 void MqttConnection::publishValue(const char * leafTopic, float value, int precision)
 {
     char msg[50];

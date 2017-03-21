@@ -1,4 +1,4 @@
-#include <ESP8266WiFi.h>
+#include "ESP8266WiFi.h"
 #include <PubSubClient.h>
 
 /****************************** Wifi connect function ***************************************/
@@ -15,6 +15,7 @@ class MqttConnection : public PubSubClient
 	  WiFiClient wifiClient_;
 	  MqttConnection(const char* sensorId, const char* ssid, const char* pass, const char* mqttServer, int mqttPort)  ;
 	  void reconnect();
+      void publishValue(const char * leafTopic, const char* msg);
 	  void publishValue(const char * leafTopic, float value, int precision);
       void addSubscription(const char * leafTopic);
 	  void registerCustomProcessing(void (*)(char*, byte*, unsigned int) );
