@@ -1,5 +1,8 @@
 #include "MqttConnection.h"
 
+
+char tmpChars[32];
+  
 PubSubClient * g_mqttClient;
 void (* customMsgProcessing)(char* topic, byte* payload, unsigned int length) = NULL;
 
@@ -161,9 +164,11 @@ MqttConnection::MqttConnection(const char* sensorId, const char* ssid, const cha
   addSubscription(PING_LEAF_TOPIC);
   sensorId_ = sensorId; 
   wifiSetup(ssid, pass);
-      
- // mqttClient_ = new PubSubClient(*wifiClient_);
-  setServer(mqttServer, mqttPort);
+
+
+  //make a copy in a global char array due to bug somewhere in the pubsub lib?
+  strcpy(tmpChars, mqttServer);
+  setServer(tmpChars, mqttPort);
   setCallback(mycallback);
   g_mqttClient = this;
   
