@@ -50,11 +50,11 @@ void ConfigServer::handleRoot()
       Serial.print("mqttPort :");
       Serial.println(mqttPort);
 
-      confServer->writeConfigField(0, confServer->config.sensorName);
-      confServer->writeConfigField(1, confServer->config.wifiName);
-      confServer->writeConfigField(2, confServer->config.wifiPwd);
-      confServer->writeConfigField(3, confServer->config.mqttIp);
-      confServer->writeConfigField(4, confServer->config.mqttPort);
+      confServer->writeConfigField(0, sensorName);
+      confServer->writeConfigField(1, wifiName);
+      confServer->writeConfigField(2, wifiPwd);
+      confServer->writeConfigField(3, mqttIp);
+      confServer->writeConfigField(4, mqttPort);
 
       confServer->eepromConfig.commit();
       confServer->returnOK();
