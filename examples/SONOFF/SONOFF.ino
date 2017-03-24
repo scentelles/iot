@@ -201,6 +201,10 @@ void setup() {
         MqttConfig tmpConfig = myConfigServer->getMqttConfig();
         sensorNameForCallback = tmpConfig.sensorName;
         if(tmpConfig.mqttPort != ""){
+            WiFi.mode(WIFI_STA);
+            WiFi.softAPdisconnect();
+
+            
             bootMode = BOOT_MODE_MQTT;
             myMqtt = new MqttConnection(tmpConfig.sensorName.c_str(), tmpConfig.wifiName.c_str(), tmpConfig.wifiPwd.c_str(), tmpConfig.mqttIp.c_str(), tmpConfig.mqttPort.toInt());
       
@@ -217,6 +221,8 @@ void setup() {
         }
         else{
             WiFi.mode(WIFI_STA);
+            WiFi.softAPdisconnect();
+
             WiFi.begin(tmpConfig.wifiName.c_str(), tmpConfig.wifiPwd.c_str());
          
             while (WiFi.status() != WL_CONNECTED) {
