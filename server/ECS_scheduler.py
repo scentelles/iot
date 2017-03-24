@@ -299,6 +299,8 @@ def heatManager(msqQueue, mqttClient):
                     mqttClient.publish("ECS/state", payload='1', qos=1, retain=False)
 		    mqttClient.publish("ECS/target", payload='0', qos=1, retain=False)
 
+                    ecsRemoteState  = ECS_STATE_OFF
+		    
                 elif (msgValue == ECS_STATE_ON):
                     ecsState = ECS_STATE_ON
                     ecsHeatTarget = getTargetTemperature(msgHeatProfile)
