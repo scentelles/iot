@@ -130,7 +130,7 @@ String ConfigServer::getHtmlPage(){
         Serial.println("starting config server :");
         WiFi.mode(WIFI_AP);
         WiFi.softAPConfig(serverIP, serverIP, IPAddress(255, 255, 255, 0));
-        String configWifiName = String(WiFi.macAddress()) + "_DEVICE_CONFIG";
+        String configWifiName = "DEVICE_CFG_" + String(WiFi.macAddress());
         Serial.println(configWifiName);
         int result = WiFi.softAP(configWifiName.c_str());
 
