@@ -19,7 +19,7 @@ bool statusGiven = false;
 int pressCount = 0;
 int currentRelayState = RELAY_STATE_OFF;
 
-String sensorName;
+String sensorNameForCallback;
 char tmpS[32];
 
 /************************* WiFi Access Point *********************************/
@@ -142,9 +142,11 @@ void deviceMqttReadyBlink(){
 
 void processCommandMsg(char* topic, byte* payload, unsigned int length)
 {
+  String commandTopic = sensorNameForCallback + "/" + "command";
+  Serial.print("Checking if topic:#");
+  Serial.print(commandTopic);
+  Serial.println("#");
 
-  Serial.print("Checking if state topic");
-  String commandTopic = sensorName + "/" + "command";
   if(String(topic) == commandTopic){
      Serial.println("Received state topic change");
        if ((char)payload[0] == RELAY_STATE_ON) {
@@ -197,7 +199,7 @@ void setup() {
     }
     else{
         MqttConfig tmpConfig = myConfigServer->getMqttConfig();
-
+        sensorNameForCallback = tmpConfig.sensorName;
         if(tmpConfig.mqttPort != ""){
             bootMode = BOOT_MODE_MQTT;
             myMqtt = new MqttConnection(tmpConfig.sensorName.c_str(), tmpConfig.wifiName.c_str(), tmpConfig.wifiPwd.c_str(), tmpConfig.mqttIp.c_str(), tmpConfig.mqttPort.toInt());
