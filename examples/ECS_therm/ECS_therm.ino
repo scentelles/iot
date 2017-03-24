@@ -65,7 +65,6 @@ void processEcsStateMsg(char* topic, byte* payload, unsigned int length)
 {
 
   Serial.print("Checking if state topic");
- // if(String(topic) == "ECS/state"){
 	  Serial.println("Received ECS/State change message");
 		 Serial.println("changing ECS relay state");
 	     if ((char)payload[0] == ECS_STATE_ON) {
@@ -94,10 +93,6 @@ void processEcsStateMsg(char* topic, byte* payload, unsigned int length)
 		 }
 
 	  
-  //}
-  //else {
-  //	  Serial.println("not for me...");
-  //}  
 
 	
 }
@@ -112,7 +107,7 @@ void setup() {
   myMqtt = new MqttConnection(SENSOR_ID, WLAN_SSID, WLAN_PASS, MQTT_SERVER, MQTT_PORT);
   myMqtt->registerCustomProcessing(&processEcsStateMsg);
   myMqtt->addSubscription("state");
-  myMqtt->addSubscription("force");  
+ // myMqtt->addSubscription("force");  
   
   
 }

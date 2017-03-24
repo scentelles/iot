@@ -6,17 +6,20 @@ MqttConnection * myMqtt;
 
 //Constants
 #define SENSOR_ID "ROOM1_SENSOR"
-#define PROBE_TEMPO 1000
+#define SLEEP_TIME_S 60
 #define DHTPIN D4     // what pin we're connected to
-#define DHTTYPE DHT11   // DHT 11
+#define DHTTYPE AM2301   
 
-#define DHTPIN D4 
-#define AIRPIN D5 
+#define DHTPIN D5 
+#define AIRPIN D4 
 #define AIRPIN_ANALOG A0 
 
 DHT dht(DHTPIN, DHTTYPE); //// Initialize DHT sensor
 
+
+
 //Variables
+
 
 float hum;  //Stores humidity value
 float temp; //Stores temperature value
@@ -42,9 +45,10 @@ long lastMsg = 0;
 void setup()
 {
   Serial.begin(115200);
-  //myMqtt = new MqttConnection(SENSOR_ID, WLAN_SSID, WLAN_PASS, MQTT_SERVER, MQTT_PORT);
+  myMqtt = new MqttConnection(SENSOR_ID, WLAN_SSID, WLAN_PASS, MQTT_SERVER, MQTT_PORT);
   dht.begin();
-  
+
+  pinMode(DHTPIN, INPUT);  
   pinMode(AIRPIN, INPUT);
   pinMode(AIRPIN_ANALOG, INPUT);
   
@@ -53,46 +57,45 @@ void setup()
 
 void loop()
 {
-  //if (!myMqtt->connected()) {
-  //  myMqtt->reconnect();
-  //}
-  //myMqtt->loop();
-
-  long now = millis(); 
-  if (now - lastMsg > PROBE_TEMPO) {
-      lastMsg = now;
-      
-      int analogSensor = analogRead(AIRPIN_ANALOG);
-      Serial.print("air Quality : ");
-      Serial.println(analogSensor);
-      
-       int digitalSensor = digitalRead(AIRPIN);
-      Serial.print("air Quality Digital : ");
-      Serial.println(digitalSensor);     
-      
-      //Read data and store it to variables hum and temp
-      hum  = dht.readHumidity();
-      temp = dht.readTemperature();
-      
-      if (isnan(hum) || isnan(temp)) {
-          Serial.println("Failed to read from DHT sensor!");
-      }
-      else
-      {
-          //Print temp and humidity values to serial monitor
-          Serial.print("Humidity: ");
-          Serial.print(hum);
-          Serial.print(" %, Temp: ");
-          Serial.print(temp);
-          Serial.println(" Celsius");
-    
-          //send to MQTT server
-          myMqtt->publishValue("temp", temp, 1);
-          myMqtt->publishValue("hum", hum, 1);        
-
-      }
+  if (!myMqtt->connected()) {
+    myMqtt->reconnect();
   }
+  myMqtt->loop();
 
+
+ 
+  int analogSensor = analogRead(AIRPIN_ANALOG);
+  Serial.print("air Quality : ");
+  Serial.println(analogSensor);
+  myMqtt->publishValue("quality", analogSensor, 1);
+  
+   int digitalSensor = digitalRead(AIRPIN);
+  Serial.print("air Quality Digital : ");
+  Serial.println(digitalSensor);     
+  
+  //Read data and store it to variables hum and temp
+  hum  = dht.readHumidity();
+  temp = dht.readTemperature();
+  
+  if (isnan(hum) || isnan(temp)) {
+      Serial.println("Failed to read from DHT sensor!");
+  }
+  else
+  {
+      //Print temp and humidity values to serial monitor
+      Serial.print("Humidity: ");
+      Serial.print(hum);
+      Serial.print(" %, Temp: ");
+      Serial.print(temp);
+      Serial.println(" Celsius");
+
+      //send to MQTT server
+      myMqtt->publishValue("temp", temp, 1);
+      myMqtt->publishValue("hum", hum, 1);        
+  }
+  //wait a bit before going to deep sleep
+  delay(1000);
+  ESP.deepSleep(SLEEP_TIME_S * 1000000);
 }
 
    

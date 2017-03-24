@@ -1,5 +1,8 @@
 #include "MqttConnection.h"
 
+
+char tmpChars[32];
+  
 PubSubClient * g_mqttClient;
 void (* customMsgProcessing)(char* topic, byte* payload, unsigned int length) = NULL;
 
@@ -69,6 +72,18 @@ void MqttConnection::registerCustomProcessing(void (*myFunc)(char* topic, byte* 
 
 }
 
+void MqttConnection::publishValue(const char * leafTopic, const char* msg)
+{
+    Serial.print("Publish message: ");
+    Serial.println(msg);
+    
+    
+    String outTopic = sensorId_ + "/";
+    outTopic += leafTopic;
+    Serial.print("on topic: ");
+    Serial.println(outTopic.c_str());
+    publish(outTopic.c_str(), msg);
+}
 void MqttConnection::publishValue(const char * leafTopic, float value, int precision)
 {
     char msg[50];
@@ -149,9 +164,11 @@ MqttConnection::MqttConnection(const char* sensorId, const char* ssid, const cha
   addSubscription(PING_LEAF_TOPIC);
   sensorId_ = sensorId; 
   wifiSetup(ssid, pass);
-      
- // mqttClient_ = new PubSubClient(*wifiClient_);
-  setServer(mqttServer, mqttPort);
+
+
+  //make a copy in a global char array due to bug somewhere in the pubsub lib?
+  strcpy(tmpChars, mqttServer);
+  setServer(tmpChars, mqttPort);
   setCallback(mycallback);
   g_mqttClient = this;
   
