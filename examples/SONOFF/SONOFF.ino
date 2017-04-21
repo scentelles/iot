@@ -263,7 +263,7 @@ void toggleRelayState(){
     {
         currentRelayState= RELAY_STATE_ON;
 
-        digitalWrite(LED, HIGH);
+        digitalWrite(LED, LOW);
         digitalWrite(RELAY, HIGH);
         if(bootMode == BOOT_MODE_MQTT){
             char tmpChar = RELAY_STATE_ON;
@@ -274,7 +274,7 @@ void toggleRelayState(){
     {
         currentRelayState = RELAY_STATE_OFF;
 
-        digitalWrite(LED, LOW);
+        digitalWrite(LED, HIGH);
         digitalWrite(RELAY, LOW);
         if(bootMode == BOOT_MODE_MQTT){
             char tmpChar = RELAY_STATE_OFF;
