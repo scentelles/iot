@@ -82,11 +82,12 @@ void handleSubmitRelay()
   relayValue = server.arg("RELAY");
   if (relayValue == "1") {
     digitalWrite(LED, LOW);
-
+    digitalWrite(RELAY, HIGH);
     server.send(200, "text/html", INDEX_RELAY_HTML);
   }
   else if (relayValue == "0") {
     digitalWrite(LED, HIGH);
+    digitalWrite(RELAY, LOW);
     server.send(200, "text/html", INDEX_RELAY_HTML);
   }
   else {
