@@ -153,7 +153,7 @@ void processCommandMsg(char* topic, byte* payload, unsigned int length)
           Serial.println("RELAY STATE ON received");
           currentRelayState= RELAY_STATE_ON;
 
-          digitalWrite(LED, HIGH);
+          digitalWrite(LED, LOW);
           digitalWrite(RELAY, HIGH);
           char tmpChar = RELAY_STATE_ON;
           myMqtt->publishValue("state", &tmpChar);
@@ -162,7 +162,7 @@ void processCommandMsg(char* topic, byte* payload, unsigned int length)
         Serial.println("RELAY STATE OFF received");
           currentRelayState= RELAY_STATE_OFF;
 
-          digitalWrite(LED, LOW);
+          digitalWrite(LED, HIGH);
           digitalWrite(RELAY, LOW);    
           char tmpChar = RELAY_STATE_OFF;
           myMqtt->publishValue("state", &tmpChar); 
