@@ -82,11 +82,12 @@ void handleSubmitRelay()
   relayValue = server.arg("RELAY");
   if (relayValue == "1") {
     digitalWrite(LED, LOW);
-
+    digitalWrite(RELAY, HIGH);
     server.send(200, "text/html", INDEX_RELAY_HTML);
   }
   else if (relayValue == "0") {
     digitalWrite(LED, HIGH);
+    digitalWrite(RELAY, LOW);
     server.send(200, "text/html", INDEX_RELAY_HTML);
   }
   else {
@@ -153,7 +154,7 @@ void processCommandMsg(char* topic, byte* payload, unsigned int length)
           Serial.println("RELAY STATE ON received");
           currentRelayState= RELAY_STATE_ON;
 
-          digitalWrite(LED, HIGH);
+          digitalWrite(LED, LOW);
           digitalWrite(RELAY, HIGH);
           char tmpChar = RELAY_STATE_ON;
           myMqtt->publishValue("state", &tmpChar);
@@ -162,7 +163,7 @@ void processCommandMsg(char* topic, byte* payload, unsigned int length)
         Serial.println("RELAY STATE OFF received");
           currentRelayState= RELAY_STATE_OFF;
 
-          digitalWrite(LED, LOW);
+          digitalWrite(LED, HIGH);
           digitalWrite(RELAY, LOW);    
           char tmpChar = RELAY_STATE_OFF;
           myMqtt->publishValue("state", &tmpChar); 
@@ -262,7 +263,7 @@ void toggleRelayState(){
     {
         currentRelayState= RELAY_STATE_ON;
 
-        digitalWrite(LED, HIGH);
+        digitalWrite(LED, LOW);
         digitalWrite(RELAY, HIGH);
         if(bootMode == BOOT_MODE_MQTT){
             char tmpChar = RELAY_STATE_ON;
@@ -273,7 +274,7 @@ void toggleRelayState(){
     {
         currentRelayState = RELAY_STATE_OFF;
 
-        digitalWrite(LED, LOW);
+        digitalWrite(LED, HIGH);
         digitalWrite(RELAY, LOW);
         if(bootMode == BOOT_MODE_MQTT){
             char tmpChar = RELAY_STATE_OFF;
