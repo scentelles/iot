@@ -222,7 +222,9 @@ def getTargetTemperature(profile):
         
 def getStatusString():
     global ecsState, ecsRemoteState, ecsStateForced, ecsTemperature, ecsHeatTarget
-    result  = "\n\n====================="
+    now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    result  = "\n\n=====================\nTime : "
+    result += now
     result += "\n\tECS state :" + ecsState
     result += "\n\tECS remote state :" + ecsRemoteState
     result += "\n\tECS force state :" + str(ecsStateForced)
@@ -512,7 +514,6 @@ def main():
     mqttClient.on_message = on_message
     mqttClient.connect(mqttAddress, mqttPort)
     mqttClient.loop_start()
-    mqttClient.subscribe("ECS/temp1")
     mqttClient.subscribe("ECS/temp2")
     mqttClient.subscribe("ECS/force")
     mqttClient.subscribe("ECS/calendar_update")
