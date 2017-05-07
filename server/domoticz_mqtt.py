@@ -1,15 +1,19 @@
 import paho.mqtt.client as mqtt
 import ConfigParser
 import json
+import time
 
 
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
     mqttClient.subscribe("domoticz/out")
     mqttClient.subscribe("ROOM1_SENSOR/temp")
+    mqttClient.subscribe("ROOM1_SENSOR/hum")
     mqttClient.subscribe("ECS/temp1")
     mqttClient.subscribe("ECS/temp2")
     mqttClient.subscribe("FLOWER1_WATER/moisture")
+
+    mqttClient.subscribe("POOL_PUMP/command")
 
     
 def on_message(client, userdata, msg):
@@ -33,18 +37,28 @@ def on_message(client, userdata, msg):
         value = '{ "idx" : 28, "nvalue" : 0, "svalue" : "' + msg.payload + '"}'
         mqttClient.publish("domoticz/in", payload=value)
 
+    if msg.topic == "POOL_PUMP/command":
+       print ("received Pool pump external update")
+       if msg.payload == '2':
+           boolVal = "1"
+	   print 'External update : switch On '
+       else:
+           boolVal = "0"
+	   print 'External update : switch Off'
+	   
+       value = '{ "idx" : 38, "nvalue" : ' + boolVal + ', "svalue1" : "0"}'
+       mqttClient.publish("domoticz/in", payload=value)
 
     
     if msg.topic == "domoticz/out":
        # print msg.topic
-   # print msg.payload
+       # print msg.payload
         data = json.loads(msg.payload)
         index = data["idx"]
-      #  print index
         nvalue = data["nvalue"]
-      #  print nvalue
+
+
         name = data["name"]
-      #  print name
         topic = name + "/command"
         if name == "dreamroom/chauffage":
             print "Sending command to MQTT broker on topic :"
@@ -55,7 +69,50 @@ def on_message(client, userdata, msg):
 	        value = '2'
             mqttClient.publish(topic, payload=value, qos=1, retain=False)
 		    
+        if name == "ECS Control":
+            svalue = data["svalue1"]
+	    topic = "ECS/force"
+            print "Sending command to MQTT broker on topic :"
+	    print topic
+            if svalue == "0": #OFF
+	        value = '1'
+	    elif svalue == "10": #ON
+	        value = '2'
+	    elif svalue == "20": #AUTO
+	        #First force OFF in case the ECS was ON.
+	        mqttClient.publish(topic, payload='1', qos=1, retain=False)
+	        time.sleep(1)
+		value = '0'
+            else:
+	        print "ERROR : unrecognized svalue in ECS Control"
+	        value = '0' 
+	    
+            mqttClient.publish(topic, payload=value, qos=1, retain=False)
+
+        if name == "Arrosage":
+            print "Sending command to MQTT broker on topic :"
+	    topic="GARDEN_WATERING/command"
+	    print topic
+            if nvalue == 1:
+	        value = '2'
+	    else:
+	        value = '1'
+            mqttClient.publish(topic, payload=value, qos=1, retain=False)
  
+        if name == "Pompe piscine":
+            print "Sending command to MQTT broker on topic :"
+	    topic="POOL_PUMP/command"
+	    print topic
+            if nvalue == 1:
+	        value = '2'
+	    else:
+	        value = '1'
+            #unscubscribe to avoid infinite loop between in and out topic...
+            mqttClient.unsubscribe("POOL_PUMP/command")
+
+            mqttClient.publish(topic, payload=value, qos=1, retain=False)
+ 
+            mqttClient.subscribe("POOL_PUMP/command")
  
         
 if __name__ == '__main__':
