@@ -23,6 +23,13 @@ def on_message(client, userdata, msg):
         value = '{ "idx" : 4, "nvalue" : 0, "svalue" : "' + msg.payload + '"}'
         mqttClient.publish("domoticz/in", payload=value)
 
+    if msg.topic == "ROOM1_SENSOR/hum":
+        value = '{ "idx" : 41, "nvalue" : ' + str(int(float(msg.payload))) +', "svalue" : "OK"}'
+	print "Dreamroom humidity to be sent : " 
+	print value
+        mqttClient.publish("domoticz/in", payload=value)
+
+
     if msg.topic == "ECS/temp1":
         value = '{ "idx" : 1, "nvalue" : 0, "svalue" : "' + msg.payload + '"}'
         mqttClient.publish("domoticz/in", payload=value)
