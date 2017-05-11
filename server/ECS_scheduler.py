@@ -210,11 +210,11 @@ def getEventsFromCalendar(calendarId):
         
 def getTargetTemperature(profile):
     if (profile == ECS_HEAT_PROFILE_HIGH):
-        return 60
+        return 65
     elif (profile == ECS_HEAT_PROFILE_MEDIUM):
-        return 55
+        return 60
     elif (profile == ECS_HEAT_PROFILE_LOW):
-        return 48
+        return 53
     else:
         print("Unknown heatprofile. Defaulting to 50", profile)
         return 53
