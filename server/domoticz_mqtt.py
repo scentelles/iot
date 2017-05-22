@@ -12,6 +12,8 @@ def on_connect(client, userdata, flags, rc):
     mqttClient.subscribe("ECS/temp1")
     mqttClient.subscribe("ECS/temp2")
     mqttClient.subscribe("FLOWER1_WATER/moisture")
+    mqttClient.subscribe("POOL/temp")
+
 
     mqttClient.subscribe("POOL_PUMP/command")
 
@@ -43,6 +45,11 @@ def on_message(client, userdata, msg):
         mqttClient.publish("domoticz/in", payload=value)
         value = '{ "idx" : 28, "nvalue" : 0, "svalue" : "' + msg.payload + '"}'
         mqttClient.publish("domoticz/in", payload=value)
+
+    if msg.topic == "POOL/temp":
+        value = '{ "idx" : 42, "nvalue" : 0, "svalue" : "' + msg.payload + '"}'
+        mqttClient.publish("domoticz/in", payload=value)
+
 
     if msg.topic == "POOL_PUMP/command":
        print ("received Pool pump external update")
