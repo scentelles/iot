@@ -4,6 +4,10 @@ import json
 import time
 
 
+current_ecs_control = ""
+current_pool_pump = ""
+current_garden_watering = ""
+current_dreamroom_chauffage = ""
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
     mqttClient.subscribe("domoticz/out")
@@ -14,8 +18,10 @@ def on_connect(client, userdata, flags, rc):
     mqttClient.subscribe("FLOWER1_WATER/moisture")
     mqttClient.subscribe("POOL/temp")
 
-
+    mqttClient.subscribe("dreamroom/chauffage/command")
     mqttClient.subscribe("POOL_PUMP/command")
+    mqttClient.subscribe("GARDEN_WATERING/command")
+    mqttClient.subscribe("ECS/force")
 
     
 def on_message(client, userdata, msg):
@@ -51,8 +57,61 @@ def on_message(client, userdata, msg):
         mqttClient.publish("domoticz/in", payload=value)
 
 
+
+# COMMANDS (BIDIRECTIONAL)
+    if msg.topic == "ECS/force":
+       global current_ecs_control
+
+       print ("received ECS force external update")
+       
+       if msg.payload == '1': 
+           svalue1 = "0"  
+	   nvalue = "2"
+	   print 'External update : Force Off '
+       elif msg.payload == '2':
+           svalue1 = "10"
+	   nvalue = "0"
+	   print 'External update : Force On'
+       elif msg.payload == '0':
+           svalue1 = "20"
+	   nvalue = "2"
+	   print 'External update : Auto'
+       else:
+           print "Error: Unknown ECS/force payload\r\t"
+	   print msg.payload   	   
+       value = '{ "command":"switchlight","idx" : 36, "switchcmd":"Set Level", "level": ' +  svalue1 + '}'
+       
+       if (current_ecs_control == svalue1):
+           print "Skipping to send same value to domoticz"
+           return
+       else:
+           current_ecs_control = svalue1;
+           mqttClient.publish("domoticz/in", payload=value)
+
+       
+    if msg.topic == "GARDEN_WATERING/command":
+       global current_garden_watering
+       print ("received garden watering external update")
+       if msg.payload == '2':
+           boolVal = "1"
+	   print 'External update : switch On '
+       else:
+           boolVal = "0"
+	   print 'External update : switch Off'
+	   
+       value = '{ "idx" : 37, "nvalue" : ' + boolVal + ', "svalue1" : "0"}'
+ 
+       if (current_garden_watering == boolVal):
+           print "Skipping to send same value to domoticz"
+           return
+       else:
+           current_garden_watering = boolVal;
+           mqttClient.publish("domoticz/in", payload=value)
+
     if msg.topic == "POOL_PUMP/command":
-       print ("received Pool pump external update")
+       global current_pool_pump
+
+       print ("received Pool pump externsal update")
        if msg.payload == '2':
            boolVal = "1"
 	   print 'External update : switch On '
@@ -63,10 +122,30 @@ def on_message(client, userdata, msg):
        value = '{ "idx" : 38, "nvalue" : ' + boolVal + ', "svalue1" : "0"}'
        mqttClient.publish("domoticz/in", payload=value)
 
+    if msg.topic == "dreamroom/chauffage/command":
+       global current_dreamroom_chauffage
+       print ("received dreamroom chauffage external update")
+       if msg.payload == '1':
+           boolVal = "1"
+	   print 'External update : switch On '
+       else:
+           boolVal = "0"
+	   print 'External update : switch Off'
+	   
+       value = '{ "idx" : 5, "nvalue" : ' + boolVal + ', "svalue1" : "0"}'
+
+       if (current_dreamroom_chauffage == boolVal):
+           print "Skipping to send same value to domoticz"
+           return
+       else:
+           current_dreamroom_chauffage = boolVal;
+           mqttClient.publish("domoticz/in", payload=value)
+
+
     
     if msg.topic == "domoticz/out":
-       # print msg.topic
-       # print msg.payload
+        #print msg.topic
+        #print msg.payload
         data = json.loads(msg.payload)
         index = data["idx"]
         nvalue = data["nvalue"]
@@ -81,10 +160,16 @@ def on_message(client, userdata, msg):
 	        value = '1'
 	    else:
 	        value = '2'
-            mqttClient.publish(topic, payload=value, qos=1, retain=False)
+            mqttClient.publish(topic, payload=value, qos=1, retain=True)
 		    
         if name == "ECS Control":
-            svalue = data["svalue1"]
+	    
+	    try:
+                svalue = data["svalue1"]
+	    except KeyError, e:
+	        print "Error caught"
+		return
+	    
 	    topic = "ECS/force"
             print "Sending command to MQTT broker on topic :"
 	    print topic
@@ -93,16 +178,21 @@ def on_message(client, userdata, msg):
 	    elif svalue == "10": #ON
 	        value = '2'
 	    elif svalue == "20": #AUTO
+	    
 	        #First force OFF in case the ECS was ON.
+		mqttClient.unsubscribe(topic)
 	        mqttClient.publish(topic, payload='1', qos=1, retain=False)
+		
 	        time.sleep(1)
 		value = '0'
             else:
 	        print "ERROR : unrecognized svalue in ECS Control"
 	        value = '0' 
+	 
+	    print "value", value
+            mqttClient.publish(topic, payload=value, qos=1, retain=True)
+	    mqttClient.subscribe(topic)
 	    
-            mqttClient.publish(topic, payload=value, qos=1, retain=False)
-
         if name == "Arrosage":
             print "Sending command to MQTT broker on topic :"
 	    topic="GARDEN_WATERING/command"
@@ -111,7 +201,12 @@ def on_message(client, userdata, msg):
 	        value = '2'
 	    else:
 	        value = '1'
+            #unscubscribe to avoid infinite loop between in and out topic...
+            mqttClient.unsubscribe(topic)
+
             mqttClient.publish(topic, payload=value, qos=1, retain=False)
+	    
+            mqttClient.subscribe(topic)
  
         if name == "Pompe piscine":
             print "Sending command to MQTT broker on topic :"
@@ -122,11 +217,11 @@ def on_message(client, userdata, msg):
 	    else:
 	        value = '1'
             #unscubscribe to avoid infinite loop between in and out topic...
-            mqttClient.unsubscribe("POOL_PUMP/command")
+            mqttClient.unsubscribe(topic)
 
             mqttClient.publish(topic, payload=value, qos=1, retain=False)
  
-            mqttClient.subscribe("POOL_PUMP/command")
+            mqttClient.subscribe(topic)
  
         
 if __name__ == '__main__':
