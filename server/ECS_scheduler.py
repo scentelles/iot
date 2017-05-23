@@ -28,7 +28,6 @@ from Queue import Queue
 
 
 heatMgrQueue = 0
-global mqttClient
 
 #TODO unused
 class EcsCommand(Enum):
@@ -105,9 +104,9 @@ class ThermoEvent:
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc) + "\n")
-    mqttClient.subscribe("ECS/temp2")
-    mqttClient.subscribe("ECS/force")
-    mqttClient.subscribe("ECS/calendar_update")
+    client.subscribe("ECS/temp2")
+    client.subscribe("ECS/force")
+    client.subscribe("ECS/calendar_update")
 
 def on_message(client, userdata, msg):
     tmpQueue = userdata
@@ -511,7 +510,6 @@ def main():
     global heatMgrQueue
     heatMgrQueue = Queue()
     
-    global mqttClient
     mqttClient = mqtt.Client(userdata=heatMgrQueue)
     print ("heatMgrQueue : ") 
     print (heatMgrQueue)
