@@ -8,6 +8,8 @@ current_ecs_control = ""
 current_pool_pump = ""
 current_garden_watering = ""
 current_dreamroom_chauffage = ""
+current_pool_pump_mode = ""
+
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
     mqttClient.subscribe("domoticz/out")
@@ -22,6 +24,7 @@ def on_connect(client, userdata, flags, rc):
     mqttClient.subscribe("POOL_PUMP/command")
     mqttClient.subscribe("GARDEN_WATERING/command")
     mqttClient.subscribe("ECS/force")
+    mqttClient.subscribe("POOL_PUMP/mode")
 
     
 def on_message(client, userdata, msg):
@@ -120,7 +123,40 @@ def on_message(client, userdata, msg):
 	   print 'External update : switch Off'
 	   
        value = '{ "idx" : 38, "nvalue" : ' + boolVal + ', "svalue1" : "0"}'
-       mqttClient.publish("domoticz/in", payload=value)
+       if (current_pool_pump == boolVal):
+           print "Skipping to send same value to domoticz"
+           return
+       else:
+           current_pool_pump = boolVal;
+           mqttClient.publish("domoticz/in", payload=value)
+
+    if msg.topic == "POOL_PUMP/mode":
+       global current_pool_pump_mode
+
+       print ("received Pool pump mode external update")
+       if msg.payload == '1': 
+           current_pool_pump_mode
+	   svalue1 = "10"
+	   print 'External update : Manual mode '
+       elif msg.payload == '2': 
+           current_pool_pump_mode
+	   svalue1 = "20"
+	   print 'External update : Auto mode '
+       else:
+	   print 'Unknown external update : falling back on Off '
+	   svalue1 = "0"
+	   
+       value = '{ "command":"switchlight","idx" : 43, "switchcmd":"Set Level", "level": ' +  svalue1 + '}'
+
+       if (current_pool_pump_mode == svalue1):
+           print "Skipping to send same value to domoticz"
+           return
+       else:
+           current_pool_pump_mode = svalue1;
+           mqttClient.publish("domoticz/in", payload=value)
+
+
+
 
     if msg.topic == "dreamroom/chauffage/command":
        global current_dreamroom_chauffage
@@ -161,6 +197,30 @@ def on_message(client, userdata, msg):
 	    else:
 	        value = '2'
             mqttClient.publish(topic, payload=value, qos=1, retain=True)
+
+        if name == "Pool Control":
+	    try:
+                svalue = data["svalue1"]
+	    except KeyError, e:
+	        print "Error caught"
+		return
+		
+            topic = "POOL_PUMP/mode"
+	    
+            print "Sending command to MQTT broker on topic :"
+	    print topic
+            if svalue == "0": #OFF (should remain unused)
+	        value = '0'
+	    elif svalue == "10": #MANUAL
+	        value = '1'
+	    elif svalue == "20": #AUTO
+	        value = '2'
+            else:
+	        print "ERROR : unrecognized svalue in Pool Control"
+	        value = '0' 
+
+            mqttClient.publish(topic, payload=value, qos=1, retain=True)
+
 		    
         if name == "ECS Control":
 	    
@@ -169,6 +229,8 @@ def on_message(client, userdata, msg):
 	    except KeyError, e:
 	        print "Error caught"
 		return
+
+
 	    
 	    topic = "ECS/force"
             print "Sending command to MQTT broker on topic :"
@@ -209,6 +271,13 @@ def on_message(client, userdata, msg):
             mqttClient.subscribe(topic)
  
         if name == "Pompe piscine":
+	    print "Manual setting of pool : first go back to manual mode :"
+	    #Upon on / off press first disable auto mode
+	    topic = "POOL_PUMP/mode"
+	    value = '1'
+            mqttClient.publish(topic, payload=value, qos=1, retain=False)
+            time.sleep(1)
+	    
             print "Sending command to MQTT broker on topic :"
 	    topic="POOL_PUMP/command"
 	    print topic
@@ -222,6 +291,8 @@ def on_message(client, userdata, msg):
             mqttClient.publish(topic, payload=value, qos=1, retain=False)
  
             mqttClient.subscribe(topic)
+	    
+
  
         
 if __name__ == '__main__':
