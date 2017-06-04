@@ -338,8 +338,8 @@ def heatManager(msqQueue, mqttClient):
             deltaTime = currentTemperatureUpdate - lastTemperatureUpdate
             deltaTimeInSeconds = deltaTime.total_seconds()
             
-            if(deltaTimeInSeconds > DELAY_BETWEEN_TEMPERATURE_UPDATE *2):
-                message = "Warning : Temperature update from sensor exceeded twice maximum delta time: " + str(deltaTimeInSeconds) + "seconds"
+            if(deltaTimeInSeconds > DELAY_BETWEEN_TEMPERATURE_UPDATE * 4):
+                message = "Warning : Temperature update from sensor exceeded 4 times maximum delta time: " + str(deltaTimeInSeconds) + "seconds"
                 print(message)
                 warnMessage(message)
             
