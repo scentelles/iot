@@ -17,36 +17,45 @@ def on_connect(client, userdata, flags, rc):
     mqttClient.subscribe("ROOM1_SENSOR/hum")
     mqttClient.subscribe("ECS/temp1")
     mqttClient.subscribe("ECS/temp2")
-    mqttClient.subscribe("FLOWER1_WATER/moisture")
-    mqttClient.subscribe("POOL/temp")
+    mqttClient.subscribe("ECS/next_start")
 
-    mqttClient.subscribe("dreamroom/chauffage/command")
-    mqttClient.subscribe("POOL_PUMP/command")
-    mqttClient.subscribe("GARDEN_WATERING/command")
-    mqttClient.subscribe("ECS/force")
-    mqttClient.subscribe("POOL_PUMP/mode")
+    mqttClient.subscribe("FLOWER1_WATER/moisture")
+    mqttClient.subscribe("PISCINE/temp")
+    mqttClient.subscribe("PISCINE/ph")
+
+  #  mqttClient.subscribe("dreamroom/chauffage/command")
+  #  mqttClient.subscribe("POOL_PUMP/command")
+  #  mqttClient.subscribe("GARDEN_WATERING/command")
+  #  mqttClient.subscribe("ECS/force")
+  #  mqttClient.subscribe("POOL_PUMP/mode")
+    mqttClient.subscribe("EDF/power")
 
     
 def on_message(client, userdata, msg):
    # print(msg.topic+" "+str(msg.payload)+"\n")
     
     if msg.topic == "ROOM1_SENSOR/temp":
-        value = '{ "idx" : 4, "nvalue" : 0, "svalue" : "' + msg.payload + '"}'
+        value = '{ "idx" : 6, "nvalue" : 0, "svalue" : "' + msg.payload + '"}'
         mqttClient.publish("domoticz/in", payload=value)
 
     if msg.topic == "ROOM1_SENSOR/hum":
-        value = '{ "idx" : 41, "nvalue" : ' + str(int(float(msg.payload))) +', "svalue" : "OK"}'
+        value = '{ "idx" : 7, "nvalue" : ' + str(int(float(msg.payload))) +', "svalue" : "OK"}'
 	print "Dreamroom humidity to be sent : " 
 	print value
         mqttClient.publish("domoticz/in", payload=value)
 
 
     if msg.topic == "ECS/temp1":
-        value = '{ "idx" : 1, "nvalue" : 0, "svalue" : "' + msg.payload + '"}'
+        value = '{ "idx" : 4, "nvalue" : 0, "svalue" : "' + msg.payload + '"}'
         mqttClient.publish("domoticz/in", payload=value)
     if msg.topic == "ECS/temp2":
-        value = '{ "idx" : 2, "nvalue" : 0, "svalue" : "' + msg.payload + '"}'
+        value = '{ "idx" : 5, "nvalue" : 0, "svalue" : "' + msg.payload + '"}'
         mqttClient.publish("domoticz/in", payload=value)
+
+    if msg.topic == "ECS/next_start":
+        value = '{ "idx" : 17, "nvalue" : 0, "svalue" : "' + msg.payload + '"}'
+        mqttClient.publish("domoticz/in", payload=value)
+
 
     if msg.topic == "FLOWER1_WATER/moisture":
         print ("received moisture update")
@@ -55,10 +64,17 @@ def on_message(client, userdata, msg):
         value = '{ "idx" : 28, "nvalue" : 0, "svalue" : "' + msg.payload + '"}'
         mqttClient.publish("domoticz/in", payload=value)
 
-    if msg.topic == "POOL/temp":
-        value = '{ "idx" : 42, "nvalue" : 0, "svalue" : "' + msg.payload + '"}'
+    if msg.topic == "PISCINE/temp":
+        value = '{ "idx" : 14, "nvalue" : 0, "svalue" : "' + msg.payload + '"}'
+        mqttClient.publish("domoticz/in", payload=value)
+	
+    if msg.topic == "PISCINE/ph":
+        value = '{ "idx" : 15, "nvalue" : 0, "svalue" : "' + msg.payload + '"}'
         mqttClient.publish("domoticz/in", payload=value)
 
+    if msg.topic == "EDF/power":
+        value = '{ "idx" : 12, "nvalue" : 0, "svalue" : "' + msg.payload + '"}'
+        mqttClient.publish("domoticz/in", payload=value)
 
 
 # COMMANDS (BIDIRECTIONAL)
@@ -82,7 +98,7 @@ def on_message(client, userdata, msg):
        else:
            print "Error: Unknown ECS/force payload\r\t"
 	   print msg.payload   	   
-       value = '{ "command":"switchlight","idx" : 36, "switchcmd":"Set Level", "level": ' +  svalue1 + '}'
+       value = '{ "command":"switchlight","idx" : 11, "switchcmd":"Set Level", "level": ' +  svalue1 + '}'
        
        if (current_ecs_control == svalue1):
            print "Skipping to send same value to domoticz"
@@ -102,7 +118,7 @@ def on_message(client, userdata, msg):
            boolVal = "0"
 	   print 'External update : switch Off'
 	   
-       value = '{ "idx" : 37, "nvalue" : ' + boolVal + ', "svalue1" : "0"}'
+       value = '{ "idx" : 8, "nvalue" : ' + boolVal + ', "svalue1" : "0"}'
  
        if (current_garden_watering == boolVal):
            print "Skipping to send same value to domoticz"
@@ -122,7 +138,7 @@ def on_message(client, userdata, msg):
            boolVal = "0"
 	   print 'External update : switch Off'
 	   
-       value = '{ "idx" : 38, "nvalue" : ' + boolVal + ', "svalue1" : "0"}'
+       value = '{ "idx" : 9, "nvalue" : ' + boolVal + ', "svalue1" : "0"}'
        if (current_pool_pump == boolVal):
            print "Skipping to send same value to domoticz"
            return
@@ -168,7 +184,7 @@ def on_message(client, userdata, msg):
            boolVal = "0"
 	   print 'External update : switch Off'
 	   
-       value = '{ "idx" : 5, "nvalue" : ' + boolVal + ', "svalue1" : "0"}'
+       value = '{ "idx" : 13, "nvalue" : ' + boolVal + ', "svalue1" : "0"}'
 
        if (current_dreamroom_chauffage == boolVal):
            print "Skipping to send same value to domoticz"
@@ -189,7 +205,8 @@ def on_message(client, userdata, msg):
 
         name = data["name"]
         topic = name + "/command"
-        if name == "dreamroom/chauffage":
+        if name == "Dreamroom chauffage":
+	    topic = "dreamroom/chauffage/command"
             print "Sending command to MQTT broker on topic :"
 	    print topic
             if nvalue == 1:
@@ -273,13 +290,13 @@ def on_message(client, userdata, msg):
         if name == "Pompe piscine":
 	    print "Manual setting of pool : first go back to manual mode :"
 	    #Upon on / off press first disable auto mode
-	    topic = "POOL_PUMP/mode"
-	    value = '1'
-            mqttClient.publish(topic, payload=value, qos=1, retain=False)
-            time.sleep(1)
+	    #topic = "POOL_PUMP/mode"
+	    #value = '1'
+            #mqttClient.publish(topic, payload=value, qos=1, retain=False)
+            #time.sleep(1)
 	    
             print "Sending command to MQTT broker on topic :"
-	    topic="POOL_PUMP/command"
+	    topic="PISCINE/command"
 	    print topic
             if nvalue == 1:
 	        value = '2'
