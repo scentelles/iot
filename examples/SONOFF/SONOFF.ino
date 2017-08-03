@@ -14,6 +14,8 @@ ESP8266WebServer server(80);
 #define RELAY_STATE_OFF '1'
 #define RELAY_STATE_ON '2'
 
+#define LED_INVERTED 1
+
 int bootMode = BOOT_MODE_DEFAULT;
 bool statusGiven = false;
 int pressCount = 0;
@@ -29,6 +31,7 @@ IPAddress    configServerIP(10, 10, 10, 10);
 
 #define BUTTON 0
 #define RELAY 12
+
 #define LED 13
 #define SPARE 14
 
@@ -140,6 +143,22 @@ void deviceMqttReadyBlink(){
        blinkSlow(3);
 }
 
+void lightLed()
+{
+    if(LED_INVERTED)
+        digitalWrite(LED, HIGH);
+    else
+        digitalWrite(LED, LOW);        
+}
+
+
+void shutLed()
+{
+    if(LED_INVERTED)
+        digitalWrite(LED, LOW);
+    else
+        digitalWrite(LED, HIGH);
+}
 
 void processCommandMsg(char* topic, byte* payload, unsigned int length)
 {
@@ -154,7 +173,7 @@ void processCommandMsg(char* topic, byte* payload, unsigned int length)
           Serial.println("RELAY STATE ON received");
           currentRelayState= RELAY_STATE_ON;
 
-          digitalWrite(LED, LOW);
+          lightLed();
           digitalWrite(RELAY, HIGH);
           char tmpChar = RELAY_STATE_ON;
           myMqtt->publishValue("state", &tmpChar);
@@ -163,7 +182,7 @@ void processCommandMsg(char* topic, byte* payload, unsigned int length)
         Serial.println("RELAY STATE OFF received");
           currentRelayState= RELAY_STATE_OFF;
 
-          digitalWrite(LED, HIGH);
+          shutLed();
           digitalWrite(RELAY, LOW);    
           char tmpChar = RELAY_STATE_OFF;
           myMqtt->publishValue("state", &tmpChar); 
@@ -263,7 +282,7 @@ void toggleRelayState(){
     {
         currentRelayState= RELAY_STATE_ON;
 
-        digitalWrite(LED, LOW);
+        lightLed();
         digitalWrite(RELAY, HIGH);
         if(bootMode == BOOT_MODE_MQTT){
             char tmpChar = RELAY_STATE_ON;
@@ -274,7 +293,7 @@ void toggleRelayState(){
     {
         currentRelayState = RELAY_STATE_OFF;
 
-        digitalWrite(LED, HIGH);
+        shutLed();
         digitalWrite(RELAY, LOW);
         if(bootMode == BOOT_MODE_MQTT){
             char tmpChar = RELAY_STATE_OFF;
@@ -299,6 +318,7 @@ void loop() {
             }
             if (myMqtt->connected() & !statusGiven) {
                 deviceMqttReadyBlink();
+				shutLed();
                 statusGiven = true;
             }
             myMqtt->loop();
