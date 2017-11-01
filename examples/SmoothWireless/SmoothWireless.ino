@@ -23,7 +23,7 @@ char ssid[] = "xxx";                   // your network SSID (name)
 char pass[] = "xxx";       // your network password
 
 WiFiUDP Udp;                                // A UDP instance to let us send and receive packets over UDP
-const IPAddress outIp(192,168,1,51);        // remote IP of your computer
+const IPAddress outIp(192,168,1,64);        // remote IP of your computer
 const unsigned int outPort = 8000;          // remote port to receive OSC
 const unsigned int localPort = 8888;        // local port to listen for OSC packets (actually not used for sending)
 
@@ -57,26 +57,30 @@ void setup() {
 
     delay(1000); //wait for I2C init
     /* Initialise the sensor */
-    if(!accel.begin())
-    {
+   // if(!accel.begin())
+   // {
         /* There was a problem detecting the ADXL345 ... check your connections */
-        Serial.println("Ooops, no ADXL345 detected ... Check your wiring!");
-        while(1);  //will cause watchdog time out
-    }
+   //     Serial.println("Ooops, no ADXL345 detected ... Check your wiring!");
+   //     while(1);  //will cause watchdog time out
+   // }
 
     /* Set the range to whatever is appropriate for your project */
-    accel.setRange(ADXL345_RANGE_16_G);
+   // accel.setRange(ADXL345_RANGE_16_G);
     // displaySetRange(ADXL345_RANGE_8_G);
     // displaySetRange(ADXL345_RANGE_4_G);
     // displaySetRange(ADXL345_RANGE_2_G);
   
     /* Display some basic information on this sensor */
-    displaySensorDetails(&accel);
+   // displaySensorDetails(&accel);
   
     /* Display additional settings (outside the scope of sensor_t) */
-    displayDataRate(&accel);
-    displayRange(&accel);
-    Serial.println("");
+   // displayDataRate(&accel);
+   // displayRange(&accel);
+   // Serial.println("");
+	
+	pinMode(D5, INPUT);
+	
+	
 
 }
 
@@ -103,8 +107,20 @@ void sendNote(unsigned int note, unsigned int velocity, int duration)
 	    sendOSCMessage(noteMsg, 0);
 	}
 }
+void startNote(unsigned int note, unsigned int velocity)
+{
+    String prefix  =  "/vkb_midi/0/note/";
+	String noteMsg = prefix + String(note);
+	sendOSCMessage(noteMsg, velocity);
 
+}
+void stopNote(unsigned int note)
+{
+    String prefix  =  "/vkb_midi/0/note/";
+	String noteMsg = prefix + String(note);
+	sendOSCMessage(noteMsg, 0);
 
+}
 void sendCC(unsigned int nb, unsigned int value)
 {
     String prefix = "/vkb_midi/0/cc/";
@@ -126,8 +142,41 @@ void loop() {
 
     Serial.println("sending first note");
 	
-	sendNote(45, 120, -1);
-    
+	//sendNote(45, 120, -1);
+    bool isPlaying = 0;
+	while (1)
+	{
+	    int val = digitalRead(D5);
+		int analogVal = analogRead(A0);
+		
+		Serial.print("New value : ");
+		Serial.println(val);
+	    Serial.print("Analog : ");
+		Serial.println(analogVal);
+		if (isPlaying == 0)
+		{
+		    if(val != 1)
+		    {
+		        startNote(65, 80);
+				startNote(53, 120);
+				startNote(41, 120);
+	            isPlaying = 1;
+			}
+		}
+		else
+		{
+			if(val == 1)
+		    {
+		        stopNote(65);
+				stopNote(53);
+				stopNote(41);
+	            isPlaying = 0;
+			}
+  
+	    }
+		delay(5);
+	}
+	
     while(1){
 
     	  accel.getEvent(&event);
