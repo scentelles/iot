@@ -213,13 +213,13 @@ def getEventsFromCalendar(calendarId):
         
 def getTargetTemperature(profile):
     if (profile == ECS_HEAT_PROFILE_HIGH):
-        return 65
+        return 62
     elif (profile == ECS_HEAT_PROFILE_MEDIUM):
-        return 60
+        return 58
     elif (profile == ECS_HEAT_PROFILE_LOW):
         return 53
     else:
-        print("Unknown heatprofile. Defaulting to 50", profile)
+        print("Unknown heatprofile. Defaulting to 53", profile)
         return 53
         
         
@@ -238,20 +238,22 @@ def getStatusString():
 
 
 def warnMessage(msg):
-    Mimemsg = MIMEMultipart()
-    global configWarningSender, configWarningRecipient, configSmtpLogin, configSmtpPassword
+    return
     
-    Mimemsg['From'] = configWarningSender
-    Mimemsg['To'] = configWarningRecipient
-    Mimemsg['Subject'] = 'ECS WARNING' 
-    msg += getStatusString()
-    Mimemsg.attach(MIMEText(msg))
-    server = smtplib.SMTP('smtp.gmail.com', 587)
-    server.ehlo()
-    server.starttls()
-    server.login(configSmtpLogin, configSmtpPassword)
-    server.sendmail(configWarningSender, configWarningRecipient, Mimemsg.as_string())
-    server.quit()
+#    Mimemsg = MIMEMultipart()
+#    global configWarningSender, configWarningRecipient, configSmtpLogin, configSmtpPassword
+    
+#    Mimemsg['From'] = configWarningSender
+#    Mimemsg['To'] = configWarningRecipient
+#    Mimemsg['Subject'] = 'ECS WARNING' 
+#    msg += getStatusString()
+#    Mimemsg.attach(MIMEText(msg))
+#    server = smtplib.SMTP('smtp.gmail.com', 587)
+#    server.ehlo()
+#    server.starttls()
+#    server.login(configSmtpLogin, configSmtpPassword)
+#    server.sendmail(configWarningSender, configWarningRecipient, Mimemsg.as_string())
+#    server.quit()
 
 def checkTemperatureValidity(temperature):  
     if(temperature < UNDERHEAT_TEMPERATURE):
@@ -277,6 +279,7 @@ def heatManager(msqQueue, mqttClient):
     ecsTemperature = 0
     ecsHeatTarget = 0
 
+    nbMsg = 0
     
     while True:
         print ("HeatManager waiting for message")
@@ -286,6 +289,9 @@ def heatManager(msqQueue, mqttClient):
         msgHeatProfile = msg.heatProfile
 
         print("HeatManager waking up. message received")
+	nbMsg += 1
+	print("nb message received")
+	print (nbMsg)
         print("\tmsgtype : ", msgType)
         print ("\tmsgvalue :", msgValue)
         print ("\tmsgheatprofile :", msgHeatProfile)
@@ -494,6 +500,7 @@ def ecsStateScheduler(heatMgrQueue, mqttClient):
 # Main...                                                                 #
 #=========================================================================#  
 def main():
+    print("STARTING main process")
     global calendarId
     config = ConfigParser.ConfigParser()
     config.read('myconf.conf')
