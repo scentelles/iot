@@ -11,15 +11,19 @@ import sys
 
 
 
-doorPin = 17 #(must be pull down at reset) 
+door1Pin = 17 #(must be pull down at reset) 
+door2Pin = 18 #(must be pull down at reset) 
+
 
 GPIO.setmode(GPIO.BCM)
 
 # Pin Setup:
-GPIO.setup(doorPin, GPIO.OUT) # LED pin set as output
+GPIO.setup(door1Pin, GPIO.OUT) # LED pin set as output
+GPIO.setup(door2Pin, GPIO.OUT) # LED pin set as output
 
 # Initial state for LEDs:
-GPIO.output(doorPin, GPIO.HIGH)
+GPIO.output(door1Pin, GPIO.HIGH)
+GPIO.output(door2Pin, GPIO.HIGH)
 
 class MyException(Exception):
     pass
@@ -42,18 +46,33 @@ def on_message(client, userdata, msg):
         print msg.topic
 	if msg.payload == "2":
 	    print "trigger external door"
-	    GPIO.output(doorPin, GPIO.LOW)
+	    GPIO.output(door1Pin, GPIO.LOW)
 	    time.sleep(1)
-	    GPIO.output(doorPin, GPIO.HIGH)
+	    GPIO.output(door1Pin, GPIO.HIGH)
 	if msg.payload == "3":
 	    print "trigger auto close external door"
-	    GPIO.output(doorPin, GPIO.LOW)
+	    GPIO.output(door1Pin, GPIO.LOW)
 	    time.sleep(1)
-	    GPIO.output(doorPin, GPIO.HIGH)
+	    GPIO.output(door1Pin, GPIO.HIGH)
 	    time.sleep(60)
-	    GPIO.output(doorPin, GPIO.LOW)
+	    GPIO.output(door1Pin, GPIO.LOW)
 	    time.sleep(1)
-	    GPIO.output(doorPin, GPIO.HIGH)	
+	    GPIO.output(door1Pin, GPIO.HIGH)	
+	    client.publish("Door/open", payload=0, qos=0, retain=True)
+	if msg.payload == "12":
+	    print "trigger external door"
+	    GPIO.output(door2Pin, GPIO.LOW)
+	    time.sleep(1)
+	    GPIO.output(door2Pin, GPIO.HIGH)
+	if msg.payload == "13":
+	    print "trigger auto close external door"
+	    GPIO.output(door2Pin, GPIO.LOW)
+	    time.sleep(1)
+	    GPIO.output(door2Pin, GPIO.HIGH)
+	    time.sleep(60)
+	    GPIO.output(door2Pin, GPIO.LOW)
+	    time.sleep(1)
+	    GPIO.output(door2Pin, GPIO.HIGH)	
 	    client.publish("Door/open", payload=0, qos=0, retain=True)
 
     
