@@ -138,7 +138,7 @@ void loop()
 	  Serial.println("Probig NOW");
 	  lastProbe = now;
 	  DS18B20.requestTemperatures(); 
-	  int temperature = DS18B20.getTempCByIndex(0);
+	  float temperature = DS18B20.getTempCByIndex(0);
 	  Serial.print("Temperature: ");
 	  Serial.println(temperature);
 	  if (temperature == 85.0 || temperature == (-127.0)) {
