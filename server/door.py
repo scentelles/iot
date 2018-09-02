@@ -25,6 +25,8 @@ GPIO.setup(door2Pin, GPIO.OUT) # LED pin set as output
 GPIO.output(door1Pin, GPIO.HIGH)
 GPIO.output(door2Pin, GPIO.HIGH)
 
+msg_at_boot = 1
+
 class MyException(Exception):
     pass
 
@@ -41,13 +43,18 @@ def on_connect(client, userdata, flags, rc):
     
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
+    global msg_at_boot
     print(msg.topic+" "+str(msg.payload)+"\n")
     if msg.topic == "Door/open":
         print msg.topic
+	if(msg_at_boot == 1) :
+	   print "skipping first message at boot"
+	   msg_at_boot = 0
+	   return
 	if msg.payload == "2":
-	    print "trigger external door"
+            print "trigger external door"
 	    GPIO.output(door1Pin, GPIO.LOW)
-	    time.sleep(1)
+	    time.sleep(0.5)
 	    GPIO.output(door1Pin, GPIO.HIGH)
 	if msg.payload == "3":
 	    print "trigger auto close external door"
