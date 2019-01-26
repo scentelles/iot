@@ -69,7 +69,11 @@ def on_message(client, userdata, msg):
         mqttClient.publish("domoticz/in", payload=value)
 	
     if msg.topic == "PISCINE/ph":
-        value = '{ "idx" : 15, "nvalue" : 0, "svalue" : "' + msg.payload + '"}'
+        floatVal = float(str(msg.payload))
+	phCalibration = 3.4
+	floatVal = floatVal - phCalibration
+	
+        value = '{ "idx" : 18, "nvalue" : 0, "svalue" : "' + str(floatVal) + '"}'
         mqttClient.publish("domoticz/in", payload=value)
 
     if msg.topic == "EDF/power":

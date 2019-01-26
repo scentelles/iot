@@ -1,4 +1,5 @@
 import httplib, urllib
+import requests
 import time
 import os
 import urllib2
@@ -21,9 +22,24 @@ import smtplib
 
 #Remote 1(Dorian) A  
 #home/OpenMQTTGateway/SRFBtoMQTT 6454993
+#Remote 1(Dorian) B
+#home/OpenMQTTGateway/SRFBtoMQTT 6454994
+
+#Remote 2(Gael) A 
+#home/OpenMQTTGateway/SRFBtoMQTT 14993777
+#Remote 2(Gael) B 
+#home/OpenMQTTGateway/SRFBtoMQTT 14993778
+
 
 #move/detected
 #home/OpenMQTTGateway/SRFBtoMQTT 14786398
+
+#Door bell
+#home/OpenMQTTGateway/SRFBtoMQTT 16276098
+
+
+#button bell 2
+#home/OpenMQTTGateway/SRFBtoMQTT 4462722
 
 deck_state = 0
 
@@ -40,6 +56,32 @@ try:
 except:
     print 'Something went wrong'
 
+
+def getImageFromCamera1():
+    if os.path.exists("/home/pi/camera1.jpg"):
+        os.remove("/home/pi/camera1.jpg")
+    #url = "http://192.168.2.122:554/snapshot"
+    #url = "http://192.168.2.80:554/snapshot"
+    url = "http://192.168.2.29/snap.jpg?usr=admin&pwd=admin"
+    try:
+        r = requests.get(url, verify = False, timeout=2)
+        open("/home/pi/camera1.jpg", 'w+b').write(r.content)
+    except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as error:
+        print "Time out! or connection error :"
+	print error
+	os.system('cp /home/pi/camera_disconnected.jpg /home/pi/camera1.jpg')
+	
+def getImageFromCamera2():
+    if os.path.exists("/home/pi/camera2.jpg"):
+        os.remove("/home/pi/camera2.jpg")
+    url = "http://192.168.2.13/snap.jpg?usr=admin&pwd=admin"
+    try:
+        r = requests.get(url, verify = False, timeout=2)
+        open("/home/pi/camera2.jpg", 'w+b').write(r.content)
+    except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as error:
+        print "Time out! or connection error :"
+	print error
+	os.system('cp /home/pi/camera_disconnected.jpg /home/pi/camera2.jpg')
 
 
 # The callback for when the client receives a CONNACK response from the server.
@@ -62,16 +104,54 @@ def on_message(client, userdata, msg):
 	print "trigger external door"
         client.publish("Door/open", payload='2', qos=1, retain=False)
 
+#Dorian
     if msg.payload == "6454993":
 	print "Remote 1 A trigger received"
 	print "trigger external door"
-        client.publish("Door/open", payload='2', qos=1, retain=False)
-        client.publish("Door/dorian", payload='2', qos=1, retain=False)
+        client.publish("Door/open", payload='12', qos=1, retain=False)
+	#getImageFromCamera1();
+	getImageFromCamera2();
+        client.publish("Door/dorian", payload='Portail Dorian', qos=1, retain=False)
 
+
+    if msg.payload == "6454994":
+	print "Remote 1 B trigger received"
+	print "trigger external door"
+        client.publish("Door/open", payload='2', qos=1, retain=False)
+	#getImageFromCamera1();
+        client.publish("Door/dorian", payload='Portail Dorian', qos=1, retain=False)
+	
+#Gael
+    if msg.payload == "14993777":
+	print "Remote 2 A trigger received"
+	print "trigger external door"
+        client.publish("Door/open", payload='12', qos=1, retain=False)
+	#getImageFromCamera1();
+	getImageFromCamera2();
+        client.publish("Door/gael", payload='Portail Gael', qos=1, retain=False)
+
+
+    if msg.payload == "14993778":
+	print "Remote 2 B trigger received"
+	print "trigger external door"
+        client.publish("Door/open", payload='2', qos=1, retain=False)
+	#getImageFromCamera1();
+        client.publish("Door/gael", payload='Portail Gael', qos=1, retain=False)
+
+    if msg.payload == "16276098":
+	print "Door bell trigger received"
+	print "trigger Ring"
+	getImageFromCamera1();
+	getImageFromCamera2();
+        client.publish("Door/bell", payload='1', qos=1, retain=False)
+		
     if msg.payload == "14786398":
 	print "Move trigger received"
 	print "trigger move"
         client.publish("move/detected", payload='1', qos=1, retain=False)
+
+
+
 
     if msg.payload == "10867362":
 	print "Switch 2 trigger received"
