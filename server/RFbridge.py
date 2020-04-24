@@ -109,8 +109,8 @@ def on_message(client, userdata, msg):
 	print "Remote 1 A trigger received"
 	print "trigger external door"
         client.publish("Door/open", payload='12', qos=1, retain=False)
-	#getImageFromCamera1();
-	getImageFromCamera2();
+	getImageFromCamera1();
+	#getImageFromCamera2();
         client.publish("Door/dorian", payload='Portail Dorian', qos=1, retain=False)
 
 
@@ -126,8 +126,8 @@ def on_message(client, userdata, msg):
 	print "Remote 2 A trigger received"
 	print "trigger external door"
         client.publish("Door/open", payload='12', qos=1, retain=False)
-	#getImageFromCamera1();
-	getImageFromCamera2();
+	getImageFromCamera1();
+	#getImageFromCamera2();
         client.publish("Door/gael", payload='Portail Gael', qos=1, retain=False)
 
 
@@ -142,7 +142,7 @@ def on_message(client, userdata, msg):
 	print "Door bell trigger received"
 	print "trigger Ring"
 	getImageFromCamera1();
-	getImageFromCamera2();
+	#getImageFromCamera2();
         client.publish("Door/bell", payload='1', qos=1, retain=False)
 		
     if msg.payload == "14786398":
