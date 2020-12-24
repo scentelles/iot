@@ -30,7 +30,9 @@ lastTemperatureUpdate = datetime.datetime.now()
 currentTemperatureUpdate = datetime.datetime.now()
 global configWarningSender, configWarningRecipient, configSmtpLogin, configSmtpPassword
 global ecsState, ecsRemoteState, ecsStateForced, ecsTemperature, ecsHeatTarget      
-global calendarId
+
+targetReached = False
+
 
 #defines
 ECS_HEAT_PROFILE_LOW         = "LOW"
@@ -132,14 +134,16 @@ def getStatusString():
     return result
 
 
-def warnMessage(msg):
+def warnMessage(msg, mqttClient):
+    print(msg)  
+    mqttClient.publish("ECS/warning", payload=msg, qos=1, retain=False)
     return
 
-def checkTemperatureValidity(temperature):  
+def checkTemperatureValidity(temperature, mqttClient):  
     if(temperature < UNDERHEAT_TEMPERATURE):
-        warnMessage("Warning, the temperature of the ECS is getting low. Consider forcing ON")
+        warnMessage("Warning, the temperature of the ECS is getting low. Consider forcing ON", mqttClient)
     if(temperature > OVERHEAT_TEMPERATURE):
-        warnMessage("Warning, the temperature of the ECS is getting too high. Consider forcing OFF")
+        warnMessage("Warning, the temperature of the ECS is getting too high. Consider forcing OFF", mqttClient)
 
 
     
@@ -153,6 +157,7 @@ def checkTemperatureValidity(temperature):
 def heatManager(msqQueue, mqttClient):
     global ecsState, ecsRemoteState, ecsStateForced, ecsTemperature, ecsHeatTarget
     global lastTemperatureUpdate, currentTemperatureUpdate
+    global targetReached
     ecsState       = ECS_STATE_OFF 
     ecsRemoteState = ECS_STATE_OFF 
     ecsStateForced = False
@@ -175,11 +180,7 @@ def heatManager(msqQueue, mqttClient):
 	now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 	print (nbMsg, "Time : ", now)
 	
-        #print ("\tmsgtype : ", msgType)
-        #print ("\tmsgvalue :", msgValue)
-        #print ("\tmsgheatprofile :", msgHeatProfile)
-
-       
+      
             
         #process messages
         if(msgType == "ECS_COMMAND"):
@@ -193,10 +194,13 @@ def heatManager(msqQueue, mqttClient):
 		    mqttClient.publish("ECS/target", payload='0', qos=1, retain=False)
 
                     ecsRemoteState  = ECS_STATE_OFF
+                    if(targetReached == False):
+                        warnMessage("Temperature not reached before turning Off", mqttClient) 
 	    
 		    
             elif (msgValue == ECS_COMMAND_ON):
-                    ecsState = ECS_STATE_ON
+		    targetReached = False
+		    ecsState = ECS_STATE_ON
                     ecsHeatTarget = getTargetTemperature(msgHeatProfile)
                     
                     #Check if temperature is recent enough to be valid, else warn user
@@ -204,9 +208,8 @@ def heatManager(msqQueue, mqttClient):
                     deltaTime = currentTime - currentTemperatureUpdate
                     deltaTimeInSeconds = deltaTime.total_seconds()
                     if(deltaTimeInSeconds > DELAY_BETWEEN_TEMPERATURE_UPDATE *10):
-                        message = "Warning : Switching ECS while temperature info may not be valid : \nsensor update exceeded 10 times maximum delta time: " + str(deltaTimeInSeconds) + "seconds"
-                        warnMessage(message)  
-                        print(message)
+                        message = "Warning : Switching ECS ON while temperature info may not be valid : \nsensor update exceeded 10 times maximum delta time: " + str(deltaTimeInSeconds) + "seconds"
+                        warnMessage(message, mqttClient)  
                     
                     if(ecsTemperature < ecsHeatTarget):
                         print("Heat Manager : turning ECS ON")
@@ -215,11 +218,14 @@ def heatManager(msqQueue, mqttClient):
 			
                         ecsRemoteState  = ECS_STATE_ON
                     else:
-                        print("Heat Manager : No ECS ON despite command, due to target temperature already reached")
+			message = "Heat Manager : No ECS ON despite command, due to target temperature already reached"                        
+                        warnMessage(message, mqttClient)  
+
             else: 
                     print("Heat Manager : Error : unknown EcsCommand %s in received message" % msgValue)
 
         elif(msgType == "ECS_TEMPERATURE"):
+
             ecsTemperature = float(msgValue)
 
             lastTemperatureUpdate = currentTemperatureUpdate
@@ -229,15 +235,16 @@ def heatManager(msqQueue, mqttClient):
             
             if(deltaTimeInSeconds > DELAY_BETWEEN_TEMPERATURE_UPDATE * 4):
                 message = "Warning : Temperature update from sensor exceeded 4 times maximum delta time: " + str(deltaTimeInSeconds) + "seconds"
-                print(message)
-                warnMessage(message)
+                warnMessage(message, mqttClient)
             
             
             print ("updating temperature : ", ecsTemperature, " <> Target :", ecsHeatTarget)
-            checkTemperatureValidity(ecsTemperature)
+            checkTemperatureValidity(ecsTemperature, mqttClient)
             #Check against temperature target when ECS is ON and not in forced mode
             if ((ecsState == ECS_STATE_ON) and (ecsStateForced == False)):
                 if (ecsTemperature > ecsHeatTarget):
+                    targetReached = True
+
                     print("Heat Manager : Switching ECS OFF due to target temperature reached")
                     ecsState = ECS_STATE_OFF
                     mqttClient.publish("ECS/state", payload='1', qos=1, retain=True)

@@ -360,7 +360,7 @@ def heatManager(msqQueue, mqttClient):
                     ecsState = ECS_STATE_OFF
                     mqttClient.publish("ECS/state", payload='1', qos=1, retain=True)
 		    mqttClient.publish("ECS/target", payload='0', qos=1, retain=False)
-
+		    target_reached = True
                     ecsRemoteState  = ECS_STATE_OFF
  
         elif(msgType == "ECS_FORCE"):   
