@@ -97,21 +97,21 @@ do
   MQTT_path="mijia1"
   get_handler
   get_values_from_sensor
-  sleep 5
+  sleep 20
   MACadd="A4:C1:38:89:3A:0C"
   MQTT_path="mijia2"
   get_handler
   get_values_from_sensor
-  sleep 5
+  sleep 20
   MACadd="A4:C1:38:50:4B:C7"
   MQTT_path="mijia3"
   get_handler
   get_values_from_sensor
-  sleep 5
+  sleep 20
   MACadd="A4:C1:38:91:E7:1F"
   MQTT_path="mijia4"
   get_handler
   get_values_from_sensor
   
-  sleep 30
+  sleep 120
 done
