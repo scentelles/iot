@@ -28,7 +28,8 @@ else
     python -u /home/pi/Projects/iot/server/RFbridge.py >> /home/pi/Projects/RFbridge.log &
     sleep 1
  
-
+    python -u /home/pi/Projects/iot/server/TTS_daemon.py >> /home/pi/Projects/TTS_daemon.log &
+    sleep 1
     
 #    python -u /home/pi/Projects/iot/server/domoticz_mqtt.py >> /home/pi/Projects/domoticz_mqtt_log.txt &
 #    sleep 1
