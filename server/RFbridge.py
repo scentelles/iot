@@ -1,8 +1,8 @@
-import httplib, urllib
+import http.client, urllib.request, urllib.parse, urllib.error
 import requests
 import time
 import os
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import socket
 
 import paho.mqtt.client as mqtt
@@ -54,7 +54,7 @@ try:
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.ehlo()
 except:
-    print 'Something went wrong'
+    print('Something went wrong')
 
 
 def getImageFromCamera1():
@@ -67,9 +67,9 @@ def getImageFromCamera1():
         r = requests.get(url, verify = False, timeout=2)
         open("/home/pi/camera1.jpg", 'w+b').write(r.content)
     except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as error:
-        print "Time out! or connection error :"
-	print error
-	os.system('cp /home/pi/camera_disconnected.jpg /home/pi/camera1.jpg')
+        print("Time out! or connection error :")
+        print(error)
+        os.system('cp /home/pi/camera_disconnected.jpg /home/pi/camera1.jpg')
 	
 def getImageFromCamera2():
     if os.path.exists("/home/pi/camera2.jpg"):
@@ -79,14 +79,14 @@ def getImageFromCamera2():
         r = requests.get(url, verify = False, timeout=2)
         open("/home/pi/camera2.jpg", 'w+b').write(r.content)
     except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as error:
-        print "Time out! or connection error :"
-	print error
-	os.system('cp /home/pi/camera_disconnected.jpg /home/pi/camera2.jpg')
+        print("Time out! or connection error :")
+        print(error)
+        os.system('cp /home/pi/camera_disconnected.jpg /home/pi/camera2.jpg')
 
 
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
-    print("Connected with result code "+str(rc))
+    print(("Connected with result code "+str(rc)))
 
     # Subscribing in on_connect() means that if we lose the connection and
     # reconnect then subscriptions will be renewed.
@@ -96,72 +96,72 @@ def on_connect(client, userdata, flags, rc):
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
     global deck_state
-    print(msg.topic+" "+str(msg.payload)+"\n")
+    print((msg.topic+" "+str(msg.payload)+"\n"))
 #    if msg.topic == "Door/open":
 #        print msg.topic
-    if msg.payload == "3151714":
-	print "Switch 1 trigger received"
-	print "trigger external door"
+    if msg.payload == b'3151714':
+        print("Switch 1 trigger received")
+        print("trigger external door")
         client.publish("Door/open", payload='2', qos=1, retain=False)
 
 #Dorian
-    if msg.payload == "6454993":
-	print "Remote 1 A trigger received"
-	print "trigger external door"
+    if msg.payload == b'6454993':
+        print("Remote 1 A trigger received")
+        print("trigger external door")
         client.publish("Door/open", payload='12', qos=1, retain=False)
-	getImageFromCamera1();
 	#getImageFromCamera2();
         client.publish("Door/dorian", payload='Portail Dorian', qos=1, retain=False)
+        getImageFromCamera1();
 
 
-    if msg.payload == "6454994":
-	print "Remote 1 B trigger received"
-	print "trigger external door"
+    if msg.payload == b'6454994':
+        print("Remote 1 B trigger received")
+        print("trigger external door")
         client.publish("Door/open", payload='2', qos=1, retain=False)
 	#getImageFromCamera1();
         client.publish("Door/dorian", payload='Portail Dorian', qos=1, retain=False)
 	
 #Gael
-    if msg.payload == "14993777":
-	print "Remote 2 A trigger received"
-	print "trigger external door"
+    if msg.payload == b'14993777':
+        print("Remote 2 A trigger received")
+        print("trigger external door")
         client.publish("Door/open", payload='12', qos=1, retain=False)
-	getImageFromCamera1();
 	#getImageFromCamera2();
         client.publish("Door/gael", payload='Portail Gael', qos=1, retain=False)
+        getImageFromCamera1();
 
 
-    if msg.payload == "14993778":
-	print "Remote 2 B trigger received"
-	print "trigger external door"
+    if msg.payload == b'14993778':
+        print("Remote 2 B trigger received")
+        print("trigger external door")
         client.publish("Door/open", payload='2', qos=1, retain=False)
 	#getImageFromCamera1();
         client.publish("Door/gael", payload='Portail Gael', qos=1, retain=False)
 
-    if msg.payload == "16276098":
-	print "Door bell trigger received"
-	print "trigger Ring"
-	getImageFromCamera1();
+    if msg.payload == b'16276098':
+        print("Door bell trigger received")
+        print("trigger Ring")
+        getImageFromCamera1();
 	#getImageFromCamera2();
         client.publish("Door/bell", payload='1', qos=1, retain=False)
 		
-    if msg.payload == "14786398":
-	print "Move trigger received"
-	print "trigger move"
+    if msg.payload == b'14786398':
+        print("Move trigger received")
+        print("trigger move")
         client.publish("move/detected", payload='1', qos=1, retain=False)
 
 
 
 
-    if msg.payload == "10867362":
-	print "Switch 2 trigger received"
-	print "trigger Deck light"
-	if(deck_state == 1):
-	   newValue   = '1'
-	   deck_state = 0
-	else:
-	   newValue   = '2'
-	   deck_state = 1
+    if msg.payload == b'10867362':
+        print("Switch 2 trigger received")
+        print("trigger Deck light")
+        if(deck_state == 1):
+           newValue   = '1'
+           deck_state = 0
+        else:
+           newValue   = '2'
+           deck_state = 1
 	   	
         client.publish("DECK_LEDS/stairs", payload=newValue, qos=1, retain=False)
         client.publish("DECK/LIGHT/command", payload=newValue, qos=1, retain=False)

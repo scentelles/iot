@@ -1,29 +1,26 @@
 from __future__ import print_function
-import httplib2
 import os
 
 
 import datetime
-import rfc3339      # for date object -> date string
-import iso8601      # for date string -> date object
 
-import ConfigParser
+import configparser
 import time
-import pytz
+#import pytz
 
 
 from enum import Enum
 
 import paho.mqtt.client as mqtt
 from threading import Thread
-from Queue import Queue
+from queue import Queue
 
 
 
 heatMgrQueue = 0
 
-ECS_COMMAND_OFF =  "1"
-ECS_COMMAND_ON  =  "2"
+ECS_COMMAND_OFF =  b'1'
+ECS_COMMAND_ON  =  b'2'
 
 
 lastTemperatureUpdate = datetime.datetime.now()
@@ -81,11 +78,11 @@ def on_message(client, userdata, msg):
     #print(msg.topic+" "+str(msg.payload) + "\n")
     if msg.topic == "ECS/force":
       #  print ("Callback sending force command to heatManager")
-        if(msg.payload == '0'):
+        if(msg.payload == b'0'):
             tmpValue = ECS_FORCE_DISABLED
-        elif(msg.payload == '1'):
+        elif(msg.payload == b'1'):
             tmpValue = ECS_FORCE_OFF
-        elif(msg.payload == '2'):
+        elif(msg.payload == b'2'):
             tmpValue = ECS_FORCE_ON
         else:
             print ("Callback Error : Unknown Force command :", msg.payload)
@@ -174,24 +171,24 @@ def heatManager(msqQueue, mqttClient):
         msgHeatProfile = msg.heatProfile
 
         #print ("HeatManager waking up. message received")
-	nbMsg += 1
-	#print ("nb message received")
-	print ("#################################################")
-	now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-	print (nbMsg, "Time : ", now)
+        nbMsg += 1
+        #print ("nb message received")
+        print ("#################################################")
+        now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        print (nbMsg, "Time : ", now)
 	
       
             
         #process messages
         if(msgType == "ECS_COMMAND"):
             print(getStatusString())
-	    print("====================================")
-	    print("HeatManager : Processing ECS Command")
+            print("====================================")
+            print("HeatManager : Processing ECS Command")
             if (msgValue == ECS_COMMAND_OFF):
                     print("Heat Manager : turning ECS OFF")
                     ecsState = ECS_STATE_OFF 
                     mqttClient.publish("ECS/state", payload='1', qos=1, retain=False)
-		    mqttClient.publish("ECS/target", payload='0', qos=1, retain=False)
+                    mqttClient.publish("ECS/target", payload='0', qos=1, retain=False)
 
                     ecsRemoteState  = ECS_STATE_OFF
                     if(targetReached == False):
@@ -199,8 +196,8 @@ def heatManager(msqQueue, mqttClient):
 	    
 		    
             elif (msgValue == ECS_COMMAND_ON):
-		    targetReached = False
-		    ecsState = ECS_STATE_ON
+                    targetReached = False
+                    ecsState = ECS_STATE_ON
                     ecsHeatTarget = getTargetTemperature(msgHeatProfile)
                     
                     #Check if temperature is recent enough to be valid, else warn user
@@ -214,11 +211,11 @@ def heatManager(msqQueue, mqttClient):
                     if(ecsTemperature < ecsHeatTarget):
                         print("Heat Manager : turning ECS ON")
                         mqttClient.publish("ECS/state", payload='2', qos=1, retain=False)
-			mqttClient.publish("ECS/target", payload=ecsHeatTarget, qos=1, retain=False)
+                        mqttClient.publish("ECS/target", payload=ecsHeatTarget, qos=1, retain=False)
 			
                         ecsRemoteState  = ECS_STATE_ON
                     else:
-			message = "Heat Manager : No ECS ON despite command, due to target temperature already reached"                        
+                        message = "Heat Manager : No ECS ON despite command, due to target temperature already reached"                        
                         warnMessage(message, mqttClient)  
 
             else: 
@@ -248,7 +245,7 @@ def heatManager(msqQueue, mqttClient):
                     print("Heat Manager : Switching ECS OFF due to target temperature reached")
                     ecsState = ECS_STATE_OFF
                     mqttClient.publish("ECS/state", payload='1', qos=1, retain=True)
-		    mqttClient.publish("ECS/target", payload='0', qos=1, retain=False)
+                    mqttClient.publish("ECS/target", payload='0', qos=1, retain=False)
 
                     ecsRemoteState  = ECS_STATE_OFF
  
@@ -260,7 +257,7 @@ def heatManager(msqQueue, mqttClient):
                 ecsStateForced = True
                 print("\tHeat Manager : Switching ECS OFF") 
                 mqttClient.publish("ECS/state", payload='1', qos=1, retain=False)
-		mqttClient.publish("ECS/target", payload='0', qos=1, retain=False)
+                mqttClient.publish("ECS/target", payload='0', qos=1, retain=False)
 
                 ecsState        = ECS_STATE_OFF
                 ecsRemoteState  = ECS_STATE_OFF
@@ -279,7 +276,7 @@ def heatManager(msqQueue, mqttClient):
                 ecsStateForced = False
                 print("\tHeat Manager FORCE DISABLED : Switching ECS OFF") 
                 mqttClient.publish("ECS/state", payload='1', qos=1, retain=False)
-		mqttClient.publish("ECS/target", payload='0', qos=1, retain=False)
+                mqttClient.publish("ECS/target", payload='0', qos=1, retain=False)
                 ecsState        = ECS_STATE_OFF
                 ecsRemoteState  = ECS_STATE_OFF
 
@@ -299,11 +296,11 @@ def heatManager(msqQueue, mqttClient):
 #=========================================================================#  
 def main():
     print("STARTING main process")
-    config = ConfigParser.ConfigParser()
+    config = configparser.ConfigParser()
     config.read('myconf.conf')
 
     mqttAddress = config.get('MQTT', 'mqttAddress')
-    mqttPort    = config.get('MQTT', 'mqttPort')
+    mqttPort    = int(config.get('MQTT', 'mqttPort'))
     
     global heatMgrQueue
     heatMgrQueue = Queue()

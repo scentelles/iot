@@ -4,7 +4,7 @@ import os
 
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
-    print("Connected with result code "+str(rc))
+    print(("Connected with result code "+str(rc)))
 
     # Subscribing in on_connect() means that if we lose the connection and
     # reconnect then subscriptions will be renewed.
@@ -21,17 +21,17 @@ def speak(text):
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
 
-    print(msg.topic+" "+str(msg.payload)+"\n")
+    print((msg.topic+" "+str(msg.payload)+"\n"))
     if msg.topic == "/speaker1/tts":
-	text = msg.payload
-        print text
+        text = msg.payload
+        print(text)
         text = text.replace("'","''")
-	print text
+        print(text)
 #generate the mp3 that will be served by node-red server
         command = "pico2wave -w /var/local/wave.wav -l fr-FR '" + text + "' | lame - /home/pi/wave.mp3" 
         #command = "echo toto"
-	print command
-	os.system(command) 
+        print(command)
+        os.system(command) 
         
          #then route to proper audio speaker, trigering the proper MQTT topic
         client.publish("/slyzic/play", payload="http://192.168.1.27:1880/wave.mp3", qos=0, retain=True)
