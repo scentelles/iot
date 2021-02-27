@@ -3,6 +3,6 @@
 
 unclutter &
 
-chromium-browser http://localhost:8123 --window-size=1920,1080 --start-fullscreen --kiosk
+chromium http://localhost:8123 --kiosk --disk-cache-dir=/dev/null --disk-cache-size=1 --media-cache-size=1
 
 #vcgencmd display_power 1
