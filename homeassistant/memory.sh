@@ -10,7 +10,7 @@ while true
 do
   value=$(freemem_in_gb)
   echo $value
-  if (($value < 170))
+  if (($value < 500))
   then
     echo "not enough memory. Restarting chromium"
     pkill -f chromium

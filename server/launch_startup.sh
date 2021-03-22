@@ -43,7 +43,7 @@ else
     
     #Launch VNC virtual desktop
     echo "Launching virtual desktop"
-    vncserver :2 
+    vncserver -geometry 1920x1080 :2 
     
     
     echo "startup script stop \n" >> /home/pi/startup.log
