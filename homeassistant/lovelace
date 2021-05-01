@@ -1,0 +1,552 @@
+{
+    "version": 1,
+    "key": "lovelace",
+    "data": {
+        "config": {
+            "title": "Maison",
+            "views": [
+                {
+                    "path": "default_view",
+                    "title": "Home",
+                    "panel": false,
+                    "badges": [
+                        {
+                            "entity": "person.admin"
+                        },
+                        {
+                            "entity": "sensor.memory_use_percent"
+                        },
+                        {
+                            "entity": "sensor.processor_use_percent"
+                        },
+                        {
+                            "entity": "sensor.disk_use_percent_home"
+                        },
+                        {
+                            "entity": "sensor.speedtest_download"
+                        }
+                    ],
+                    "cards": [
+                        {
+                            "type": "vertical-stack",
+                            "cards": [
+                                {
+                                    "type": "weather-forecast",
+                                    "entity": "weather.pins_justaret",
+                                    "secondary_info_attribute": "wind_speed",
+                                    "show_forecast": true
+                                },
+                                {
+                                    "type": "calendar",
+                                    "entities": [
+                                        "calendar.scentelles_gmail_com",
+                                        "calendar.famille",
+                                        "calendar.birthdays",
+                                        "calendar.jours_feries_en_france"
+                                    ],
+                                    "initial_view": "listWeek"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "picture-glance",
+                            "title": "Portail",
+                            "entities": [],
+                            "tap_action": {
+                                "action": "none"
+                            },
+                            "hold_action": {
+                                "action": "none"
+                            },
+                            "camera_image": "camera.streaming_enabled"
+                        },
+                        {
+                            "type": "horizontal-stack",
+                            "cards": [
+                                {
+                                    "type": "custom:button-card",
+                                    "icon": "mdi:gate",
+                                    "size": "20%",
+                                    "tap_action": {
+                                        "action": "call-service",
+                                        "service": "mqtt.publish",
+                                        "service_data": {
+                                            "payload": 2,
+                                            "topic": "Door/open"
+                                        }
+                                    }
+                                },
+                                {
+                                    "type": "custom:button-card",
+                                    "icon": "mdi:gate-arrow-right",
+                                    "size": "20%",
+                                    "tap_action": {
+                                        "action": "call-service",
+                                        "service": "mqtt.publish",
+                                        "service_data": {
+                                            "payload": 12,
+                                            "topic": "Door/open"
+                                        }
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "type": "picture-glance",
+                            "title": "Jardin",
+                            "entities": [],
+                            "tap_action": {
+                                "action": "none"
+                            },
+                            "hold_action": {
+                                "action": "none"
+                            },
+                            "camera_image": "camera.jardin_stream"
+                        },
+                        {
+                            "type": "thermostat",
+                            "entity": "climate.netatmo_ma_piece"
+                        },
+                        {
+                            "type": "vertical-stack",
+                            "cards": [
+                                {
+                                    "type": "media-control",
+                                    "entity": "media_player.spotify_sylvain_centelles"
+                                },
+                                {
+                                    "type": "media-control",
+                                    "entity": "media_player.spotify_dorian"
+                                },
+                                {
+                                    "type": "media-control",
+                                    "entity": "media_player.nvidia_shield"
+                                },
+                                {
+                                    "type": "entities",
+                                    "entities": [
+                                        {
+                                            "entity": "input_boolean.tv_timer_start"
+                                        },
+                                        {
+                                            "entity": "input_number.slidertv"
+                                        },
+                                        {
+                                            "entity": "timer.timertv"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "horizontal-stack",
+                            "cards": [
+                                {
+                                    "type": "button",
+                                    "icon": "mdi:lightbulb-on-outline",
+                                    "tap_action": {
+                                        "action": "toggle"
+                                    },
+                                    "entity": "group.terrasse_gr",
+                                    "name": "Terrasse"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "vertical-stack",
+                            "cards": [
+                                {
+                                    "type": "history-graph",
+                                    "entities": [
+                                        {
+                                            "entity": "sensor.ecs2"
+                                        },
+                                        {
+                                            "entity": "sensor.ecstarget"
+                                        }
+                                    ],
+                                    "hours_to_show": 24,
+                                    "refresh_interval": 0
+                                },
+                                {
+                                    "type": "horizontal-stack",
+                                    "cards": [
+                                        {
+                                            "type": "custom:button-card",
+                                            "icon": "mdi:auto-fix",
+                                            "size": "20%",
+                                            "name": "ECS AUTO",
+                                            "styles": {
+                                                "icon": [
+                                                    {
+                                                        "color": "[[[ \n  if (states[\"sensor.ecs_force\"].state == '0') return \"green\";\n  return \"white\";\n\n]]]"
+                                                    }
+                                                ]
+                                            },
+                                            "tap_action": {
+                                                "action": "call-service",
+                                                "service": "mqtt.publish",
+                                                "service_data": {
+                                                    "payload": "0",
+                                                    "topic": "ECS/force"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "custom:button-card",
+                                            "icon": "mdi:water-boiler",
+                                            "size": "20%",
+                                            "name": "ECS ON",
+                                            "styles": {
+                                                "icon": [
+                                                    {
+                                                        "color": "[[[ \n  if (states[\"sensor.ecs_force\"].state == '2') return \"green\";\n  return \"white\";\n\n]]]"
+                                                    }
+                                                ]
+                                            },
+                                            "tap_action": {
+                                                "action": "call-service",
+                                                "service": "mqtt.publish",
+                                                "service_data": {
+                                                    "payload": "2",
+                                                    "topic": "ECS/force"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "custom:button-card",
+                                            "icon": "mdi:water-boiler-off",
+                                            "size": "20%",
+                                            "name": "ECS OFF",
+                                            "styles": {
+                                                "icon": [
+                                                    {
+                                                        "color": "[[[ \n  if (states[\"sensor.ecs_force\"].state == '1') return \"green\";\n  return \"white\";\n\n]]]"
+                                                    }
+                                                ]
+                                            },
+                                            "tap_action": {
+                                                "action": "call-service",
+                                                "service": "mqtt.publish",
+                                                "service_data": {
+                                                    "payload": "1",
+                                                    "topic": "ECS/force"
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "horizontal-stack",
+                            "cards": [
+                                {
+                                    "type": "entities",
+                                    "entities": [
+                                        {
+                                            "entity": "sensor.vf1ag000463165667_charge_state",
+                                            "name": "Etat"
+                                        },
+                                        {
+                                            "entity": "sensor.vf1ag000463165667_charging_remaining_time",
+                                            "name": "Temps restant"
+                                        },
+                                        {
+                                            "entity": "sensor.vf1ag000463165667_mileage",
+                                            "name": "Km"
+                                        }
+                                    ],
+                                    "title": "ZOE"
+                                },
+                                {
+                                    "type": "horizontal-stack",
+                                    "cards": [
+                                        {
+                                            "type": "gauge",
+                                            "min": 0,
+                                            "entity": "sensor.vf1ag000463165667_battery_autonomy",
+                                            "name": "Autonomie",
+                                            "max": 300
+                                        },
+                                        {
+                                            "type": "gauge",
+                                            "min": 0,
+                                            "max": 100,
+                                            "entity": "sensor.vf1ag000463165667_battery_level",
+                                            "name": "Batterie"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "custom:xiaomi-vacuum-card",
+                            "entity": "vacuum.jean_claude",
+                            "name": "Jean-Claude",
+                            "vendor": "xiaomi",
+                            "image": "/local/img/vacuum.png"
+                        },
+                        {
+                            "type": "entity",
+                            "entity": "switch.plug_status2"
+                        },
+                        {
+                            "type": "horizontal-stack",
+                            "cards": [
+                                {
+                                    "type": "gauge",
+                                    "min": 10,
+                                    "max": 32,
+                                    "entity": "sensor.pooltemp",
+                                    "name": "Piscine"
+                                },
+                                {
+                                    "type": "entities",
+                                    "entities": [
+                                        {
+                                            "entity": "sensor.pool"
+                                        },
+                                        {
+                                            "entity": "sensor.pooltemp"
+                                        },
+                                        {
+                                            "entity": "switch.poolpump"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "entities",
+                            "entities": [
+                                "sensor.ecs_force"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "title": "HOME2",
+                    "path": "Home2",
+                    "badges": [],
+                    "cards": [
+                        {
+                            "type": "custom:xiaomi-vacuum-map-card",
+                            "entity": "vacuum.jean_claude",
+                            "map_camera": "camera.jean_claude",
+                            "camera_calibration": true,
+                            "language": "fr",
+                            "debug": false,
+                            "default_mode": "predefined_zones",
+                            "modes": [
+                                "predefined_zones"
+                            ],
+                            "zones": [
+                                [
+                                    [
+                                        21091,
+                                        24635,
+                                        30196,
+                                        28306
+                                    ]
+                                ],
+                                [
+                                    [
+                                        21575,
+                                        21210,
+                                        25766,
+                                        24580
+                                    ]
+                                ],
+                                [
+                                    [
+                                        21956,
+                                        17547,
+                                        25648,
+                                        21210
+                                    ]
+                                ],
+                                [
+                                    [
+                                        25731,
+                                        13621,
+                                        26847,
+                                        24458
+                                    ]
+                                ],
+                                [
+                                    [
+                                        26789,
+                                        20905,
+                                        30107,
+                                        24576
+                                    ]
+                                ],
+                                [
+                                    [
+                                        26789,
+                                        16910,
+                                        30107,
+                                        20993
+                                    ]
+                                ],
+                                [
+                                    [
+                                        26789,
+                                        13210,
+                                        30107,
+                                        16998
+                                    ]
+                                ],
+                                [
+                                    [
+                                        22031,
+                                        15706,
+                                        25819,
+                                        17028
+                                    ]
+                                ],
+                                [
+                                    [
+                                        21943,
+                                        13386,
+                                        25085,
+                                        15677
+                                    ]
+                                ]
+                            ]
+                        },
+                        {
+                            "type": "entities",
+                            "entities": [
+                                "switch.pc_etage"
+                            ]
+                        },
+                        {
+                            "type": "custom:button-card",
+                            "name": "ShutdownPC",
+                            "icon": "mdi:desktop-tower-monitor",
+                            "tap_action": {
+                                "action": "call-service",
+                                "service": "shell_command.shutdown_pc_etage"
+                            }
+                        },
+                        {
+                            "type": "history-graph",
+                            "entities": [
+                                {
+                                    "entity": "sensor.0x00158d0006c570b8_temperature"
+                                },
+                                {
+                                    "entity": "sensor.0x00158d0006d474d0_temperature"
+                                },
+                                {
+                                    "entity": "sensor.0x00158d0006d41ce1_temperature"
+                                }
+                            ],
+                            "hours_to_show": 24,
+                            "refresh_interval": 0,
+                            "title": "Thermometres"
+                        },
+                        {
+                            "type": "history-graph",
+                            "entities": [
+                                {
+                                    "entity": "sensor.0x00158d0006c570b8_humidity"
+                                },
+                                {
+                                    "entity": "sensor.0x00158d0006d474d0_humidity"
+                                },
+                                {
+                                    "entity": "sensor.0x00158d0006d41ce1_humidity"
+                                }
+                            ],
+                            "hours_to_show": 24,
+                            "refresh_interval": 0
+                        },
+                        {
+                            "type": "history-graph",
+                            "entities": [
+                                {
+                                    "entity": "sensor.0x00158d0006c570b8_linkquality"
+                                },
+                                {
+                                    "entity": "sensor.0x00158d0006d474d0_linkquality"
+                                },
+                                {
+                                    "entity": "sensor.0x00158d0006d41ce1_linkquality"
+                                },
+                                {
+                                    "entity": "sensor.0x00158d0006baa383_linkquality"
+                                },
+                                {
+                                    "entity": "sensor.0x00158d0006baa638_linkquality"
+                                }
+                            ],
+                            "hours_to_show": 24,
+                            "refresh_interval": 0,
+                            "title": "ZB Link"
+                        },
+                        {
+                            "type": "history-graph",
+                            "entities": [
+                                {
+                                    "entity": "sensor.0x00158d0006c570b8_battery"
+                                },
+                                {
+                                    "entity": "sensor.0x00158d0006d474d0_battery"
+                                },
+                                {
+                                    "entity": "sensor.0x00158d0006d41ce1_battery"
+                                },
+                                {
+                                    "entity": "sensor.0x00158d0006baa383_battery"
+                                },
+                                {
+                                    "entity": "sensor.0x00158d0006baa638_battery"
+                                }
+                            ],
+                            "hours_to_show": 24,
+                            "refresh_interval": 0,
+                            "title": "ZB battery"
+                        },
+                        {
+                            "type": "horizontal-stack",
+                            "cards": [
+                                {
+                                    "type": "custom:mini-graph-card",
+                                    "entities": [
+                                        "sensor.0x00158d0006c570b8_temperature",
+                                        "sensor.0x00158d0006d474d0_temperature",
+                                        "sensor.0x00158d0006d41ce1_temperature"
+                                    ],
+                                    "line_color": "blue",
+                                    "line_width": 8,
+                                    "font_size": 75
+                                },
+                                {
+                                    "type": "custom:mini-graph-card",
+                                    "entities": [
+                                        "sensor.illumination"
+                                    ],
+                                    "line_color": "#e74c3c",
+                                    "line_width": 8,
+                                    "font_size": 75
+                                },
+                                {
+                                    "type": "custom:mini-graph-card",
+                                    "entities": [
+                                        "sensor.temperature"
+                                    ],
+                                    "line_color": "var(--accent-color)",
+                                    "line_width": 8,
+                                    "font_size": 75
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
