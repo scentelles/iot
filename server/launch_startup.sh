@@ -1,6 +1,6 @@
 
 
-if pgrep Xtightvnc
+if pgrep ECS_scheduler
 then
     echo "first session already running\n" >> /home/pi/startup.log
     exit
@@ -21,7 +21,7 @@ else
     cd /home/pi/Projects/iot/server
  
     echo "startup ECS script"
-    python3 -u /home/pi/Projects/iot/server/ECS_scheduler_new.py >> /home/pi/Projects/ECS_log.txt &
+    /home/pi/Projects/iot/server/ECS_scheduler_new.py >> /home/pi/Projects/ECS_log.txt &
     sleep 1
 
     echo "startup RF script"
@@ -34,16 +34,27 @@ else
     
 #    /usr/bin/node-red start >> /home/pi/Projects/node-red.log &
     
+    echo "launching node-red manually to be after usb drive mount"
+    /usr/bin/influxd &
+    
     #python -u /home/pi/Projects/camera.py >> /home/pi/Projects/camera_log.txt &
     echo "launching node-red"
     /usr/bin/node-red /home/pi/Projects/iot/node-red/myflow.json >> /home/pi/Projects/node-red.log &
    
-    echo "mounting samba SHIELD share" 
-    sudo mount -t cifs -o username=scentelles,password=tweak-were-bingle,uid=1000,gid=1000 //192.168.1.9/Elements/NVIDIA_SHIELD/Films/tmp /home/pi/Shield
+    #echo "mounting samba SHIELD share" 
+    #sudo mount -t cifs -o username=scentelles,password=tweak-were-bingle,uid=1000,gid=1000 //192.168.1.9/Elements/NVIDIA_SHIELD/Films/tmp /home/pi/Shield
+    
+    #echo "mounting samba Synology  share" 
+    #sudo mount -t cifs -o username=admin,password=Totor0608,uid=1000,gid=1000 //192.168.1.1/usbshare1/Download /home/pi/Synology
+
     
     #Launch VNC virtual desktop
     echo "Launching virtual desktop"
     vncserver -geometry 1920x1080 :2 
+    
+    sleep 10
+    xscreensaver-command -display :2.0 -exit
+    
     
     
     echo "startup script stop \n" >> /home/pi/startup.log
