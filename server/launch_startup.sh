@@ -55,7 +55,7 @@ else
     sleep 10
     xscreensaver-command -display :2.0 -exit
     
-    
+    echo "Launching motioneye"    
     
     echo "startup script stop \n" >> /home/pi/startup.log
 
