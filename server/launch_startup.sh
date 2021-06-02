@@ -56,6 +56,7 @@ else
     xscreensaver-command -display :2.0 -exit
     
     echo "Launching motioneye"    
+    sudo systemctl start motioneye
     
     echo "startup script stop \n" >> /home/pi/startup.log
 
