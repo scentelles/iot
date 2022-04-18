@@ -1,0 +1,8 @@
+sudo journalctl -u zigbee2mqtt.service -f
+
+sudo systemctl restart zigbee2mqtt.service 
+
+
+sudo service home-assistant@homeassistant restart
+
+systemctl status home-assistant@homeassistant.service
