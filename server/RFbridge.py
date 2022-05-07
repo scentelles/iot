@@ -110,15 +110,16 @@ def on_message(client, userdata, msg):
         print("trigger external door")
         client.publish("Door/open", payload='12', qos=1, retain=False)
 	#getImageFromCamera2();
-        client.publish("Door/dorian", payload='Portail Dorian', qos=1, retain=False)
         getImageFromCamera1();
-
+        time.sleep(1)
+        client.publish("Door/dorian", payload='Portail Dorian', qos=1, retain=False)
 
     if msg.payload == b'6454994':
         print("Remote 1 B trigger received")
         print("trigger external door")
         client.publish("Door/open", payload='2', qos=1, retain=False)
-	#getImageFromCamera1();
+        getImageFromCamera1();
+        time.sleep(1)
         client.publish("Door/dorian", payload='Portail Dorian', qos=1, retain=False)
 	
 #Gael
@@ -127,22 +128,23 @@ def on_message(client, userdata, msg):
         print("trigger external door")
         client.publish("Door/open", payload='12', qos=1, retain=False)
 	#getImageFromCamera2();
-        client.publish("Door/gael", payload='Portail Gael', qos=1, retain=False)
         getImageFromCamera1();
-
+        time.sleep(1)
+        client.publish("Door/gael", payload='Portail Gael', qos=1, retain=False)
 
     if msg.payload == b'14993778':
         print("Remote 2 B trigger received")
         print("trigger external door")
         client.publish("Door/open", payload='2', qos=1, retain=False)
-	#getImageFromCamera1();
+        time.sleep(1)
+        getImageFromCamera1();
         client.publish("Door/gael", payload='Portail Gael', qos=1, retain=False)
 
     if msg.payload == b'16276098':
         print("Door bell trigger received")
         print("trigger Ring")
         getImageFromCamera1();
-	#getImageFromCamera2();
+        time.sleep(1)
         client.publish("Door/bell", payload='1', qos=1, retain=False)
 		
     if msg.payload == b'14786398':

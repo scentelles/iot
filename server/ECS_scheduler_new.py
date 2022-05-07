@@ -28,7 +28,9 @@ lastTemperatureUpdate = datetime.datetime.now()
 currentTemperatureUpdate = datetime.datetime.now()
 global configWarningSender, configWarningRecipient, configSmtpLogin, configSmtpPassword
 global ecsState, ecsRemoteState, ecsStateForced, ecsTemperature, ecsHeatTarget      
+global warnSent
 
+warnSent = False
 targetReached = False
 
 
@@ -138,6 +140,7 @@ def warnMessage(msg, mqttClient):
     return
 
 def checkTemperatureValidity(temperature, mqttClient):  
+    global warnSent
     if(temperature < UNDERHEAT_TEMPERATURE):
          if(warnSent == False):
             warnMessage("Warning, the temperature of the ECS is getting low. Consider forcing ON", mqttClient)
@@ -158,6 +161,7 @@ def heatManager(msqQueue, mqttClient):
     global ecsState, ecsRemoteState, ecsStateForced, ecsTemperature, ecsHeatTarget
     global lastTemperatureUpdate, currentTemperatureUpdate
     global targetReached
+    global warnSent
     ecsState       = ECS_STATE_OFF 
     ecsRemoteState = ECS_STATE_OFF 
     ecsStateForced = False
@@ -210,8 +214,9 @@ def heatManager(msqQueue, mqttClient):
                     currentTime = datetime.datetime.now()
                     deltaTime = currentTime - currentTemperatureUpdate
                     deltaTimeInSeconds = deltaTime.total_seconds()
-                    if(deltaTimeInSeconds > DELAY_BETWEEN_TEMPERATURE_UPDATE *10):
-                        message = "Warning : Switching ECS ON while temperature info may not be valid : \nsensor update exceeded 10 times maximum delta time: " + str(deltaTimeInSeconds) + "seconds"
+                    if(deltaTimeInSeconds > DELAY_BETWEEN_TEMPERATURE_UPDATE *100):
+                        message = "Warning : Switching ECS ON while temperature info may not be valid : \nsensor update exceeded 100 times maximum delta time: " + str(deltaTimeInSeconds) + "seconds. \nresetting temperature to avoid ON/OFF bypass"
+                        ecsTemperature = 0
                         warnMessage(message, mqttClient)  
                     
                     if(ecsTemperature < ecsHeatTarget):
