@@ -9,8 +9,8 @@ MqttConnection * myMqtt;
 
 #define SENSOR_ID "ALARM1"
 
-#define ALARM_LED_RELAY_PIN        D5
-#define ALARM_BUZ_RELAY_PIN        D1 
+#define ALARM_RELAY_PIN        D6
+ 
 
 
 
@@ -20,38 +20,27 @@ MqttConnection * myMqtt;
 #define MQTT_PORT 1883
 
 //Constants
-const char ALARM_LED_ON  =  '2';
-const char ALARM_LED_OFF =  '1';
-const char ALARM_BUZ_ON  =  '4';
-const char ALARM_BUZ_OFF =  '3';
+const char TV_STATE_OFF = 1;
+const char TV_STATE_ON  = 2;
+const char ALARM_ON  =  '2';
+const char ALARM_OFF =  '1';
+
 void processAlarmStateMsg(char* topic, byte* payload, unsigned int length)
 {
 
   Serial.print("Checking if state topic");
   if(String(topic) == "ALARM1/cmd"){
 	  Serial.println("Received Alarm change message");
-       if ((char)payload[0] == ALARM_LED_ON){
-		    Serial.println("ALARM LED ON received");
+       if ((char)payload[0] == ALARM_ON){
+		    Serial.println("ALARM ON received");
 
-			  switchAlarmLedOn();
+			  switchAlarmOn();
 			
 	     }
-       else if ((char)payload[0] == ALARM_LED_OFF){
-        Serial.println("ALARM LED OFF received");
+       else if ((char)payload[0] == ALARM_OFF){
+        Serial.println("ALARM OFF received");
 
-        switchAlarmLedOff();
-      
-       }
-       else if ((char)payload[0] == ALARM_BUZ_ON){
-        Serial.println("ALARM BUZ ON received");
-
-        switchAlarmBuzOn();
-      
-       }
-       else if ((char)payload[0] == ALARM_BUZ_OFF){
-        Serial.println("ALARM BUZ OFF received");
-
-        switchAlarmBuzOff();
+        switchAlarmOff();
       
        }
 		 else {
@@ -64,10 +53,9 @@ void processAlarmStateMsg(char* topic, byte* payload, unsigned int length)
 
 void setup() {
   Serial.begin(115200);
-  pinMode(ALARM_LED_RELAY_PIN, OUTPUT);
-  digitalWrite(ALARM_LED_RELAY_PIN, LOW);
-  pinMode(ALARM_BUZ_RELAY_PIN, OUTPUT);
-  digitalWrite(ALARM_BUZ_RELAY_PIN, LOW);
+  pinMode(ALARM_RELAY_PIN, OUTPUT);
+  digitalWrite(ALARM_RELAY_PIN, HIGH);
+
   
   delay(10);
   
@@ -78,28 +66,16 @@ void setup() {
 }
 
 
-void switchAlarmLedOn(){
+void switchAlarmOn(){
     
-  Serial.println("Switching Alarm LED ON");
-  digitalWrite(ALARM_LED_RELAY_PIN, HIGH);
+  Serial.println("Switching Alarm ON");
+  digitalWrite(ALARM_RELAY_PIN, LOW);
 
 }
-void switchAlarmLedOff(){
+void switchAlarmOff(){
     
-  Serial.println("Switching Alarm LED OFF");
-  digitalWrite(ALARM_LED_RELAY_PIN, LOW);
-
-}
-void switchAlarmBuzOn(){
-    
-  Serial.println("Switching Alarm BUZ ON");
-  digitalWrite(ALARM_BUZ_RELAY_PIN, HIGH);
-
-}
-void switchAlarmBuzOff(){
-    
-  Serial.println("Switching Alarm BUZ OFF");
-  digitalWrite(ALARM_BUZ_RELAY_PIN, LOW);
+  Serial.println("Switching Alarm OFF");
+  digitalWrite(ALARM_RELAY_PIN, HIGH);
 
 }
 void loop() {
