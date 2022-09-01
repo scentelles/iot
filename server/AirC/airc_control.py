@@ -7,7 +7,7 @@ import json
 
 from AirCDefines import *
 from Room import *
-
+from AeroChannel import *
 
 
 
@@ -17,20 +17,12 @@ def on_connect(client, userdata, flags, rc):
 
     # Subscribing in on_connect() means that if we lose the connection and
     # reconnect then subscriptions will be renewed.
-
-    client.subscribe(MQTT_ADDRESS_CHAMBRE1)
-    client.subscribe(MQTT_ADDRESS_CHAMBRE2)
-    client.subscribe(MQTT_ADDRESS_CHAMBRE3)
-    client.subscribe(MQTT_ADDRESS_DREAMROOM)
-    client.subscribe(MQTT_ADDRESS_SALON)
-    client.subscribe(MQTT_ADDRESS_ETAGE)
-    #client.subscribe(MQTT_TEST)
-    
-    
     for r in roomList:
-        client.subscribe(MQTT_PREFIX + "/" + roomList[r].name + "/" + MQTT_SUFFIX_TARGETTEMP)   
+        client.subscribe(MQTT_ADDRESS[r])
     for r in roomList:
-        client.subscribe(MQTT_PREFIX + "/" + roomList[r].name + "/" + MQTT_SUFFIX_AC_STATE)   
+        client.subscribe(MQTT_PREFIX + "/" + r + "/" + MQTT_SUFFIX_TARGETTEMP)   
+    for r in roomList:
+        client.subscribe(MQTT_PREFIX + "/" + r + "/" + MQTT_SUFFIX_AC_STATE)   
     
     
 # The callback for when a PUBLISH message is received from the server.
@@ -66,12 +58,23 @@ def main():
 
     mqttClient.connect("localhost")
 
-    myAirCManager = AirCManager(roomList)
+    myAirCManager = AirCManager(mqttClient, roomList)
     
     aircManagerThread = Thread(target=myAirCManager.aircManagerLoop, args=(mqttClient,))    
     aircManagerThread.start() 
 
 
+    masterChannel1 = AeroChannel(mqttClient, 0, "MASTER1") #useless
+    masterChannel2 = AeroChannel(mqttClient, 0, "MASTER2")
+    masterChannel3 = AeroChannel(mqttClient, 0, "MASTER3") #useless
+
+
+    roomList[CHAMBRE1] = Room(mqttClient, CHAMBRE1, 25, masterChannel2)
+    roomList[CHAMBRE2] = Room(mqttClient, CHAMBRE2, 25, masterChannel2)
+    roomList[CHAMBRE3] = Room(mqttClient, CHAMBRE3, 25, masterChannel2)
+    roomList[DREAMROOM] = Room(mqttClient, DREAMROOM, 35, masterChannel2)
+    roomList[SALON] = Room(mqttClient, SALON, 80, 0)
+    roomList[ETAGE] = Room(mqttClient, ETAGE, 35, 0)
 
 
 

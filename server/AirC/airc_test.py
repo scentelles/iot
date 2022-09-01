@@ -23,12 +23,14 @@ mqttClient.on_connect = on_connect
 
 mqttClient.connect("localhost")
 
+time.sleep(1)
 
-
-setTemperature(mqttClient, MQTT_ADDRESS_CHAMBRE1, 25)
-setTemperature(mqttClient, MQTT_ADDRESS_CHAMBRE2, 26)
-setTemperature(mqttClient, MQTT_ADDRESS_CHAMBRE3, 27)
-setTemperature(mqttClient, MQTT_ADDRESS_DREAMROOM, 28)
+setTemperature(mqttClient, MQTT_ADDRESS[CHAMBRE1], 25)
+setTemperature(mqttClient, MQTT_ADDRESS[CHAMBRE2], 26)
+setTemperature(mqttClient, MQTT_ADDRESS[CHAMBRE3], 27)
+setTemperature(mqttClient, MQTT_ADDRESS[DREAMROOM], 28)
+setTemperature(mqttClient, MQTT_ADDRESS[ETAGE], 28)
+setTemperature(mqttClient, MQTT_ADDRESS[SALON], 28)
 
 time.sleep(1)
 
@@ -39,6 +41,8 @@ for r in roomList:
     mqttClient.publish(MQTT_PREFIX + "/" + roomList[r].name + "/" + MQTT_SUFFIX_AC_STATE, AC_STATE_ON)   
     
 
+time.sleep(10)
+mqttClient.publish(MQTT_PREFIX + "/" + "DREAMROOM" + "/" + MQTT_SUFFIX_AC_STATE, AC_STATE_OFF)   
 
 
 
