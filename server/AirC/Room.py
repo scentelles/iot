@@ -33,6 +33,7 @@ class Room:
            if(self.getDeltaTemperature() > DELTATEMP_THRESHOLD):
                self.in_demand = True
        
+       
        if(self.in_demand == True):
            self.aeroChannel.stageOpenChannel()
        else:

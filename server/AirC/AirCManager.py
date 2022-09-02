@@ -25,6 +25,16 @@ class AirCManager:
 	    #Check and update first each room demand state
             for r in self.roomList:
                 self.roomList[r].updateDemand()
+		
+	    #manage the master channels separately
+            for r in self.roomList:
+                thisMasterChannel = self.roomList[r].aeroChannel.masterChannel
+                if(thisMasterChannel != 0):
+                    print("#NB master open :" + str(thisMasterChannel.nbOpen))
+                    if(thisMasterChannel.nbOpen != 0):
+                        thisMasterChannel.stageOpenChannel()
+                    else:
+                        thisMasterChannel.stageCloseChannel()		    
 	    
             if(self.isACInDemand() == True):
                 print("At least one room is in demand")
