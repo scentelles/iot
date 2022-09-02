@@ -7,12 +7,13 @@ class AeroChannel:
         self.currentAngle = 0
         self.name = name
         self.nbOpen = 0
+        self.angleStaged = False
 
     def stageAngle(self, angle):
         if(self.currentAngle != angle):
             self.currentAngle = angle
-            self.mqttClient.publish("AC/SERVO/" + self.name + "/angle", angle)
-	    
+            self.mqttClient.publish("AC/ESP/SERVO/" + self.name + "/ANGLE", int(angle))
+            self.angleStaged = True
             print("MQTT angle sent")
 	
     def stageCloseChannel(self):
@@ -30,3 +31,9 @@ class AeroChannel:
 
             if(self.masterChannel != 0):
                     self.masterChannel.nbOpen +=1
+
+    def isAngledStaged(self):
+        return self.angleStaged
+	
+    def clearAngledStaged(self):
+        self.angleStaged = False

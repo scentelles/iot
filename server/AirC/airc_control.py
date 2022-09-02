@@ -9,6 +9,25 @@ from AirCDefines import *
 from Room import *
 from AeroChannel import *
 
+initDone = False
+mqttClient = mqtt.Client()
+
+masterChannel1 = AeroChannel(mqttClient, 0, "MASTER1") #useless
+masterChannel2 = AeroChannel(mqttClient, 0, "MASTER2")
+masterChannel3 = AeroChannel(mqttClient, 0, "MASTER3") #useless
+
+
+roomList[CHAMBRE1] = Room(mqttClient, CHAMBRE1, 25, masterChannel2)
+roomList[CHAMBRE2] = Room(mqttClient, CHAMBRE2, 25, masterChannel2)
+roomList[CHAMBRE3] = Room(mqttClient, CHAMBRE3, 25, masterChannel2)
+roomList[DREAMROOM] = Room(mqttClient, DREAMROOM, 35, masterChannel2)
+roomList[SALON] = Room(mqttClient, SALON, 80, 0)
+roomList[ETAGE] = Room(mqttClient, ETAGE, 35, 0)
+
+
+
+myAirCManager = AirCManager(mqttClient, roomList)
+
 
 
 # The callback for when the client receives a CONNACK response from the server.
@@ -24,6 +43,8 @@ def on_connect(client, userdata, flags, rc):
     for r in roomList:
         client.subscribe(MQTT_PREFIX + "/" + r + "/" + MQTT_SUFFIX_AC_STATE)   
     
+    client.subscribe(MQTT_ESP_AERAULIC_STATE)   
+    client.subscribe(MQTT_ESP_INIT_DONE) 
     
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
@@ -40,6 +61,16 @@ def on_message(client, userdata, msg):
         print( "target temp change received")
         room = getRoomFromAddress(msg.topic)
         roomList[room].setTemperatureTarget(msg.payload)
+
+    elif(msg.topic == MQTT_ESP_AERAULIC_STATE):
+        if(msg.payload == AERO_CONFIG_ONGOING):
+            print("Configuration ongoing - Toggle TBD")
+        if(msg.payload == b'3'):
+            myAirCManager.aeraulicState = AERO_CONFIGURED
+
+    elif(msg.topic == MQTT_ESP_INIT_DONE):
+        myAirCManager.initDone = True
+	    
     else:
         myjson = json.loads(msg.payload)
         current_temperature = myjson['temperature']
@@ -52,29 +83,23 @@ def on_message(client, userdata, msg):
 # Main...                                                                 #
 #=========================================================================#  
 def main():
-    mqttClient = mqtt.Client()
+
+
+
+
     mqttClient.on_connect = on_connect
     mqttClient.on_message = on_message
 
     mqttClient.connect("localhost")
 
-    myAirCManager = AirCManager(mqttClient, roomList)
-    
+
+
+
     aircManagerThread = Thread(target=myAirCManager.aircManagerLoop, args=(mqttClient,))    
     aircManagerThread.start() 
 
 
-    masterChannel1 = AeroChannel(mqttClient, 0, "MASTER1") #useless
-    masterChannel2 = AeroChannel(mqttClient, 0, "MASTER2")
-    masterChannel3 = AeroChannel(mqttClient, 0, "MASTER3") #useless
 
-
-    roomList[CHAMBRE1] = Room(mqttClient, CHAMBRE1, 25, masterChannel2)
-    roomList[CHAMBRE2] = Room(mqttClient, CHAMBRE2, 25, masterChannel2)
-    roomList[CHAMBRE3] = Room(mqttClient, CHAMBRE3, 25, masterChannel2)
-    roomList[DREAMROOM] = Room(mqttClient, DREAMROOM, 35, masterChannel2)
-    roomList[SALON] = Room(mqttClient, SALON, 80, 0)
-    roomList[ETAGE] = Room(mqttClient, ETAGE, 35, 0)
 
 
 

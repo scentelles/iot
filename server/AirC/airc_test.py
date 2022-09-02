@@ -38,11 +38,11 @@ time.sleep(1)
 
 for r in roomList:
     mqttClient.publish(MQTT_PREFIX + "/" + roomList[r].name + "/" + MQTT_SUFFIX_TARGETTEMP, 22)   
-    mqttClient.publish(MQTT_PREFIX + "/" + roomList[r].name + "/" + MQTT_SUFFIX_AC_STATE, AC_STATE_ON)   
+#    mqttClient.publish(MQTT_PREFIX + "/" + roomList[r].name + "/" + MQTT_SUFFIX_AC_STATE, AC_STATE_ON)   
     
 
-time.sleep(10)
-mqttClient.publish(MQTT_PREFIX + "/" + "DREAMROOM" + "/" + MQTT_SUFFIX_AC_STATE, AC_STATE_OFF)   
+#time.sleep(10)
+#mqttClient.publish(MQTT_PREFIX + "/" + "DREAMROOM" + "/" + MQTT_SUFFIX_AC_STATE, AC_STATE_OFF)   
 
 
 
