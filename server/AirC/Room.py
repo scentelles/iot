@@ -48,3 +48,6 @@ class Room:
        print("\ttemperature : \t" + str(self.temperature))
        print("\ttemperature target : \t" + str(self.temperature_target))
        print("\ttemperature delta : \t" + str(self.getDeltaTemperature()))   
+
+   def getDemandPower(self):
+       self.getDeltaTemperature() * self.volume
