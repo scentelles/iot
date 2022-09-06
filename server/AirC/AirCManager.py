@@ -11,6 +11,7 @@ MQTT_SUFFIX_AC_STATE = "state"
 MQTT_PREFIX = "AC"
 AC_STATE_OFF = 1
 
+SAFETY_ROOM_CHANNEL = "ETAGE"
 
 MQTT_GREE_PREFIX = "AC/GREE"
 
@@ -81,6 +82,8 @@ class AirCManager:
             if(self.isACInDemand() == True):
                 print("At least one room is in demand")
                 if(self.isAnyAeroAngleStaged() == True):
+                    self.roomList[SAFETY_ROOM_CHANNEL].aeroChannel.clearSafetyFlag()
+                        
                     self.runAeraulicConfig()
 		
                 if(self.aeraulicState == AERO_CONFIGURED):
@@ -90,11 +93,12 @@ class AirCManager:
 		
             else:
                 print("No demand")
+                self.roomList[SAFETY_ROOM_CHANNEL].aeroChannel.safetyOpen()
                 self.turnACOff()          
 
             for r in self.roomList:
                 self.roomList[r].dumpValues()
-            time.sleep(10)    
+            time.sleep(1)    
 
 
     def isACInDemand(self):
@@ -112,9 +116,9 @@ class AirCManager:
             self.aeraulicState = AERO_CONFIG_ONGOING
             self.clearAllAeroStaged()
             self.mqttClient.publish("AC/ESP/SERVO/RUN_ALL", 1)
-            while(self.aeraulicState == AERO_CONFIG_ONGOING):
-                print("Waiting for end of Servo moves")
-                time.sleep(1)
+          #  while(self.aeraulicState == AERO_CONFIG_ONGOING): 
+          #      print("Waiting for end of Servo moves")
+          #      time.sleep(1)
 			    
         else: 
             print("WARNING : AERO config asked while it was already ongoing")
@@ -150,8 +154,10 @@ class AirCManager:
     def turnACOn(self):
         print("AC ON")
         self.ACRunning == True
-        self.mqttClient.publish(MQTT_GREE_PREFIX + "/mode/set", "cool")   
+        self.mqttClient.publish(MQTT_GREE_PREFIX + "/mode/set", "cool")  
+        time.sleep(0.5) 
         self.mqttClient.publish(MQTT_GREE_PREFIX + "/power/set", 1)   
+        time.sleep(0.5) 
         self.mqttClient.publish(MQTT_GREE_PREFIX + "/fanspeed/set", self.calculatefanSpeedd())    
 
     def turnACOff(self):
