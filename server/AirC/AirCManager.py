@@ -15,6 +15,8 @@ SAFETY_ROOM_CHANNEL = "ETAGE"
 
 MQTT_GREE_PREFIX = "AC/GREE"
 
+
+
 class AirCManager:
 
    
@@ -25,10 +27,13 @@ class AirCManager:
         self.ACRunning = False
         self.mqttClient = mqttClient
         self.initDone = False
-
+        self.pingAck = False
+        self.errorState = False
+	
     def initAfterBoot(self):
 
-#TODO : check ESP is alive
+
+        self.mqttClient.publish("AC/ERROR", 0)
 
         for r in self.roomList: 
             self.mqttClient.publish(MQTT_PREFIX + "/" + r + "/" + MQTT_SUFFIX_AC_STATE, AC_STATE_OFF)   
@@ -49,6 +54,22 @@ class AirCManager:
         for r in self.roomList: 
             self.roomList[r].aeroChannel.clearAngledStaged()   
 
+#==========================
+# watchdog thread
+#==========================
+    def watchdog(self, mqttClient):
+        while(1):
+            print("!!!!!!!!!!!!!  PINGING ESP  !!!!!!!!!!!!!")
+            self.mqttClient.publish("AC/ESP/PING", 1)
+            self.pingAck = False
+
+            time.sleep(10)
+            if(self.pingAck == False):
+                self.mqttClient.publish("AC/ERROR", "ESP NOT RESPONDING!!!")
+                self.errorState = True
+                self.turnACOff()		
+		
+		
 #======================
 #Main Loop	
 #======================		
@@ -61,7 +82,7 @@ class AirCManager:
             print("Init ongoing")  
             time.sleep(1)
 	
-        while True:
+        while (self.errorState == False):
             print ("aircManager loop\n")
             print ("checking demand\n")
 
@@ -94,12 +115,13 @@ class AirCManager:
             else:
                 print("No demand")
                 self.roomList[SAFETY_ROOM_CHANNEL].aeroChannel.safetyOpen()
-                self.turnACOff()          
+                if(self.ACRunning == True):
+                    self.turnACOff()          
 
             for r in self.roomList:
                 self.roomList[r].dumpValues()
             time.sleep(1)    
-
+        print("ERROR STATE REACHED !!!! - Stopping main loop!!!!!!")
 
     def isACInDemand(self):
         demand = False
@@ -153,7 +175,7 @@ class AirCManager:
 	   	   
     def turnACOn(self):
         print("AC ON")
-        self.ACRunning == True
+        self.ACRunning = True
         self.mqttClient.publish(MQTT_GREE_PREFIX + "/mode/set", "cool")  
         time.sleep(0.5) 
         self.mqttClient.publish(MQTT_GREE_PREFIX + "/power/set", 1)   
@@ -162,10 +184,10 @@ class AirCManager:
 
     def turnACOff(self):
         print("AC OFF")
-        self.ACRunning == False
+        self.ACRunning = False
         self.mqttClient.publish(MQTT_GREE_PREFIX + "/fanspeed/set", "low")
         self.mqttClient.publish(MQTT_GREE_PREFIX + "/power/set", 0)   
 	
     def updateACMastertargetTemp(self):
-        self.mqttClient.publish(MQTT_GREE_PREFIX + "/temperature/set", self.getMaxDeltaTemp())   
+        self.mqttClient.publish(MQTT_GREE_PREFIX + "/temperature/set", self.roomList["ETAGE"].temperature + self.getMaxDeltaTemp())   
 

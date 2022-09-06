@@ -45,6 +45,7 @@ def on_connect(client, userdata, flags, rc):
     
     client.subscribe(MQTT_ESP_AERAULIC_STATE)   
     client.subscribe(MQTT_ESP_INIT_DONE) 
+    client.subscribe(MQTT_ESP_PONG)
     
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
@@ -68,8 +69,12 @@ def on_message(client, userdata, msg):
         if(msg.payload == b'3'):
             myAirCManager.aeraulicState = AERO_CONFIGURED
 
+
     elif(msg.topic == MQTT_ESP_INIT_DONE):
         myAirCManager.initDone = True
+
+    elif(msg.topic == MQTT_ESP_PONG):
+        myAirCManager.pingAck = True
 	    
     else:
         myjson = json.loads(msg.payload)
@@ -98,6 +103,8 @@ def main():
     aircManagerThread = Thread(target=myAirCManager.aircManagerLoop, args=(mqttClient,))    
     aircManagerThread.start() 
 
+    watchdogThread = Thread(target=myAirCManager.watchdog, args=(mqttClient,))    
+    watchdogThread.start() 
 
 
 
