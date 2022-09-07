@@ -1,4 +1,8 @@
-#include <ESP8266WiFi.h> //TODO : should not need the entire include just for Strings and serial
+#if defined(ESP8266)
+  #include <ESP8266WiFi.h> //TODO : should not need the entire include just for Strings and serial
+#else
+  #include <WiFi.h>
+#endif
 #include <EEPROM.h>
 
 

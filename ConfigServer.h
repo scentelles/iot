@@ -1,4 +1,8 @@
-#include <ESP8266WebServer.h>
+#if defined(ESP8266)
+  #include <ESP8266WebServer.h>
+#else
+  #include <WebServer.h>
+#endif
 
 #include "PersistentConfig.h"
 
@@ -12,8 +16,11 @@ typedef struct MqttConfig{
     String mqttIp;
     String mqttPort;    
 } MqttConfig;
-
+#if defined(ESP8266)  
 class ConfigServer : public ESP8266WebServer{
+#else
+class ConfigServer : public WebServer{
+#endif
     public :
     ConfigServer(IPAddress ip);
     void start();
@@ -22,7 +29,12 @@ class ConfigServer : public ESP8266WebServer{
     
     private :
     IPAddress serverIP;
+#if defined(ESP8266) 
     ESP8266WebServer * server;
+#else
+    WebServer * server;
+#endif
+
     PersistentConfig eepromConfig;
     MqttConfig config;  
    
