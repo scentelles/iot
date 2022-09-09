@@ -33,7 +33,7 @@ class AirCManager:
     def initAfterBoot(self):
 
 
-        self.mqttClient.publish("AC/ERROR", 0)
+        self.mqttClient.publish("AC/ERROR", "INITIALIZING CONNECTION")
 
         for r in self.roomList: 
             self.mqttClient.publish(MQTT_PREFIX + "/" + r + "/" + MQTT_SUFFIX_AC_STATE, AC_STATE_OFF)   
@@ -75,53 +75,60 @@ class AirCManager:
 #======================		
     def aircManagerLoop(self, mqttClient):
 
-        time.sleep(1)
+        time.sleep(2)
         self.initAfterBoot()
 
         while(self.initDone == False):
             print("Init ongoing")  
-            time.sleep(1)
+            #self.mqttClient.publish("AC/ESP/SERVO/RESET", 1)
+            time.sleep(2)
 	
-        while (self.errorState == False):
-            print ("aircManager loop\n")
-            print ("checking demand\n")
+        while (1):
+            if(self.errorState == False):
+                print ("aircManager loop\n")
+                print ("checking demand\n")
 
-	    #Check and update first each room demand state
-            for r in self.roomList:
-                self.roomList[r].updateDemand()
-		
-	    #manage the master channels separately
-            for r in self.roomList:
-                thisMasterChannel = self.roomList[r].aeroChannel.masterChannel
-                if(thisMasterChannel != 0):
-                    print("#NB master open :" + str(thisMasterChannel.nbOpen))
-                    if(thisMasterChannel.nbOpen != 0):
-                        thisMasterChannel.stageOpenChannel()
-                    else:
-                        thisMasterChannel.stageCloseChannel()		    
-	    
-            if(self.isACInDemand() == True):
-                print("At least one room is in demand")
-                if(self.isAnyAeroAngleStaged() == True):
-                    self.roomList[SAFETY_ROOM_CHANNEL].aeroChannel.clearSafetyFlag()
-                        
-                    self.runAeraulicConfig()
-		
-                if(self.aeraulicState == AERO_CONFIGURED):
-                    if(self.ACRunning == False):
-                        self.updateACMastertargetTemp()
-                        self.turnACOn()
-		
+                #Check and update first each room demand state
+                for r in self.roomList:
+                    self.roomList[r].updateDemand()
+
+                #manage the master channels separately
+                for r in self.roomList:
+                    thisMasterChannel = self.roomList[r].aeroChannel.masterChannel
+                    if(thisMasterChannel != 0):
+                        print("#NB master open :" + str(thisMasterChannel.nbOpen))
+                        if(thisMasterChannel.nbOpen != 0):
+                            thisMasterChannel.stageOpenChannel()
+                        else:
+                            thisMasterChannel.stageCloseChannel()		    
+
+                if(self.isACInDemand() == True):
+                    print("At least one room is in demand")
+                    if(self.isAnyAeroAngleStaged() == True):
+                        self.roomList[SAFETY_ROOM_CHANNEL].aeroChannel.clearSafetyFlag()
+
+                        self.runAeraulicConfig()
+
+                    if(self.aeraulicState == AERO_CONFIGURED):
+                        if(self.ACRunning == False):
+                            self.updateACMastertargetTemp()
+                            self.turnACOn()
+
+                else:
+                    print("No demand")
+                    self.roomList[SAFETY_ROOM_CHANNEL].aeroChannel.safetyOpen()
+                    if(self.ACRunning == True):
+                        self.turnACOff()          
+
+                for r in self.roomList:
+                    self.roomList[r].dumpValues()
+                time.sleep(1)    
             else:
-                print("No demand")
-                self.roomList[SAFETY_ROOM_CHANNEL].aeroChannel.safetyOpen()
-                if(self.ACRunning == True):
-                    self.turnACOff()          
-
-            for r in self.roomList:
-                self.roomList[r].dumpValues()
-            time.sleep(1)    
-        print("ERROR STATE REACHED !!!! - Stopping main loop!!!!!!")
+                print("ERROR STATE REACHED !!!! - Skipping main loop!!!!!!")
+                time.sleep(5)
+                self.initDone = False
+                self.mqttClient.publish("AC/ERROR", "TRYING TO RECONNECT")
+                self.initAfterBoot()
 
     def isACInDemand(self):
         demand = False

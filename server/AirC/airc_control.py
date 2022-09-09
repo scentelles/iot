@@ -71,7 +71,15 @@ def on_message(client, userdata, msg):
 
 
     elif(msg.topic == MQTT_ESP_INIT_DONE):
-        myAirCManager.initDone = True
+        if(myAirCManager.initDone == True): #ESP RESET HAPPENNED  #TODO
+            print("ESP32 reset detected")
+            mqttClient.publish("AC/ERROR", "ESP RESET DETECTED!!!")
+	   # myAirCManager
+        else:
+            myAirCManager.initDone = True
+            myAirCManager.errorState = False
+            mqttClient.publish("AC/ERROR", "ESP CONNECTION OK")
+
 
     elif(msg.topic == MQTT_ESP_PONG):
         myAirCManager.pingAck = True
