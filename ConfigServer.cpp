@@ -103,8 +103,11 @@ String ConfigServer::getHtmlPage(){
     
 }
 
-    
+#if defined(ESP8266)    
     ConfigServer::ConfigServer(IPAddress ip) : ESP8266WebServer(DEFAULT_PORT){
+#else
+    ConfigServer::ConfigServer(IPAddress ip) : WebServer(DEFAULT_PORT){
+#endif
         serverIP = ip;
         //Ugly but not other solution found... 
         //Would need to pass context to callback regitrations in ESP8266WebServer API
