@@ -63,7 +63,7 @@ class AirCManager:
             self.mqttClient.publish("AC/ESP/PING", 1)
             self.pingAck = False
 
-            time.sleep(10)
+            time.sleep(100)
             if(self.pingAck == False):
                 self.mqttClient.publish("AC/ERROR", "ESP NOT RESPONDING!!!")
                 self.errorState = True
