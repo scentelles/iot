@@ -4,7 +4,7 @@ import time
 from threading import Thread
 
 import json
-
+from AirCManager import *
 from AirCDefines import *
 from Room import *
 from AeroChannel import *
@@ -45,6 +45,7 @@ def on_connect(client, userdata, flags, rc):
     
     client.subscribe(MQTT_ESP_AERAULIC_STATE)   
     client.subscribe(MQTT_ESP_INIT_DONE) 
+    client.subscribe(MQTT_ESP_INIT_STARTED) 
     client.subscribe(MQTT_ESP_PONG)
     
 # The callback for when a PUBLISH message is received from the server.
@@ -70,15 +71,20 @@ def on_message(client, userdata, msg):
             myAirCManager.aeraulicState = AERO_CONFIGURED
 
 
-    elif(msg.topic == MQTT_ESP_INIT_DONE):
-        if(myAirCManager.initDone == True): #ESP RESET HAPPENNED  #TODO
-            print("ESP32 reset detected")
+    elif(msg.topic == MQTT_ESP_INIT_STARTED):
+        if(myAirCManager.FSMState == STATE_READY):
+            print("ESP32 reset detected\n")
             mqttClient.publish("AC/ERROR", "ESP RESET DETECTED!!!")
-	   # myAirCManager
-        else:
-            myAirCManager.initDone = True
-            myAirCManager.errorState = False
+            myAirCManager.FSMState == STATE_INIT
+	    
+    elif(msg.topic == MQTT_ESP_INIT_DONE):
+        if(myAirCManager.FSMState == STATE_WAIT_ESP_INIT):
+            print("ESP32 connection OK\n")
             mqttClient.publish("AC/ERROR", "ESP CONNECTION OK")
+            myAirCManager.FSMState = STATE_READY
+        else:
+            print("ERROR : INIT done received while Host not waiting for itESP32 connection OK\n")
+
 
 
     elif(msg.topic == MQTT_ESP_PONG):

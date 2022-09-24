@@ -1,6 +1,6 @@
 import time
-from AirCDefines import *
 from Room import *
+from AirCDefines import *
 
 AERO_INIT		= 0
 AERO_IDLE 		= 1
@@ -28,7 +28,8 @@ class AirCManager:
         self.mqttClient = mqttClient
         self.initDone = False
         self.pingAck = False
-        self.errorState = False
+        self.FSMState = STATE_INIT
+        self.ESP_Connected = False
 	
     def initAfterBoot(self):
 
@@ -36,6 +37,7 @@ class AirCManager:
         self.mqttClient.publish("AC/ERROR", "INITIALIZING CONNECTION")
 
         for r in self.roomList: 
+            roomList[r].aeroChannel.init()
             self.mqttClient.publish(MQTT_PREFIX + "/" + r + "/" + MQTT_SUFFIX_AC_STATE, AC_STATE_OFF)   
             self.mqttClient.publish(MQTT_PREFIX + "/" + r + "/" + MQTT_SUFFIX_TARGETTEMP, 24)  
             self.mqttClient.publish("AC/ESP/SERVO/" + r + "/ANGLE", 0) #can be removed when ESP will send live angle
@@ -63,11 +65,12 @@ class AirCManager:
             self.mqttClient.publish("AC/ESP/PING", 1)
             self.pingAck = False
 
-            time.sleep(100)
+            time.sleep(3)
             if(self.pingAck == False):
                 self.mqttClient.publish("AC/ERROR", "ESP NOT RESPONDING!!!")
-                self.errorState = True
-                self.turnACOff()		
+                self.ESP_Connected = False
+            else:
+                self.ESP_Connected = True
 		
 		
 #======================
@@ -75,16 +78,32 @@ class AirCManager:
 #======================		
     def aircManagerLoop(self, mqttClient):
 
-        time.sleep(2)
-        self.initAfterBoot()
-
-        while(self.initDone == False):
-            print("Init ongoing")  
-            #self.mqttClient.publish("AC/ESP/SERVO/RESET", 1)
-            time.sleep(2)
+      while(1):
+        print("DEBUG"  + str(self.FSMState) + " CONNECTED : " + str(self.ESP_Connected) )
 	
-        while (1):
-            if(self.errorState == False):
+        if(self.FSMState == STATE_INIT):
+            print("============== STATE_INIT") 
+            if(self.ESP_Connected == True):
+                self.turnACOff()
+                self.initAfterBoot()
+                self.FSMState = STATE_WAIT_ESP_INIT
+                self.mqttClient.publish(MQTT_ESP_HOST_INIT_REQUEST, 1)
+          
+            else:
+                self.mqttClient.publish("AC/ERROR", "TRYING TO RECONNECT")
+
+
+        if(self.FSMState == STATE_WAIT_ESP_INIT):
+            print("============== WAIT_ESP_INIT") 
+            if(self.ESP_Connected == False):
+                 self.FSMState = STATE_INIT
+          		
+			
+        if(self.FSMState == STATE_READY):
+            if(self.ESP_Connected == False):
+                self.FSMState = STATE_INIT
+            else:
+                print("============== STATE_READY") 
                 print ("aircManager loop\n")
                 print ("checking demand\n")
 
@@ -122,13 +141,13 @@ class AirCManager:
 
                 for r in self.roomList:
                     self.roomList[r].dumpValues()
-                time.sleep(1)    
-            else:
-                print("ERROR STATE REACHED !!!! - Skipping main loop!!!!!!")
-                time.sleep(5)
-                self.initDone = False
-                self.mqttClient.publish("AC/ERROR", "TRYING TO RECONNECT")
-                self.initAfterBoot()
+
+
+        print("looping\n")
+        time.sleep(2)
+	
+	
+	
 
     def isACInDemand(self):
         demand = False

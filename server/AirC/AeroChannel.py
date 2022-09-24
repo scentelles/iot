@@ -4,8 +4,12 @@ class AeroChannel:
     def __init__(self, mqttClient, masterChannel, name):  
         self.mqttClient = mqttClient
         self.masterChannel = masterChannel
-        self.currentAngle = 0
         self.name = name
+        self.init()
+
+
+    def init(self):
+        self.currentAngle = 0
         self.nbOpen = 0
         self.angleStaged = False
         self.safetyOpened = False
