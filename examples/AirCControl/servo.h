@@ -8,12 +8,12 @@
 #define SERVO4_TURNL_PIN        13
 #define SERVO4_TURNR_PIN        15 
 
-#define SERVO_MASTER1_TURNL_PIN        12
-#define SERVO_MASTER1_TURNR_PIN        14 
-#define SERVO_MASTER2_TURNL_PIN        27
+#define SERVO_MASTER1_TURNL_PIN        32
+#define SERVO_MASTER1_TURNR_PIN        33 
+#define SERVO_MASTER2_TURNL_PIN        25
 #define SERVO_MASTER2_TURNR_PIN        26 
-#define SERVO_MASTER3_TURNL_PIN        33
-#define SERVO_MASTER3_TURNR_PIN        32 
+#define SERVO_MASTER3_TURNL_PIN        27
+#define SERVO_MASTER3_TURNR_PIN        14 
 
 #define SERVO_CHAMBRE1  0
 #define SERVO_CHAMBRE2  1
@@ -23,9 +23,7 @@
 #define SERVO_SALON     5
 #define SERVO_MASTER2   6
 
-#define LOOP_PERIOD 10
-#define MILLIS_FOR_90_DEGREES 75 * 1000
-#define ONE_DEGREE_TIMING (MILLIS_FOR_90_DEGREES / 90)
+#define ONE_DEGREE_COUNTER 10
 
 #define NB_SERVO  7
 

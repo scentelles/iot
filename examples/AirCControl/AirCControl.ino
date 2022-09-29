@@ -28,10 +28,10 @@ MqttConnection * myMqtt;
 bool servoRunning[NB_SERVO];
 int positionArray[NB_SERVO];
 int positionTargetArray[NB_SERVO];
-int positionLoopTimeStart[NB_SERVO];
+int positionLoopCounter[NB_SERVO];
 
 
-
+#define LOOP_PERIOD 10
 unsigned long time_now = 0;
 
 /************************* MQTT *********************************/
@@ -121,6 +121,15 @@ void processACMsg(char* topic, byte* payload, unsigned int length)
       Serial.println("COMMAND : TEMPERATURE SET");
       greeSetTemperature(intPayload * 10) ;
   }
+  else if(String(topic) == "AC/GREE/corestatus/get")
+  {
+      Serial.println("COMMAND : CORE STATUS GET REQUEST");
+      readModbusCoreValues();
+      sendModbusCoreValues(myMqtt);
+
+  }
+
+  
    else if(String(topic) == "AC/ESP/SERVO/CHAMBRE1/ANGLE"){ Serial.print("Received Angle setting : "); Serial.println(intPayload); positionTargetArray[SERVO_CHAMBRE1] = intPayload; servoRunning[SERVO_CHAMBRE1] = true;}
    else if(String(topic) == "AC/ESP/SERVO/CHAMBRE2/ANGLE"){ Serial.print("Received Angle setting : "); Serial.println(intPayload); positionTargetArray[SERVO_CHAMBRE2] = intPayload; servoRunning[SERVO_CHAMBRE2] = true;}
    else if(String(topic) == "AC/ESP/SERVO/CHAMBRE3/ANGLE"){ Serial.print("Received Angle setting : "); Serial.println(intPayload); positionTargetArray[SERVO_CHAMBRE3] = intPayload; servoRunning[SERVO_CHAMBRE3] = true;}
@@ -143,7 +152,7 @@ void initPositions()
   {
     positionArray[servoId] = 0;
     positionTargetArray [servoId] = 0;
-    positionLoopTimeStart[servoId] = 0;
+    positionLoopCounter[servoId] = 0;
     servoRunning[servoId] = false;
     myMqtt->publishValue(String("ESP/SERVO/" + ID_TO_ROOM[servoId] + "/REAL_ANGLE").c_str(), "0");
   }
@@ -190,6 +199,7 @@ void setup() {
   myMqtt->addSubscription("GREE/power/set");   
   myMqtt->addSubscription("GREE/fanspeed/set");  
   myMqtt->addSubscription("GREE/temperature/set");  
+  myMqtt->addSubscription("GREE/corestatus/get"); 
 
   initCoils();
   initHregs();
@@ -210,13 +220,13 @@ void turn(int servoId, bool turnRight)
     }
 
   
-    if(millis() - positionLoopTimeStart[servoId] < ONE_DEGREE_TIMING)
+    if(positionLoopCounter[servoId] < ONE_DEGREE_COUNTER)
     {
-      //DO nothing positionLoopCounter[servoId]++;
+      positionLoopCounter[servoId]++;
     }
     else
     {
-      positionLoopTimeStart[servoId] = millis();
+      positionLoopCounter[servoId] = 0;
 
       if(turnRight)
       {
@@ -239,7 +249,7 @@ void turnOff(int servoId)
 {
     if(servoRunning[servoId] == true)
     {
-      positionLoopTimeStart[servoId] = 0;
+      positionLoopCounter[servoId] = 0;
       servoRunning[servoId]=false;
       digitalWrite(ID_TO_SERVOR[servoId], LOW);
       digitalWrite(ID_TO_SERVOL[servoId], LOW);
@@ -261,22 +271,17 @@ bool allServoConfigured()
 }
 
 int loopCount = 0;
-unsigned long time_second_now = 0;
-
 void loop() {
 
   loopCount++;
-  time_now = millis();
-      
-  if(loopCount > (1000/LOOP_PERIOD))
+  if(loopCount > 100)
   {
-    
     loopCount = 0;
    // readAllCoils();
-    //readModbusCoreValues();
+    readModbusCoreValues();
   }
-    
-
+  
+    time_now = millis();
   // put your main code here, to run repeatedly:
 
   if (!myMqtt->connected()) {
@@ -330,7 +335,6 @@ void loop() {
    
     while(millis() < time_now + LOOP_PERIOD){
         //wait approx. [period] ms
-      
     }
 
 

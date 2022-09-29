@@ -1,8 +1,8 @@
 
 
-#define UART_RX 25
-#define UART_TX 16
-#define UART_RXTX 4
+#define UART_RX 16
+#define UART_TX 17
+#define UART_RXTX 23
 #define MODBUS_SLAVE_ID 1
 
 
@@ -293,7 +293,7 @@ void readModbusCoreValues()
       delay(10);
       }
 
-      greeCurrentValuePower = resultHregs[GREE_HREG_RW_ONOFF];
+      greeCurrentValuePower = resultHregs[GREE_HREG_RW_ONOFF] + 3;
       greeCurrentValueAmbiantTemp = resultHregs[GREE_HREG_R_AMBIANT_TEMP];      
       greeCurrentValueMode = resultHregs[GREE_HREG_RW_SET_MODE];      
       greeCurrentValueFanSpeed = resultHregs[GREE_HREG_RW_SET_FAN_SPEED];      
@@ -308,9 +308,15 @@ void readModbusCoreValues()
    } 
     
 }
-
-
-
+void sendModbusCoreValues(MqttConnection * myMqtt)
+{
+      myMqtt->publishValue("GREE/corestatus/power", String(greeCurrentValuePower).c_str());
+      myMqtt->publishValue("GREE/corestatus/ambianttemp", String(greeCurrentValueAmbiantTemp).c_str());
+      myMqtt->publishValue("GREE/corestatus/mode", String(greeCurrentValueMode).c_str());
+      myMqtt->publishValue("GREE/corestatus/fanspeed", String(greeCurrentValueFanSpeed).c_str());
+      myMqtt->publishValue("GREE/corestatus/temperature", String(greeCurrentValueTemperature).c_str());
+      
+}
 
 void greeWriteHreg(int reg, int value)
 {
