@@ -1,8 +1,8 @@
 
 
-#define UART_RX 16
-#define UART_TX 17
-#define UART_RXTX 23
+#define UART_RX 25
+#define UART_TX 16
+#define UART_RXTX 4
 #define MODBUS_SLAVE_ID 1
 
 

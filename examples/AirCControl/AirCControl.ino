@@ -28,10 +28,10 @@ MqttConnection * myMqtt;
 bool servoRunning[NB_SERVO];
 int positionArray[NB_SERVO];
 int positionTargetArray[NB_SERVO];
-int positionLoopCounter[NB_SERVO];
+int positionLoopTimeStart[NB_SERVO];
 
 
-#define LOOP_PERIOD 10
+
 unsigned long time_now = 0;
 
 /************************* MQTT *********************************/
@@ -143,7 +143,7 @@ void initPositions()
   {
     positionArray[servoId] = 0;
     positionTargetArray [servoId] = 0;
-    positionLoopCounter[servoId] = 0;
+    positionLoopTimeStart[servoId] = 0;
     servoRunning[servoId] = false;
     myMqtt->publishValue(String("ESP/SERVO/" + ID_TO_ROOM[servoId] + "/REAL_ANGLE").c_str(), "0");
   }
@@ -210,13 +210,13 @@ void turn(int servoId, bool turnRight)
     }
 
   
-    if(positionLoopCounter[servoId] < ONE_DEGREE_COUNTER)
+    if(millis() - positionLoopTimeStart[servoId] < ONE_DEGREE_TIMING)
     {
-      positionLoopCounter[servoId]++;
+      //DO nothing positionLoopCounter[servoId]++;
     }
     else
     {
-      positionLoopCounter[servoId] = 0;
+      positionLoopTimeStart[servoId] = millis();
 
       if(turnRight)
       {
@@ -239,7 +239,7 @@ void turnOff(int servoId)
 {
     if(servoRunning[servoId] == true)
     {
-      positionLoopCounter[servoId] = 0;
+      positionLoopTimeStart[servoId] = 0;
       servoRunning[servoId]=false;
       digitalWrite(ID_TO_SERVOR[servoId], LOW);
       digitalWrite(ID_TO_SERVOL[servoId], LOW);
@@ -261,17 +261,22 @@ bool allServoConfigured()
 }
 
 int loopCount = 0;
+unsigned long time_second_now = 0;
+
 void loop() {
 
   loopCount++;
-  if(loopCount > 100)
+  time_now = millis();
+      
+  if(loopCount > (1000/LOOP_PERIOD))
   {
+    
     loopCount = 0;
    // readAllCoils();
-    readModbusCoreValues();
+    //readModbusCoreValues();
   }
-  
-    time_now = millis();
+    
+
   // put your main code here, to run repeatedly:
 
   if (!myMqtt->connected()) {
@@ -325,6 +330,7 @@ void loop() {
    
     while(millis() < time_now + LOOP_PERIOD){
         //wait approx. [period] ms
+      
     }
 
 
