@@ -16,6 +16,7 @@ MqttConnection * myMqtt;
 #define WLAN_SSID       "SFR_34A8"
 #define WLAN_PASS       "ab4ingrograstanstorc"
 
+
 #define SENSOR_ID "AC"
 
 #define LED_PIN 22
@@ -28,10 +29,10 @@ MqttConnection * myMqtt;
 bool servoRunning[NB_SERVO];
 int positionArray[NB_SERVO];
 int positionTargetArray[NB_SERVO];
-int positionLoopCounter[NB_SERVO];
-
 
 #define LOOP_PERIOD 10
+
+
 unsigned long time_now = 0;
 
 /************************* MQTT *********************************/
@@ -152,7 +153,7 @@ void initPositions()
   {
     positionArray[servoId] = 0;
     positionTargetArray [servoId] = 0;
-    positionLoopCounter[servoId] = 0;
+    positionLoopStartTime[servoId] = 0;
     servoRunning[servoId] = false;
     myMqtt->publishValue(String("ESP/SERVO/" + ID_TO_ROOM[servoId] + "/REAL_ANGLE").c_str(), "0");
   }
@@ -220,13 +221,13 @@ void turn(int servoId, bool turnRight)
     }
 
   
-    if(positionLoopCounter[servoId] < ONE_DEGREE_COUNTER)
+    if(millis() - positionLoopStartTime[servoId] < TIMING_PER_DEGREE)
     {
-      positionLoopCounter[servoId]++;
+      //positionLoopStartTime[servoId] = ;
     }
     else
     {
-      positionLoopCounter[servoId] = 0;
+      positionLoopStartTime[servoId] = millis();
 
       if(turnRight)
       {
@@ -249,7 +250,7 @@ void turnOff(int servoId)
 {
     if(servoRunning[servoId] == true)
     {
-      positionLoopCounter[servoId] = 0;
+      positionLoopStartTime[servoId] = 0;
       servoRunning[servoId]=false;
       digitalWrite(ID_TO_SERVOR[servoId], LOW);
       digitalWrite(ID_TO_SERVOL[servoId], LOW);
@@ -278,7 +279,7 @@ void loop() {
   {
     loopCount = 0;
    // readAllCoils();
-    readModbusCoreValues();
+    //readModbusCoreValues();
   }
   
     time_now = millis();
@@ -327,11 +328,6 @@ void loop() {
 
   }
 
-  //delay(LOOP_DELAY);
-
-
-   
-    //Serial.println("Hello");
    
     while(millis() < time_now + LOOP_PERIOD){
         //wait approx. [period] ms
