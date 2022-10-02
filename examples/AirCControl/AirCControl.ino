@@ -3,6 +3,9 @@
 //#include <pthread.h>
 
 #include <ArduinoOTA.h>
+
+#include <RemoteDebug.h>
+
 //#include <ESPmDNS.h>
 
 #include "MqttConnection.h"
@@ -11,6 +14,7 @@
 
 MqttConnection * myMqtt;
 
+RemoteDebug Debug;
 
 
 
@@ -38,6 +42,8 @@ int positionTargetArray[NB_SERVO];
 
 unsigned long time_now = 0;
 
+
+
 /************************* MQTT *********************************/
 
 #define MQTT_SERVER  "192.168.1.27"
@@ -48,17 +54,34 @@ int loopCounter = 0;
 bool bootComplete = false;
 bool endOfConfigRequestedFromHost = false;
 
-//Modbus methods//==========
-bool cbWrite(Modbus::ResultCode event, uint16_t transactionId, void* data) {
-  Serial.printf_P("Request result: 0x%02X, Mem: %d\n", event, ESP.getFreeHeap());
-  return true;
+
+
+#define TELNET_DEBUG
+void debugPrintln(const char * msg)
+{
+#ifdef TELNET_DEBUG    
+    Debug.println(F(msg));
+#else
+    debugPrintln(msg);
+#endif
 }
+void debugPrint(const char * msg)
+{
+#ifdef TELNET_DEBUG    
+    Debug.print(F(msg));
+#else
+    debugPrint(msg);
+#endif
+}
+
+
+
 //============================
 
 void processACMsg(char* topic, byte* payload, unsigned int length)
 {
  
- //Serial.println("Received custom command");
+ //debugPrintln("Received custom command");
  String strPayload = "";
  for (int i = 0; i < length; i++)
  {
@@ -68,33 +91,32 @@ void processACMsg(char* topic, byte* payload, unsigned int length)
 
  
   if(String(topic) == "AC/ESP/HOST_INIT_REQUEST"){
-        Serial.println("Received HOST_INIT_REQUEST !!!!!!!!!!!!!!!!!!");
+        debugPrintln("Received HOST_INIT_REQUEST !!!!!!!!!!!!!!!!!!");
 
         initPositions(); 
   } 
   else if(String(topic) == "AC/ESP/PING")
   {
-      Serial.println("Ping received.replying");
-      blinkLED();
+      debugPrintln("Ping received.replying");
       myMqtt->publishValue("ESP/PONG", "1");
      
   }
   else if(String(topic) == "AC/GREE/mode/set")
   {
-      Serial.println("COMMAND : MODE SET");
+      debugPrintln("COMMAND : MODE SET");
       if(strPayload == "COOL")
       {
           greeSetMode(GREE_MODE_COOL);
       }
       else
       {
-        Serial.print("========== ERROR : UNKOWN MODE");
+        debugPrint("========== ERROR : UNKOWN MODE");
       }
      
   }
   else if(String(topic) == "AC/GREE/power/set")
   {
-      Serial.println("COMMAND : POWER SET");
+      debugPrintln("COMMAND : POWER SET");
       if(intPayload == 1)
       {
         greeSetPower(true);
@@ -105,40 +127,40 @@ void processACMsg(char* topic, byte* payload, unsigned int length)
       }
       else
       {
-        Serial.print("ERROR : unknown power set command\n");
+        debugPrint("ERROR : unknown power set command\n");
       }
      
   }
   else if(String(topic) == "AC/GREE/fanspeed/set")
   {
-      Serial.println("COMMAND : FANSPEED SET");
+      debugPrintln("COMMAND : FANSPEED SET");
       greeSetFanSpeed(intPayload);
   }
   else if(String(topic) == "AC/GREE/temperature/set")
   {
-      Serial.println("COMMAND : TEMPERATURE SET");
+      debugPrintln("COMMAND : TEMPERATURE SET");
       greeSetTemperature(intPayload * 10) ;
   }
   else if(String(topic) == "AC/GREE/corestatus/get")
   {
-      Serial.println("COMMAND : CORE STATUS GET REQUEST");
+      debugPrintln("COMMAND : CORE STATUS GET REQUEST");
       readModbusCoreValues();
       sendModbusCoreValues(myMqtt);
 
   }
 
   
-   else if(String(topic) == "AC/ESP/SERVO/CHAMBRE1/ANGLE"){ Serial.print("Received Angle setting : "); Serial.println(intPayload); positionTargetArray[SERVO_CHAMBRE1] = intPayload; servoRunning[SERVO_CHAMBRE1] = true;}
-   else if(String(topic) == "AC/ESP/SERVO/CHAMBRE2/ANGLE"){ Serial.print("Received Angle setting : "); Serial.println(intPayload); positionTargetArray[SERVO_CHAMBRE2] = intPayload; servoRunning[SERVO_CHAMBRE2] = true;}
-   else if(String(topic) == "AC/ESP/SERVO/CHAMBRE3/ANGLE"){ Serial.print("Received Angle setting : "); Serial.println(intPayload); positionTargetArray[SERVO_CHAMBRE3] = intPayload; servoRunning[SERVO_CHAMBRE3] = true;}
-   else if(String(topic) == "AC/ESP/SERVO/DREAMROOM/ANGLE"){Serial.print("Received Angle setting : "); Serial.println(intPayload); positionTargetArray[SERVO_DREAMROOM] = intPayload;servoRunning[SERVO_DREAMROOM] = true;}      
-   else if(String(topic) == "AC/ESP/SERVO/ETAGE/ANGLE"){    Serial.print("Received Angle setting : "); Serial.println(intPayload); positionTargetArray[SERVO_ETAGE] = intPayload;    servoRunning[SERVO_ETAGE] = true;} 
-   else if(String(topic) == "AC/ESP/SERVO/MASTER2/ANGLE"){  Serial.print("Received Angle setting : "); Serial.println(intPayload); positionTargetArray[SERVO_MASTER2] = intPayload;  servoRunning[SERVO_MASTER2] = true;} 		 
-	 else if(String(topic) == "AC/ESP/SERVO/SALON/ANGLE"){    Serial.print("Received Angle setting : "); Serial.println(intPayload); positionTargetArray[SERVO_SALON] = intPayload;    servoRunning[SERVO_SALON] = true;} 	 
+   else if(String(topic) == "AC/ESP/SERVO/CHAMBRE1/ANGLE"){ debugPrint("Received Angle setting : "); debugPrintln(strPayload.c_str()); positionTargetArray[SERVO_CHAMBRE1] = intPayload; servoRunning[SERVO_CHAMBRE1] = true;}
+   else if(String(topic) == "AC/ESP/SERVO/CHAMBRE2/ANGLE"){ debugPrint("Received Angle setting : "); debugPrintln(strPayload.c_str()); positionTargetArray[SERVO_CHAMBRE2] = intPayload; servoRunning[SERVO_CHAMBRE2] = true;}
+   else if(String(topic) == "AC/ESP/SERVO/CHAMBRE3/ANGLE"){ debugPrint("Received Angle setting : "); debugPrintln(strPayload.c_str()); positionTargetArray[SERVO_CHAMBRE3] = intPayload; servoRunning[SERVO_CHAMBRE3] = true;}
+   else if(String(topic) == "AC/ESP/SERVO/DREAMROOM/ANGLE"){debugPrint("Received Angle setting : "); debugPrintln(strPayload.c_str()); positionTargetArray[SERVO_DREAMROOM] = intPayload;servoRunning[SERVO_DREAMROOM] = true;}      
+   else if(String(topic) == "AC/ESP/SERVO/ETAGE/ANGLE"){    debugPrint("Received Angle setting : "); debugPrintln(strPayload.c_str()); positionTargetArray[SERVO_ETAGE] = intPayload;    servoRunning[SERVO_ETAGE] = true;} 
+   else if(String(topic) == "AC/ESP/SERVO/MASTER2/ANGLE"){  debugPrint("Received Angle setting : "); debugPrintln(strPayload.c_str()); positionTargetArray[SERVO_MASTER2] = intPayload;  servoRunning[SERVO_MASTER2] = true;} 		 
+	 else if(String(topic) == "AC/ESP/SERVO/SALON/ANGLE"){    debugPrint("Received Angle setting : "); debugPrintln(strPayload.c_str()); positionTargetArray[SERVO_SALON] = intPayload;    servoRunning[SERVO_SALON] = true;} 	 
 		 
 		 else {
-		    Serial.print("Unknown topic : ");
-			  Serial.println(String(topic));
+		    debugPrint("Unknown topic : ");
+			  debugPrintln(String(topic).c_str());
 		 }
 
 }
@@ -181,21 +203,21 @@ void initOTA()
         type = "filesystem";
 
       // NOTE: if updating SPIFFS this would be the place to unmount SPIFFS using SPIFFS.end()
-      Serial.println("Start updating " + type);
+      debugPrintln(String("Start updating " + type).c_str());
     })
     .onEnd([]() {
-      Serial.println("\nEnd");
+      debugPrintln("\nEnd");
     })
     .onProgress([](unsigned int progress, unsigned int total) {
-      Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
+      debugPrintln(String("Progress: " +  (progress / (total / 100))).c_str());
     })
     .onError([](ota_error_t error) {
-      Serial.printf("Error[%u]: ", error);
-      if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
-      else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
-      else if (error == OTA_CONNECT_ERROR) Serial.println("Connect Failed");
-      else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
-      else if (error == OTA_END_ERROR) Serial.println("End Failed");
+      debugPrintln(String("Error: " + error).c_str());
+      if (error == OTA_AUTH_ERROR) debugPrintln("Auth Failed");
+      else if (error == OTA_BEGIN_ERROR) debugPrintln("Begin Failed");
+      else if (error == OTA_CONNECT_ERROR) debugPrintln("Connect Failed");
+      else if (error == OTA_RECEIVE_ERROR) debugPrintln("Receive Failed");
+      else if (error == OTA_END_ERROR) debugPrintln("End Failed");
     });
 
   ArduinoOTA.begin();
@@ -204,6 +226,7 @@ void initOTA()
 
 void setup() {
   Serial.begin(115200);
+
 
  
   pinMode(LED_PIN, OUTPUT);
@@ -241,6 +264,9 @@ void setup() {
   initHregs();
 
   initOTA();
+
+  // init remote debug
+  Debug.begin("ESP32");  
   
 }
 
@@ -314,11 +340,13 @@ bool ledHigh = false;
 void loop() {
 
   ArduinoOTA.handle();
+  Debug.handle();
 
   loopCount++;
-  if(loopCount > 5000)
+  if(loopCount > 500)
   {
     loopCount = 0;
+
     if(ledHigh)
     {
        ledHigh = false;
