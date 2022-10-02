@@ -1,6 +1,9 @@
 
 #include <ModbusRTU.h>  
-#include <pthread.h>
+//#include <pthread.h>
+
+#include <ArduinoOTA.h>
+//#include <ESPmDNS.h>
 
 #include "MqttConnection.h"
 #include "gree.h"
@@ -64,13 +67,7 @@ void processACMsg(char* topic, byte* payload, unsigned int length)
  int intPayload = atoi(strPayload.c_str());
 
  
-  if(String(topic) == "AC/ESP/SERVO/RUN_ALL"){
-        int servoId = (char)payload[0];
-		    Serial.println("Received SERVO RUN ALL ");
-        endOfConfigRequestedFromHost = true;
-
-  }
-  else if(String(topic) == "AC/ESP/HOST_INIT_REQUEST"){
+  if(String(topic) == "AC/ESP/HOST_INIT_REQUEST"){
         Serial.println("Received HOST_INIT_REQUEST !!!!!!!!!!!!!!!!!!");
 
         initPositions(); 
@@ -170,9 +167,45 @@ void blinkLED()
 
 }
 
+void initOTA()
+{
+  
+  ArduinoOTA.setHostname("ESP_32_AC_GREE");
+
+  ArduinoOTA
+    .onStart([]() {
+      String type;
+      if (ArduinoOTA.getCommand() == U_FLASH)
+        type = "sketch";
+      else // U_SPIFFS
+        type = "filesystem";
+
+      // NOTE: if updating SPIFFS this would be the place to unmount SPIFFS using SPIFFS.end()
+      Serial.println("Start updating " + type);
+    })
+    .onEnd([]() {
+      Serial.println("\nEnd");
+    })
+    .onProgress([](unsigned int progress, unsigned int total) {
+      Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
+    })
+    .onError([](ota_error_t error) {
+      Serial.printf("Error[%u]: ", error);
+      if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
+      else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
+      else if (error == OTA_CONNECT_ERROR) Serial.println("Connect Failed");
+      else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
+      else if (error == OTA_END_ERROR) Serial.println("End Failed");
+    });
+
+  ArduinoOTA.begin();
+
+}
 
 void setup() {
   Serial.begin(115200);
+
+ 
   pinMode(LED_PIN, OUTPUT);
 
 
@@ -202,8 +235,13 @@ void setup() {
   myMqtt->addSubscription("GREE/temperature/set");  
   myMqtt->addSubscription("GREE/corestatus/get"); 
 
+
+
   initCoils();
   initHregs();
+
+  initOTA();
+  
 }
 
 
@@ -272,12 +310,25 @@ bool allServoConfigured()
 }
 
 int loopCount = 0;
+bool ledHigh = false;
 void loop() {
 
+  ArduinoOTA.handle();
+
   loopCount++;
-  if(loopCount > 100)
+  if(loopCount > 5000)
   {
     loopCount = 0;
+    if(ledHigh)
+    {
+       ledHigh = false;
+    digitalWrite(LED_PIN, LOW);
+    }
+    else
+    {
+             ledHigh = true;
+      digitalWrite(LED_PIN, HIGH);
+    }
    // readAllCoils();
     //readModbusCoreValues();
   }
@@ -328,10 +379,10 @@ void loop() {
 
   }
 
-   
+   /*
     while(millis() < time_now + LOOP_PERIOD){
         //wait approx. [period] ms
-    }
+    }*/
 
 
 }
