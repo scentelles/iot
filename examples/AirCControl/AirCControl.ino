@@ -4,7 +4,7 @@
 
 #include <ArduinoOTA.h>
 
-#include <RemoteDebug.h>
+#include <RemoteDebug.h> //https://github.com/JoaoLopesF/RemoteDebug v2.1.2
 
 //#include <ESPmDNS.h>
 
@@ -26,7 +26,7 @@ MqttConnection * myMqtt;
 
 #define SENSOR_ID "AC"
 
-#define LED_PIN 2
+#define LED_PIN 22 //for lolin32 lite 2 for wemos mini32
 
 #define AERO_IDLE             "1"
 #define AERO_CONFIG_ONGOING   "2"
@@ -131,7 +131,13 @@ void processACMsg(char* topic, byte* payload, unsigned int length)
       sendModbusCoreValues(myMqtt);
 
   }
+  else if(String(topic) == "AC/GREE/secondarystatus/get")
+  {
+      debugPrintln("COMMAND : SECONDARY STATUS GET REQUEST");
+      readModbusSecondaryValues();
+      sendModbusSecondaryValues(myMqtt);
 
+  }
   
    else if(String(topic) == "AC/ESP/SERVO/CHAMBRE1/ANGLE"){ debugPrint("Received Angle setting : "); debugPrintln(strPayload.c_str()); positionTargetArray[SERVO_CHAMBRE1] = intPayload; servoRunning[SERVO_CHAMBRE1] = true;}
    else if(String(topic) == "AC/ESP/SERVO/CHAMBRE2/ANGLE"){ debugPrint("Received Angle setting : "); debugPrintln(strPayload.c_str()); positionTargetArray[SERVO_CHAMBRE2] = intPayload; servoRunning[SERVO_CHAMBRE2] = true;}
@@ -240,7 +246,7 @@ void setup() {
   myMqtt->addSubscription("GREE/fanspeed/set");  
   myMqtt->addSubscription("GREE/temperature/set");  
   myMqtt->addSubscription("GREE/corestatus/get"); 
-
+  myMqtt->addSubscription("GREE/secondarystatus/get"); 
 
 
   initCoils();
@@ -326,7 +332,7 @@ void loop() {
   Debug.handle();
 
   loopCount++;
-  if(loopCount > 5000)
+  if(loopCount > 2000)
   {
     loopCount = 0;
     debugPrintln("Alive, looping\n");
