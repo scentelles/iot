@@ -14,7 +14,7 @@
 
 MqttConnection * myMqtt;
 
-RemoteDebug Debug;
+
 
 
 
@@ -26,7 +26,7 @@ RemoteDebug Debug;
 
 #define SENSOR_ID "AC"
 
-#define LED_PIN 22
+#define LED_PIN 2
 
 #define AERO_IDLE             "1"
 #define AERO_CONFIG_ONGOING   "2"
@@ -56,23 +56,6 @@ bool endOfConfigRequestedFromHost = false;
 
 
 
-#define TELNET_DEBUG
-void debugPrintln(const char * msg)
-{
-#ifdef TELNET_DEBUG    
-    Debug.println(F(msg));
-#else
-    debugPrintln(msg);
-#endif
-}
-void debugPrint(const char * msg)
-{
-#ifdef TELNET_DEBUG    
-    Debug.print(F(msg));
-#else
-    debugPrint(msg);
-#endif
-}
 
 
 
@@ -343,10 +326,11 @@ void loop() {
   Debug.handle();
 
   loopCount++;
-  if(loopCount > 500)
+  if(loopCount > 5000)
   {
     loopCount = 0;
-
+    debugPrintln("Alive, looping\n");
+    Serial.println("Alive, looping\n");
     if(ledHigh)
     {
        ledHigh = false;
@@ -365,6 +349,7 @@ void loop() {
   // put your main code here, to run repeatedly:
 
   if (!myMqtt->connected()) {
+    debugPrintln("MQTT RECONNECT!!!!!!!!!!!!!!!!!!!!!");
     myMqtt->reconnect();
   }
   myMqtt->loop();

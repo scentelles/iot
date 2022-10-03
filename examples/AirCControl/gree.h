@@ -283,6 +283,28 @@ void readAllCoils()
 #define GREE_HREG_RW_SET_FAN_SPEED      19
 #define GREE_HREG_RW_SET_TEMP           20
 
+RemoteDebug Debug;
+
+
+#define TELNET_DEBUG
+void debugPrintln(const char * msg)
+{
+#ifdef TELNET_DEBUG    
+    Debug.println(F(msg));
+#else
+    debugPrintln(msg);
+#endif
+}
+void debugPrint(const char * msg)
+{
+#ifdef TELNET_DEBUG    
+    Debug.print(F(msg));
+#else
+    debugPrint(msg);
+#endif
+}
+
+
 void readModbusCoreValues()
 {
    if (!mb.slave()) 
@@ -293,17 +315,17 @@ void readModbusCoreValues()
       delay(10);
       }
 
-      greeCurrentValuePower = resultHregs[GREE_HREG_RW_ONOFF] + 3;
+      greeCurrentValuePower = resultHregs[GREE_HREG_RW_ONOFF];
       greeCurrentValueAmbiantTemp = resultHregs[GREE_HREG_R_AMBIANT_TEMP];      
       greeCurrentValueMode = resultHregs[GREE_HREG_RW_SET_MODE];      
       greeCurrentValueFanSpeed = resultHregs[GREE_HREG_RW_SET_FAN_SPEED];      
       greeCurrentValueTemperature = resultHregs[GREE_HREG_RW_SET_TEMP];
             
-      Serial.println("GREE POWER        : " + String(greeCurrentValuePower));
-      Serial.println("GREE AMBIANT TEMP : " + String(greeCurrentValueAmbiantTemp));
-      Serial.println("GREE MODE         : " + String(greeCurrentValueMode));
-      Serial.println("GREE FAN SPEED    : " + String(greeCurrentValueFanSpeed));   
-      Serial.println("GREE TEMPERATURE  : " + String(greeCurrentValueTemperature));
+      debugPrintln(String("GREE POWER        : " + String(greeCurrentValuePower)).c_str());
+      debugPrintln(String("GREE AMBIANT TEMP : " + String(greeCurrentValueAmbiantTemp)).c_str());
+      debugPrintln(String("GREE MODE         : " + String(greeCurrentValueMode)).c_str());
+      debugPrintln(String("GREE FAN SPEED    : " + String(greeCurrentValueFanSpeed)).c_str());   
+      debugPrintln(String("GREE TEMPERATURE  : " + String(greeCurrentValueTemperature)).c_str());
 
    } 
     
