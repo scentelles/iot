@@ -21,9 +21,11 @@ int greeCurrentValueAmbiantTemp = 0;
 int greeCurrentValueMode = 0;      
 int greeCurrentValueFanSpeed = 0;      
 int greeCurrentValueTemperature = 0;
+int greeCurrentValueTempLowerLimitNrj = 0;
 int greeCurrentValueSleepMode = 0;
 int greeCurrentValueOutdoorTemp = 0;
 int greeCurrentValueAirReturnTemp = 0;
+
 
 bool greeCurrentValueTurbo = false;      
 bool greeCurrentValueSilent = false;  
@@ -374,6 +376,7 @@ void readModbusCoreValues()
       greeCurrentValueMode = resultHregs[GREE_HREG_RW_SET_MODE];      
       greeCurrentValueFanSpeed = resultHregs[GREE_HREG_RW_SET_FAN_SPEED];      
       greeCurrentValueTemperature = resultHregs[GREE_HREG_RW_SET_TEMP];
+      greeCurrentValueTempLowerLimitNrj = resultHregs[GREE_HREG_RW_TEMP_LOWER_LIMIT_NRJ];
       greeCurrentValueSleepMode = resultHregs[GREE_HREG_RW_SLEEP_MODE];
       greeCurrentValueOutdoorTemp = resultHregs[GREE_HREG_R_OUTDOOR_TEMP];
       greeCurrentValueAirReturnTemp = resultHregs[GREE_HREG_R_AIR_RETURN_TEMP];
@@ -383,7 +386,8 @@ void readModbusCoreValues()
       debugPrintln(String("GREE MODE         : " + String(greeCurrentValueMode)).c_str());
       debugPrintln(String("GREE FAN SPEED    : " + String(greeCurrentValueFanSpeed)).c_str());   
       debugPrintln(String("GREE TEMPERATURE  : " + String(greeCurrentValueTemperature)).c_str());
-      debugPrintln(String("GREE_HREG_RW_SLEEP_MODE  : " + String(greeCurrentValueSleepMode)).c_str());      
+      debugPrintln(String("GREE TEMP LOWER LIMIT NRJ  : " + String(greeCurrentValueTempLowerLimitNrj)).c_str());      
+      debugPrintln(String("GREE SLEEP MODE  : " + String(greeCurrentValueSleepMode)).c_str());   
       debugPrintln(String("GREE OUTDOOR TEMP  : " + String(greeCurrentValueOutdoorTemp)).c_str());
       debugPrintln(String("GREE AIR RETURN TEMP  : " + String(greeCurrentValueAirReturnTemp)).c_str());
       
@@ -397,6 +401,7 @@ void sendModbusCoreValues(MqttConnection * myMqtt)
       myMqtt->publishValue("GREE/corestatus/mode", String(greeCurrentValueMode).c_str());
       myMqtt->publishValue("GREE/corestatus/fanspeed", String(greeCurrentValueFanSpeed).c_str());
       myMqtt->publishValue("GREE/corestatus/temperature", String(greeCurrentValueTemperature).c_str());
+      myMqtt->publishValue("GREE/corestatus/templowerlimitnrj", String(greeCurrentValueTempLowerLimitNrj).c_str());
       myMqtt->publishValue("GREE/corestatus/sleepmode", String(greeCurrentValueSleepMode).c_str());
       myMqtt->publishValue("GREE/corestatus/outdoortemp", String(greeCurrentValueOutdoorTemp).c_str());
       myMqtt->publishValue("GREE/corestatus/airreturntemp", String(greeCurrentValueAirReturnTemp).c_str());      
