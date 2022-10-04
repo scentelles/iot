@@ -265,36 +265,6 @@ void initCoils()
 
 
 
-
-  
-void readAllCoils()
-{
-   if (!mb.slave()) {
-   
-    int code = mb.readCoil(MODBUS_SLAVE_ID, 0, resultCoils, NB_COILS);
-    Serial.println("=======================\n read coils : ");
-    Serial.println("Code : " +String(code));
-
-    while(mb.slave()) { // Check if transaction is active
-      mb.task();
-      delay(10);
-    }
-    for(int i = 0; i < NB_COILS; i++)
-    {
-      if(coils[i] != "RESERVED")
-      {
-        Serial.print(i + String(" : "));
-        Serial.print(coils[i]+ String(" : "));
-        Serial.println(resultCoils[i]);
-      }
-    }
-    Serial.println ("=========================");
-
-  }
-
-}
-
-
 RemoteDebug Debug;
 
 
@@ -315,6 +285,36 @@ void debugPrint(const char * msg)
     debugPrint(msg);
 #endif
 }
+
+  
+void readAllCoils()
+{
+   if (!mb.slave()) {
+   
+    int code = mb.readCoil(MODBUS_SLAVE_ID, 0, resultCoils, NB_COILS);
+    debugPrintln("=======================\n read coils : ");
+    debugPrintln(String("Code : " + String(code)).c_str());
+
+    while(mb.slave()) { // Check if transaction is active
+      mb.task();
+      delay(10);
+    }
+    for(int i = 0; i < NB_COILS; i++)
+    {
+      if(coils[i] != "RESERVED")
+      {
+        debugPrint(String(i + String(" : ")).c_str());
+        debugPrint(String(coils[i]+ String(" : ")).c_str());
+        debugPrintln(String(resultCoils[i]).c_str());
+      }
+    }
+    debugPrintln ("=========================");
+
+  }
+
+}
+
+
 
 void readModbusSecondaryValues()
 {

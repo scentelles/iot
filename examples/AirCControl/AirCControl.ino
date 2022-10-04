@@ -138,7 +138,12 @@ void processACMsg(char* topic, byte* payload, unsigned int length)
       sendModbusSecondaryValues(myMqtt);
 
   }
-  
+  else if(String(topic) == "AC/GREE/coils/get")
+  {
+      debugPrintln("COMMAND : COILS GET REQUEST");
+      readAllCoils();
+
+  }  
    else if(String(topic) == "AC/ESP/SERVO/CHAMBRE1/ANGLE"){ debugPrint("Received Angle setting : "); debugPrintln(strPayload.c_str()); positionTargetArray[SERVO_CHAMBRE1] = intPayload; servoRunning[SERVO_CHAMBRE1] = true;}
    else if(String(topic) == "AC/ESP/SERVO/CHAMBRE2/ANGLE"){ debugPrint("Received Angle setting : "); debugPrintln(strPayload.c_str()); positionTargetArray[SERVO_CHAMBRE2] = intPayload; servoRunning[SERVO_CHAMBRE2] = true;}
    else if(String(topic) == "AC/ESP/SERVO/CHAMBRE3/ANGLE"){ debugPrint("Received Angle setting : "); debugPrintln(strPayload.c_str()); positionTargetArray[SERVO_CHAMBRE3] = intPayload; servoRunning[SERVO_CHAMBRE3] = true;}
@@ -247,7 +252,7 @@ void setup() {
   myMqtt->addSubscription("GREE/temperature/set");  
   myMqtt->addSubscription("GREE/corestatus/get"); 
   myMqtt->addSubscription("GREE/secondarystatus/get"); 
-
+  myMqtt->addSubscription("GREE/coils/get"); 
 
   initCoils();
   initHregs();
