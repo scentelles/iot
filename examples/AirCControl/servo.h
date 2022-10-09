@@ -1,19 +1,38 @@
 
-#define SERVO1_TURNL_PIN        19
-#define SERVO1_TURNR_PIN        23 
-#define SERVO2_TURNL_PIN        18
-#define SERVO2_TURNR_PIN        17 
-#define SERVO3_TURNL_PIN        0
-#define SERVO3_TURNR_PIN        2 
-#define SERVO4_TURNL_PIN        13
-#define SERVO4_TURNR_PIN        15 
 
-#define SERVO_MASTER1_TURNL_PIN        12
-#define SERVO_MASTER1_TURNR_PIN        14 
-#define SERVO_MASTER2_TURNL_PIN        27
-#define SERVO_MASTER2_TURNR_PIN        26 
-#define SERVO_MASTER3_TURNL_PIN        33
-#define SERVO_MASTER3_TURNR_PIN        32 
+#ifdef LOLIN
+  #define SERVO1_TURNL_PIN        19
+  #define SERVO1_TURNR_PIN        23 
+  #define SERVO2_TURNL_PIN        18
+  #define SERVO2_TURNR_PIN        17 
+  #define SERVO3_TURNL_PIN        0
+  #define SERVO3_TURNR_PIN        2 
+  #define SERVO4_TURNL_PIN        13
+  #define SERVO4_TURNR_PIN        15 
+  
+  #define SERVO_MASTER1_TURNL_PIN        12
+  #define SERVO_MASTER1_TURNR_PIN        14 
+  #define SERVO_MASTER2_TURNL_PIN        27
+  #define SERVO_MASTER2_TURNR_PIN        26 
+  #define SERVO_MASTER3_TURNL_PIN        33
+  #define SERVO_MASTER3_TURNR_PIN        32 
+#else //for Wemos mini 32
+  #define SERVO1_TURNL_PIN        25
+  #define SERVO1_TURNR_PIN        27 
+  #define SERVO2_TURNL_PIN        32
+  #define SERVO2_TURNR_PIN        4 
+  #define SERVO3_TURNL_PIN        22
+  #define SERVO3_TURNR_PIN        21 
+  #define SERVO4_TURNL_PIN        16
+  #define SERVO4_TURNR_PIN        17 
+  
+  #define SERVO_MASTER1_TURNL_PIN        5
+  #define SERVO_MASTER1_TURNR_PIN        23 
+  #define SERVO_MASTER2_TURNL_PIN        19
+  #define SERVO_MASTER2_TURNR_PIN        18 
+  #define SERVO_MASTER3_TURNL_PIN        33
+  #define SERVO_MASTER3_TURNR_PIN        35 
+#endif
 
 #define SERVO_CHAMBRE1  0
 #define SERVO_CHAMBRE2  1
@@ -25,7 +44,7 @@
 
 
 
-#define NB_SECONDS_FOR_90_DEGREES 75
+#define NB_SECONDS_FOR_90_DEGREES 78
 #define TIMING_PER_DEGREE (1000 * NB_SECONDS_FOR_90_DEGREES) / 90
 
 

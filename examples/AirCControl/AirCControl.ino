@@ -26,7 +26,11 @@ MqttConnection * myMqtt;
 
 #define SENSOR_ID "AC"
 
-#define LED_PIN 22 //for lolin32 lite 2 for wemos mini32
+#ifdef LOLIN
+  #define LED_PIN 22 //for lolin32 lite
+#else
+  #define LED_PIN 2
+#endif
 
 #define AERO_IDLE             "1"
 #define AERO_CONFIG_ONGOING   "2"

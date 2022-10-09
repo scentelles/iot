@@ -1,8 +1,14 @@
 
+#ifdef LOLIN
+  #define UART_RX 25
+  #define UART_TX 16
+  #define UART_RXTX 4
+#else //for Wemos mini 32
+  #define UART_RX 26
+  #define UART_TX 0
+  #define UART_RXTX 2
+#endif
 
-#define UART_RX 25
-#define UART_TX 16
-#define UART_RXTX 4
 #define MODBUS_SLAVE_ID 1
 
 
