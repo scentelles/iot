@@ -1,4 +1,4 @@
-
+//#define LOLIN
 
 #ifdef LOLIN
   #define SERVO1_TURNL_PIN        19
@@ -31,7 +31,7 @@
   #define SERVO_MASTER2_TURNL_PIN        19
   #define SERVO_MASTER2_TURNR_PIN        18 
   #define SERVO_MASTER3_TURNL_PIN        33
-  #define SERVO_MASTER3_TURNR_PIN        35 
+  #define SERVO_MASTER3_TURNR_PIN        14 
 #endif
 
 #define SERVO_CHAMBRE1  0

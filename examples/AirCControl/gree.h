@@ -1,3 +1,6 @@
+#define TELNET_DEBUG
+//#define LOLIN
+
 
 #ifdef LOLIN
   #define UART_RX 25
@@ -274,7 +277,7 @@ void initCoils()
 RemoteDebug Debug;
 
 
-#define TELNET_DEBUG
+
 void debugPrintln(const char * msg)
 {
 #ifdef TELNET_DEBUG    
