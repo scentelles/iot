@@ -1,11 +1,19 @@
 
-  
-#include <pthread.h>
+#include <ModbusRTU.h>  
+//#include <pthread.h>
+
+#include <ArduinoOTA.h>
+
+#include <RemoteDebug.h> //https://github.com/JoaoLopesF/RemoteDebug v2.1.2
+
+//#include <ESPmDNS.h>
 
 #include "MqttConnection.h"
-
+#include "gree.h"
+#include "servo.h"
 
 MqttConnection * myMqtt;
+
 
 
 
@@ -15,52 +23,30 @@ MqttConnection * myMqtt;
 #define WLAN_SSID       "SFR_34A8"
 #define WLAN_PASS       "ab4ingrograstanstorc"
 
+
 #define SENSOR_ID "AC"
 
-
-#define SERVO1_TURNL_PIN        D1
-#define SERVO1_TURNR_PIN        D2 
-#define SERVO2_TURNL_PIN        D1
-#define SERVO2_TURNR_PIN        D2 
-#define SERVO3_TURNL_PIN        D1
-#define SERVO3_TURNR_PIN        D2 
-#define SERVO4_TURNL_PIN        D1
-#define SERVO4_TURNR_PIN        D2 
-
-#define SERVO_MASTER1_TURNL_PIN        D1
-#define SERVO_MASTER1_TURNR_PIN        D2 
-#define SERVO_MASTER1_TURNL_PIN        D1
-#define SERVO_MASTER1_TURNR_PIN        D2 
-#define SERVO_MASTER1_TURNL_PIN        D1
-#define SERVO_MASTER1_TURNR_PIN        D2 
-
-#define SERVO_CHAMBRE1  0
-#define SERVO_CHAMBRE2  1
-#define SERVO_CHAMBRE3  2
-#define SERVO_DREAMROOM 3
-#define SERVO_ETAGE     4
-#define SERVO_SALON     5
-#define SERVO_MASTER2   6
-
+#ifdef LOLIN
+  #define LED_PIN 22 //for lolin32 lite
+#else
+  #define LED_PIN 2
+#endif
 
 #define AERO_IDLE             "1"
 #define AERO_CONFIG_ONGOING   "2"
 #define AERO_CONFIGURED       "3"
 
-#define NB_SERVO  7
-
-String ID_TO_ROOM[NB_SERVO];
 
 bool servoRunning[NB_SERVO];
 int positionArray[NB_SERVO];
 int positionTargetArray[NB_SERVO];
-int positionLoopCounter[NB_SERVO];
-
-
-#define ONE_DEGREE_COUNTER 10
 
 #define LOOP_PERIOD 10
+
+
 unsigned long time_now = 0;
+
+
 
 /************************* MQTT *********************************/
 
@@ -72,48 +58,107 @@ int loopCounter = 0;
 bool bootComplete = false;
 bool endOfConfigRequestedFromHost = false;
 
+
+
+
+
+
+//============================
+
 void processACMsg(char* topic, byte* payload, unsigned int length)
 {
  
- Serial.println("Received custom command");
+ //debugPrintln("Received custom command");
  String strPayload = "";
  for (int i = 0; i < length; i++)
  {
      strPayload += (char)payload[i];
  }
+ int intPayload = atoi(strPayload.c_str());
 
  
-  if(String(topic) == "AC/ESP/SERVO/RUN_ALL"){
-        int servoId = (char)payload[0];
-		    Serial.println("Received SERVO RUN ALL ");
-        endOfConfigRequestedFromHost = true;
-        
-        
-  }
-  else if(String(topic) == "AC/ESP/SERVO/RESET"){
-        Serial.println("Received SERVO RESET !!!!!!!!!!!!!!!!!!");
+  if(String(topic) == "AC/ESP/HOST_INIT_REQUEST"){
+        debugPrintln("Received HOST_INIT_REQUEST !!!!!!!!!!!!!!!!!!");
 
-        initPositions(); //is it really needed to wait for end of all closures?
-
-        delay(4000);
-        myMqtt->publishValue("ESP/INIT_DONE", "1");
+        initPositions(); 
   } 
   else if(String(topic) == "AC/ESP/PING")
   {
-      Serial.println("Ping received.replying");
+      debugPrintln("Ping received.replying");
       myMqtt->publishValue("ESP/PONG", "1");
+     
   }
-   else if(String(topic) == "AC/ESP/SERVO/CHAMBRE1/ANGLE"){ Serial.print("Received Angle setting : "); Serial.println(atoi(strPayload.c_str())); positionTargetArray[SERVO_CHAMBRE1] = atoi(strPayload.c_str()); servoRunning[SERVO_CHAMBRE1] = true;}
-   else if(String(topic) == "AC/ESP/SERVO/CHAMBRE2/ANGLE"){ Serial.print("Received Angle setting : "); Serial.println(atoi(strPayload.c_str())); positionTargetArray[SERVO_CHAMBRE2] = atoi(strPayload.c_str()); servoRunning[SERVO_CHAMBRE2] = true;}
-   else if(String(topic) == "AC/ESP/SERVO/CHAMBRE3/ANGLE"){ Serial.print("Received Angle setting : "); Serial.println(atoi(strPayload.c_str())); positionTargetArray[SERVO_CHAMBRE3] = atoi(strPayload.c_str()); servoRunning[SERVO_CHAMBRE3] = true;}
-   else if(String(topic) == "AC/ESP/SERVO/DREAMROOM/ANGLE"){Serial.print("Received Angle setting : "); Serial.println(atoi(strPayload.c_str())); positionTargetArray[SERVO_DREAMROOM] = atoi(strPayload.c_str());servoRunning[SERVO_DREAMROOM] = true;}      
-   else if(String(topic) == "AC/ESP/SERVO/ETAGE/ANGLE"){    Serial.print("Received Angle setting : "); Serial.println(atoi(strPayload.c_str())); positionTargetArray[SERVO_ETAGE] = atoi(strPayload.c_str());    servoRunning[SERVO_ETAGE] = true;} 
-   else if(String(topic) == "AC/ESP/SERVO/MASTER2/ANGLE"){  Serial.print("Received Angle setting : "); Serial.println(atoi(strPayload.c_str())); positionTargetArray[SERVO_MASTER2] = atoi(strPayload.c_str());  servoRunning[SERVO_MASTER2] = true;} 		 
-	 else if(String(topic) == "AC/ESP/SERVO/SALON/ANGLE"){    Serial.print("Received Angle setting : "); Serial.println(atoi(strPayload.c_str())); positionTargetArray[SERVO_SALON] = atoi(strPayload.c_str());    servoRunning[SERVO_SALON] = true;} 	 
+  else if(String(topic) == "AC/GREE/mode/set")
+  {
+      debugPrintln("COMMAND : MODE SET");
+      if(strPayload == "COOL")
+      {
+          greeSetMode(GREE_MODE_COOL);
+      }
+      else
+      {
+        debugPrint("========== ERROR : UNKOWN MODE");
+      }
+     
+  }
+  else if(String(topic) == "AC/GREE/power/set")
+  {
+      debugPrintln("COMMAND : POWER SET");
+      if(intPayload == 1)
+      {
+        greeSetPower(true);
+      }
+      else if(intPayload == 0)
+      {
+        greeSetPower(false);        
+      }
+      else
+      {
+        debugPrint("ERROR : unknown power set command\n");
+      }
+     
+  }
+  else if(String(topic) == "AC/GREE/fanspeed/set")
+  {
+      debugPrintln("COMMAND : FANSPEED SET");
+      greeSetFanSpeed(intPayload);
+  }
+  else if(String(topic) == "AC/GREE/temperature/set")
+  {
+      debugPrintln("COMMAND : TEMPERATURE SET");
+      greeSetTemperature(intPayload * 10) ;
+  }
+  else if(String(topic) == "AC/GREE/corestatus/get")
+  {
+      debugPrintln("COMMAND : CORE STATUS GET REQUEST");
+      readModbusCoreValues();
+      sendModbusCoreValues(myMqtt);
+
+  }
+  else if(String(topic) == "AC/GREE/secondarystatus/get")
+  {
+      debugPrintln("COMMAND : SECONDARY STATUS GET REQUEST");
+      readModbusSecondaryValues();
+      sendModbusSecondaryValues(myMqtt);
+
+  }
+  else if(String(topic) == "AC/GREE/coils/get")
+  {
+      debugPrintln("COMMAND : COILS GET REQUEST");
+      readAllCoils();
+
+  }  
+   else if(String(topic) == "AC/ESP/SERVO/CHAMBRE1/ANGLE"){ debugPrint("Received Angle setting : "); debugPrintln(strPayload.c_str()); positionTargetArray[SERVO_CHAMBRE1] = intPayload; servoRunning[SERVO_CHAMBRE1] = true;}
+   else if(String(topic) == "AC/ESP/SERVO/CHAMBRE2/ANGLE"){ debugPrint("Received Angle setting : "); debugPrintln(strPayload.c_str()); positionTargetArray[SERVO_CHAMBRE2] = intPayload; servoRunning[SERVO_CHAMBRE2] = true;}
+   else if(String(topic) == "AC/ESP/SERVO/CHAMBRE3/ANGLE"){ debugPrint("Received Angle setting : "); debugPrintln(strPayload.c_str()); positionTargetArray[SERVO_CHAMBRE3] = intPayload; servoRunning[SERVO_CHAMBRE3] = true;}
+   else if(String(topic) == "AC/ESP/SERVO/DREAMROOM/ANGLE"){debugPrint("Received Angle setting : "); debugPrintln(strPayload.c_str()); positionTargetArray[SERVO_DREAMROOM] = intPayload;servoRunning[SERVO_DREAMROOM] = true;}      
+   else if(String(topic) == "AC/ESP/SERVO/ETAGE/ANGLE"){    debugPrint("Received Angle setting : "); debugPrintln(strPayload.c_str()); positionTargetArray[SERVO_ETAGE] = intPayload;    servoRunning[SERVO_ETAGE] = true;} 
+   else if(String(topic) == "AC/ESP/SERVO/MASTER2/ANGLE"){  debugPrint("Received Angle setting : "); debugPrintln(strPayload.c_str()); positionTargetArray[SERVO_MASTER2] = intPayload;  servoRunning[SERVO_MASTER2] = true;} 		 
+	 else if(String(topic) == "AC/ESP/SERVO/SALON/ANGLE"){    debugPrint("Received Angle setting : "); debugPrintln(strPayload.c_str()); positionTargetArray[SERVO_SALON] = intPayload;    servoRunning[SERVO_SALON] = true;} 	 
 		 
 		 else {
-		    Serial.print("Unknown payload : ");
-			  Serial.println((char)payload[0]);
+		    debugPrint("Unknown topic : ");
+			  debugPrintln(String(topic).c_str());
 		 }
 
 }
@@ -125,23 +170,74 @@ void initPositions()
   {
     positionArray[servoId] = 0;
     positionTargetArray [servoId] = 0;
-    positionLoopCounter[servoId] = 0;
+    positionLoopStartTime[servoId] = 0;
     servoRunning[servoId] = false;
     myMqtt->publishValue(String("ESP/SERVO/" + ID_TO_ROOM[servoId] + "/REAL_ANGLE").c_str(), "0");
   }
+  // delay(5000);
+   myMqtt->publishValue("ESP/INIT_DONE", "1");
+}
+
+void blinkLED()
+{
+  digitalWrite(LED_PIN, LOW);
+  delay(200);
+  digitalWrite(LED_PIN, HIGH); 
+  delay(200);
 
 }
 
+void initOTA()
+{
+  
+  ArduinoOTA.setHostname("ESP_32_AC_GREE");
+
+  ArduinoOTA
+    .onStart([]() {
+      String type;
+      if (ArduinoOTA.getCommand() == U_FLASH)
+        type = "sketch";
+      else // U_SPIFFS
+        type = "filesystem";
+
+      // NOTE: if updating SPIFFS this would be the place to unmount SPIFFS using SPIFFS.end()
+      debugPrintln(String("Start updating " + type).c_str());
+    })
+    .onEnd([]() {
+      debugPrintln("\nEnd");
+    })
+    .onProgress([](unsigned int progress, unsigned int total) {
+      debugPrintln(String("Progress: " +  (progress / (total / 100))).c_str());
+    })
+    .onError([](ota_error_t error) {
+      debugPrintln(String("Error: " + error).c_str());
+      if (error == OTA_AUTH_ERROR) debugPrintln("Auth Failed");
+      else if (error == OTA_BEGIN_ERROR) debugPrintln("Begin Failed");
+      else if (error == OTA_CONNECT_ERROR) debugPrintln("Connect Failed");
+      else if (error == OTA_RECEIVE_ERROR) debugPrintln("Receive Failed");
+      else if (error == OTA_END_ERROR) debugPrintln("End Failed");
+    });
+
+  ArduinoOTA.begin();
+
+}
 
 void setup() {
   Serial.begin(115200);
-  pinMode(SERVO1_TURNL_PIN, OUTPUT);
-  digitalWrite(SERVO1_TURNL_PIN, LOW);
-  pinMode(SERVO2_TURNL_PIN, OUTPUT);
-  digitalWrite(SERVO2_TURNL_PIN, LOW);
-  
-  delay(10);
-  
+
+
+ 
+  pinMode(LED_PIN, OUTPUT);
+
+
+  Serial2.begin(9600, SERIAL_8N1, UART_RX, UART_TX);
+  mb.begin(&Serial2, UART_RXTX);
+
+  mb.master();
+
+  initServoPins();
+
+ 
   myMqtt = new MqttConnection(SENSOR_ID, WLAN_SSID, WLAN_PASS, MQTT_SERVER, MQTT_PORT);
   myMqtt->registerCustomProcessing(&processACMsg);
   myMqtt->addSubscription("ESP/SERVO/CHAMBRE1/ANGLE");
@@ -152,68 +248,77 @@ void setup() {
   myMqtt->addSubscription("ESP/SERVO/SALON/ANGLE");
   myMqtt->addSubscription("ESP/SERVO/MASTER2/ANGLE");
   myMqtt->addSubscription("ESP/SERVO/RUN_ALL");  
-  myMqtt->addSubscription("ESP/SERVO/RESET"); 
+  myMqtt->addSubscription("ESP/HOST_INIT_REQUEST"); 
   myMqtt->addSubscription("ESP/PING"); 
-  
-  
-  ID_TO_ROOM[SERVO_CHAMBRE1]  = "CHAMBRE1";
-  ID_TO_ROOM[SERVO_CHAMBRE2]  = "CHAMBRE2";
-  ID_TO_ROOM[SERVO_CHAMBRE3]  = "CHAMBRE3";
-  ID_TO_ROOM[SERVO_DREAMROOM] = "DREAMROOM";
-  ID_TO_ROOM[SERVO_ETAGE]     = "ETAGE";
-  ID_TO_ROOM[SERVO_SALON]     = "SALON";
-  ID_TO_ROOM[SERVO_MASTER2]   = "MASTER2";
+  myMqtt->addSubscription("GREE/mode/set");   
+  myMqtt->addSubscription("GREE/power/set");   
+  myMqtt->addSubscription("GREE/fanspeed/set");  
+  myMqtt->addSubscription("GREE/temperature/set");  
+  myMqtt->addSubscription("GREE/corestatus/get"); 
+  myMqtt->addSubscription("GREE/secondarystatus/get"); 
+  myMqtt->addSubscription("GREE/coils/get"); 
 
+  initCoils();
+  initHregs();
+
+  initOTA();
+
+  // init remote debug
+  Debug.begin("ESP32");  
   
 }
 
-
-void switchAlarmLedOn(){
-    
-  Serial.println("Switching Alarm LED ON");
- // digitalWrite(ALARM_LED_RELAY_PIN, HIGH);
-
-}
-void switchAlarmLedOff(){
-    
-  Serial.println("Switching Alarm LED OFF");
- // digitalWrite(ALARM_LED_RELAY_PIN, LOW);
-
-}
 
 void turn(int servoId, bool turnRight)
 {
-    if(positionLoopCounter[servoId] < ONE_DEGREE_COUNTER)
+    if(turnRight)
     {
-      positionLoopCounter[servoId]++;
+      digitalWrite(ID_TO_SERVOR[servoId], HIGH);
+      digitalWrite(ID_TO_SERVOL[servoId], LOW);
     }
     else
     {
-      positionLoopCounter[servoId] = 0;
+      digitalWrite(ID_TO_SERVOR[servoId], LOW);
+      digitalWrite(ID_TO_SERVOL[servoId], HIGH) ;     
+    }
+
+  
+    if(millis() - positionLoopStartTime[servoId] < TIMING_PER_DEGREE)
+    {
+      //positionLoopStartTime[servoId] = ;
+    }
+    else
+    {
+      positionLoopStartTime[servoId] = millis();
 
       if(turnRight)
       {
         positionArray[servoId] += 1;
-        Serial.print("TURN RIGHT : ");
+        logServo("TURN RIGHT : ");
       }
       else
       {
         positionArray[servoId] -= 1;
-        Serial.print("TURN LEFT : ");        
+        logServo("TURN LEFT : ");        
       }
-      Serial.print(servoId);
-      Serial.print("  : ");
-      Serial.println(positionArray[servoId]);
+     logServo(String(servoId));
+     logServo("  : ");
+     logServoCR(String(positionArray[servoId]));
       myMqtt->publishValue(String("ESP/SERVO/" + ID_TO_ROOM[servoId] + "/REAL_ANGLE").c_str(), String(positionArray[servoId]).c_str());
     }
 }
 
 void turnOff(int servoId)
 {
-    positionLoopCounter[servoId] = 0;
-    servoRunning[servoId]=false;
-  //Serial.print("TURN OFF : ");
-    //Serial.println(servoId);
+    if(servoRunning[servoId] == true)
+    {
+      positionLoopStartTime[servoId] = 0;
+      servoRunning[servoId]=false;
+      digitalWrite(ID_TO_SERVOR[servoId], LOW);
+      digitalWrite(ID_TO_SERVOL[servoId], LOW);
+      logServo("TURN OFF : ");
+      logServoCR(String(servoId));
+     }
 }
 
 bool allServoConfigured()
@@ -228,11 +333,38 @@ bool allServoConfigured()
   return true;
 }
 
+int loopCount = 0;
+bool ledHigh = false;
 void loop() {
+
+  ArduinoOTA.handle();
+  Debug.handle();
+
+  loopCount++;
+  if(loopCount > 2000)
+  {
+    loopCount = 0;
+    debugPrintln("Alive, looping\n");
+    Serial.println("Alive, looping\n");
+    if(ledHigh)
+    {
+       ledHigh = false;
+    digitalWrite(LED_PIN, LOW);
+    }
+    else
+    {
+             ledHigh = true;
+      digitalWrite(LED_PIN, HIGH);
+    }
+   // readAllCoils();
+    //readModbusCoreValues();
+  }
+  
     time_now = millis();
   // put your main code here, to run repeatedly:
 
   if (!myMqtt->connected()) {
+    debugPrintln("MQTT RECONNECT!!!!!!!!!!!!!!!!!!!!!");
     myMqtt->reconnect();
   }
   myMqtt->loop();
@@ -275,15 +407,10 @@ void loop() {
 
   }
 
-  //delay(LOOP_DELAY);
-
-
-   
-    //Serial.println("Hello");
-   
+   /*
     while(millis() < time_now + LOOP_PERIOD){
         //wait approx. [period] ms
-    }
+    }*/
 
 
 }

@@ -43,18 +43,26 @@ void  mycallback(char* topic, byte* payload, unsigned int length) {
 /****************************** Wifi connect function ***************************************/
 void MqttConnection::wifiSetup(const char* ssid, const char* pass) {
 
-   
+  int nbTry = 0;
   delay(10);
   // We start by connecting to a WiFi network
   Serial.println();
   Serial.print("Connecting to ");
   Serial.println(ssid);
-
+  
+  WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, pass);
 
   while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
+    delay(1000);
     Serial.print(".");
+	nbTry++;
+	if(nbTry > 20)
+	{
+      nbTry = 0;
+      Serial.println("Too long to connect - Rebooting");
+	  ESP.restart();
+	}
   }
 
   randomSeed(micros());
@@ -74,14 +82,14 @@ void MqttConnection::registerCustomProcessing(void (*myFunc)(char* topic, byte* 
 
 void MqttConnection::publishValue(const char * leafTopic, const char* msg)
 {
-    Serial.print("Publish message: ");
-    Serial.println(msg);
+   // Serial.print("Publish message: ");
+   // Serial.println(msg);
     
     
     String outTopic = sensorId_ + "/";
     outTopic += leafTopic;
-    Serial.print("on topic: ");
-    Serial.println(outTopic.c_str());
+    //Serial.print("on topic: ");
+    //Serial.println(outTopic.c_str());
     publish(outTopic.c_str(), msg);
 }
 void MqttConnection::publishValue(const char * leafTopic, float value, int precision)
@@ -99,8 +107,8 @@ void MqttConnection::publishValue(const char * leafTopic, float value, int preci
     
     String outTopic = sensorId_ + "/";
     outTopic += leafTopic;
-    Serial.print("on topic: ");
-    Serial.println(outTopic.c_str());
+    //Serial.print("on topic: ");
+   // Serial.println(outTopic.c_str());
     publish(outTopic.c_str(), msg);
 }
 
