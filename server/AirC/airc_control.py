@@ -89,7 +89,9 @@ def on_message(client, userdata, msg):
 
     elif(msg.topic == MQTT_ESP_PONG):
         myAirCManager.pingAck = True
-	    
+        print("ping time : ")
+        print((round(time.time() *1000) - myAirCManager.pingTime))
+
     else:
         myjson = json.loads(msg.payload)
         current_temperature = myjson['temperature']

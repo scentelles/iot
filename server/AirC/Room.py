@@ -3,6 +3,7 @@ from AeroChannel import *
 
 DELTATEMP_THRESHOLD = 0.3
 
+
 class Room:
 
    def __init__(self, mqttClient, name, volume, masterChannel):
@@ -43,11 +44,12 @@ class Room:
        return self.in_demand 
 		          
    def dumpValues(self):
-       print("ROOM : " + self.name)
-       print("\tAC_ON: \t" + str(self.AC_ON))
-       print("\ttemperature : \t" + str(self.temperature))
-       print("\ttemperature target : \t" + str(self.temperature_target))
-       print("\ttemperature delta : \t" + str(self.getDeltaTemperature()))   
+        if(DEBUG == True):
+          print("ROOM : " + self.name)
+          print("\tAC_ON: \t" + str(self.AC_ON))
+          print("\ttemperature : \t" + str(self.temperature))
+          print("\ttemperature target : \t" + str(self.temperature_target))
+          print("\ttemperature delta : \t" + str(self.getDeltaTemperature()))   
 
    def getDemandPower(self):
        self.getDeltaTemperature() * self.volume

@@ -22,7 +22,7 @@ class AeroChannel:
             print("MQTT angle sent")
 	
     def stageCloseChannel(self):
-        print("staging close Channel : " + self.name)
+       # print("staging close Channel : " + self.name)
         if((self.currentAngle != 0) and (self.safetyOpened == False))  :
             self.stageAngle(0)
 
@@ -30,7 +30,7 @@ class AeroChannel:
                     self.masterChannel.nbOpen -=1
 		
     def stageOpenChannel(self):
-        print("staging open Channel : " + self.name)
+       # print("staging open Channel : " + self.name)
         if(self.safetyOpened == True):
             self.clearSafetyFlag() #regular angle set received, reset the remaining safety state if any
         if(self.currentAngle == 0):

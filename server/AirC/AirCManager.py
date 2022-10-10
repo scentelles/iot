@@ -11,9 +11,7 @@ MQTT_SUFFIX_AC_STATE = "state"
 MQTT_PREFIX = "AC"
 AC_STATE_OFF = 1
 
-SAFETY_ROOM_CHANNEL = "ETAGE"
 
-MQTT_GREE_PREFIX = "AC/GREE"
 
 
 
@@ -30,7 +28,9 @@ class AirCManager:
         self.pingAck = False
         self.FSMState = STATE_INIT
         self.ESP_Connected = False
-	
+        self.currentACTempTarget = 0
+        self.currentFanSpeed = 0
+        self.pringTime = 0
     def initAfterBoot(self):
 
 
@@ -61,23 +61,27 @@ class AirCManager:
 #==========================
     def watchdog(self, mqttClient):
         while(1):
+     
             print("!!!!!!!!!!!!!  PINGING ESP  !!!!!!!!!!!!!")
+            self.pingTime = round(time.time() * 1000)
             self.mqttClient.publish("AC/ESP/PING", 1)
             self.pingAck = False
 
-            time.sleep(3)
+            time.sleep(10)
             if(self.pingAck == False):
                 self.mqttClient.publish("AC/ERROR", "ESP NOT RESPONDING!!!")
                 self.ESP_Connected = False
             else:
                 self.ESP_Connected = True
+                
 		
 		
 #======================
 #Main Loop	
 #======================		
     def aircManagerLoop(self, mqttClient):
-
+      #while(1):
+      #  time.sleep(2)     
       while(1):
         print("DEBUG"  + str(self.FSMState) + " CONNECTED : " + str(self.ESP_Connected) )
 	
@@ -130,8 +134,9 @@ class AirCManager:
 
                     if(self.aeraulicState == AERO_CONFIGURED):
                         if(self.ACRunning == False):
-                            self.updateACMastertargetTemp()
                             self.turnACOn()
+
+                    self.updateACMastertargetTemp()
 
                 else:
                     print("No demand")
@@ -189,31 +194,39 @@ class AirCManager:
        print("########## : Volume total : " + str(totalVolumeInDemand))
  
        if(totalVolumeInDemand < 26):
-           return "low"
+           return GREE_FANSPEED_LOW
        elif(totalVolumeInDemand < 36):
-           return "mediumLow"
+           return GREE_FANSPEED_MEDIUMLOW
        elif(totalVolumeInDemand < 51):
-           return "medium"
+           return GREE_FANSPEED_MEDIUM
        elif(totalVolumeInDemand < 80):
-           return "mediumHigh"	   
+           return GREE_FANSPEED_MEDIUMHIGH
        else:
-           return "high"	
+           return GREE_FANSPEED_HIGH	
 	   	   
     def turnACOn(self):
-        print("AC ON")
+        print("############################   AC ON   ##########################")
         self.ACRunning = True
-        self.mqttClient.publish(MQTT_GREE_PREFIX + "/mode/set", "cool")  
+        self.mqttClient.publish(MQTT_GREE_PREFIX + "/mode/set", "COOL")  
         time.sleep(0.5) 
         self.mqttClient.publish(MQTT_GREE_PREFIX + "/power/set", 1)   
         time.sleep(0.5) 
         self.mqttClient.publish(MQTT_GREE_PREFIX + "/fanspeed/set", self.calculatefanSpeedd())    
 
     def turnACOff(self):
-        print("AC OFF")
+        print("############################   AC OFF   ##########################")
         self.ACRunning = False
         self.mqttClient.publish(MQTT_GREE_PREFIX + "/fanspeed/set", "low")
         self.mqttClient.publish(MQTT_GREE_PREFIX + "/power/set", 0)   
 	
     def updateACMastertargetTemp(self):
-        self.mqttClient.publish(MQTT_GREE_PREFIX + "/temperature/set", self.roomList["ETAGE"].temperature + self.getMaxDeltaTemp())   
-
+        print("############################  SET TEMP  ##########################")
+        newACTempTarget = self.roomList["ETAGE"].temperature - self.getMaxDeltaTemp()
+        if(self.currentACTempTarget != newACTempTarget):
+             self.currentACTempTarget = newACTempTarget
+             self.mqttClient.publish(MQTT_GREE_PREFIX + "/temperature/set", newACTempTarget)   
+        time.sleep(0.2) 
+        newFanSpeed = self.calculatefanSpeedd()
+        if(self.currentFanSpeed != newFanSpeed):
+             self.currentFanSpeed = newFanSpeed
+             self.mqttClient.publish(MQTT_GREE_PREFIX + "/fanspeed/set", newFanSpeed)    
