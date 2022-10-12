@@ -90,20 +90,32 @@ void processACMsg(char* topic, byte* payload, unsigned int length)
   }
   else if(String(topic) == "AC/GREE/mode/set")
   {
-      debugPrintln("COMMAND : MODE SET");
+      debugPrintln(String("COMMAND : MODE SET : " + strPayload).c_str());
       if(strPayload == "COOL")
       {
+          debugPrintln("\tMODBUS SET MODE : COOL");
           greeSetMode(GREE_MODE_COOL);
+      }
+      else if(strPayload == "HEAT")
+      {
+          debugPrintln("\tMODBUS SET MODE : HEAT");
+          greeSetMode(GREE_MODE_HEAT);
+      }
+      else if(strPayload == "FAN")
+      {
+          debugPrintln("\tMODBUS SET MODE : FAN");
+          greeSetMode(GREE_MODE_FAN);
       }
       else
       {
+        
         debugPrint("========== ERROR : UNKOWN MODE");
       }
      
   }
   else if(String(topic) == "AC/GREE/power/set")
   {
-      debugPrintln("COMMAND : POWER SET");
+      debugPrintln(String("COMMAND : POWER SET : " + strPayload).c_str());
       if(intPayload == 1)
       {
         greeSetPower(true);
@@ -120,12 +132,12 @@ void processACMsg(char* topic, byte* payload, unsigned int length)
   }
   else if(String(topic) == "AC/GREE/fanspeed/set")
   {
-      debugPrintln("COMMAND : FANSPEED SET");
+      debugPrintln(String("COMMAND : FANSPEED SET : " + strPayload).c_str());
       greeSetFanSpeed(intPayload);
   }
   else if(String(topic) == "AC/GREE/temperature/set")
   {
-      debugPrintln("COMMAND : TEMPERATURE SET");
+      debugPrintln(String("COMMAND : TEMPERATURE SET : " + strPayload).c_str());
       greeSetTemperature(intPayload * 10) ;
   }
   else if(String(topic) == "AC/GREE/corestatus/get")
@@ -163,9 +175,15 @@ void processACMsg(char* topic, byte* payload, unsigned int length)
 
 }
 
-
+void initBoot()
+{
+     myMqtt->publishValue("ESP/INIT_DONE", "1");
+  
+}
 void initPositions()
 {
+   debugPrintln("Starting initialization of all servos");
+   
     for(int servoId = 0; servoId < NB_SERVO; servoId++)
   {
     positionArray[servoId] = 0;
@@ -175,15 +193,42 @@ void initPositions()
     myMqtt->publishValue(String("ESP/SERVO/" + ID_TO_ROOM[servoId] + "/REAL_ANGLE").c_str(), "0");
   }
   // delay(5000);
-   myMqtt->publishValue("ESP/INIT_DONE", "1");
+  unsigned long   initStartTime = millis();
+  while(millis() - initStartTime < NB_SECONDS_FOR_90_DEGREES * 1000)
+  {
+    for(int servoId = 0; servoId < NB_SERVO; servoId++)
+    {
+      if(servoId != SERVO_ETAGE)
+      {
+        digitalWrite(ID_TO_SERVOR[servoId], LOW);
+        digitalWrite(ID_TO_SERVOL[servoId], HIGH) ; 
+      }
+    }
+    digitalWrite(ID_TO_SERVOR[SERVO_ETAGE], HIGH);
+    digitalWrite(ID_TO_SERVOL[SERVO_ETAGE], LOW) ; 
+    blinkLED(50);
+    myMqtt->loop(); //run mqttloop while initializing servos, as we are out of main loop
+  }
+  for(int servoId = 0; servoId < NB_SERVO; servoId++)
+  {
+    if(servoId != SERVO_ETAGE)
+    {
+      digitalWrite(ID_TO_SERVOR[servoId], LOW);
+      digitalWrite(ID_TO_SERVOL[servoId], LOW) ; 
+    }
+  }
+        
+  debugPrintln("Servo init Done");
+  myMqtt->publishValue("ESP/INIT_SERVO_DONE", "1");
 }
 
-void blinkLED()
+
+void blinkLED(int value)
 {
   digitalWrite(LED_PIN, LOW);
-  delay(200);
+  delay(value);
   digitalWrite(LED_PIN, HIGH); 
-  delay(200);
+  delay(value);
 
 }
 
@@ -223,13 +268,20 @@ void initOTA()
 }
 
 void setup() {
-  Serial.begin(115200);
+  delay(1000); //delay to wait power supply to stabilize
+  #ifndef TELNET_DEBUG  
+    Serial.begin(115200);
+  #endif
 
-
- 
   pinMode(LED_PIN, OUTPUT);
-
-
+  digitalWrite(LED_PIN, LOW); 
+  delay(200);
+  digitalWrite(LED_PIN, HIGH); 
+  delay(200);
+  digitalWrite(LED_PIN, LOW); 
+  delay(200);
+  digitalWrite(LED_PIN, HIGH); 
+    
   Serial2.begin(9600, SERIAL_8N1, UART_RX, UART_TX);
   mb.begin(&Serial2, UART_RXTX);
 
@@ -247,7 +299,6 @@ void setup() {
   myMqtt->addSubscription("ESP/SERVO/ETAGE/ANGLE");
   myMqtt->addSubscription("ESP/SERVO/SALON/ANGLE");
   myMqtt->addSubscription("ESP/SERVO/MASTER2/ANGLE");
-  myMqtt->addSubscription("ESP/SERVO/RUN_ALL");  
   myMqtt->addSubscription("ESP/HOST_INIT_REQUEST"); 
   myMqtt->addSubscription("ESP/PING"); 
   myMqtt->addSubscription("GREE/mode/set");   
@@ -344,7 +395,7 @@ void loop() {
   if(loopCount > 2000)
   {
     loopCount = 0;
-    debugPrintln("Alive, looping\n");
+    debugPrintln("AC Alive, looping\n");
     Serial.println("Alive, looping\n");
     if(ledHigh)
     {
@@ -356,8 +407,6 @@ void loop() {
              ledHigh = true;
       digitalWrite(LED_PIN, HIGH);
     }
-   // readAllCoils();
-    //readModbusCoreValues();
   }
   
     time_now = millis();
@@ -371,7 +420,7 @@ void loop() {
 
     if(bootComplete == false)
     {
-      initPositions();
+      initBoot();
       bootComplete = true;
     }
 
