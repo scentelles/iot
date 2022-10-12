@@ -31,6 +31,8 @@ class AirCManager:
         self.currentACTempTarget = 0
         self.currentFanSpeed = 0
         self.pringTime = 0
+
+
     def initAfterBoot(self):
 
 
@@ -69,7 +71,7 @@ class AirCManager:
 
             time.sleep(10)
             if(self.pingAck == False):
-                self.mqttClient.publish("AC/ERROR", "ESP NOT RESPONDING!!!")
+                #self.mqttClient.publish("AC/ERROR", "ESP NOT RESPONDING!!!")
                 self.ESP_Connected = False
             else:
                 self.ESP_Connected = True
@@ -92,6 +94,7 @@ class AirCManager:
                 self.initAfterBoot()
                 self.FSMState = STATE_WAIT_ESP_INIT
                 self.mqttClient.publish(MQTT_ESP_HOST_INIT_REQUEST, 1)
+                self.mqttClient.publish("AC/ERROR", "WAITING_ESP_SERVO_INIT")
           
             else:
                 self.mqttClient.publish("AC/ERROR", "TRYING TO RECONNECT")
@@ -207,17 +210,13 @@ class AirCManager:
     def turnACOn(self):
         print("############################   AC ON   ##########################")
         self.ACRunning = True
-        self.mqttClient.publish(MQTT_GREE_PREFIX + "/mode/set", "COOL")  
-        time.sleep(0.5) 
-        self.mqttClient.publish(MQTT_GREE_PREFIX + "/power/set", 1)   
-        time.sleep(0.5) 
-        self.mqttClient.publish(MQTT_GREE_PREFIX + "/fanspeed/set", self.calculatefanSpeedd())    
+#        self.mqttClient.publish(MQTT_GREE_PREFIX + "/fanspeed/set", self.calculatefanSpeedd())    
 
     def turnACOff(self):
         print("############################   AC OFF   ##########################")
         self.ACRunning = False
-        self.mqttClient.publish(MQTT_GREE_PREFIX + "/fanspeed/set", "low")
-        self.mqttClient.publish(MQTT_GREE_PREFIX + "/power/set", 0)   
+ #       self.mqttClient.publish(MQTT_GREE_PREFIX + "/fanspeed/set", "low")
+ #       self.mqttClient.publish(MQTT_GREE_PREFIX + "/power/set", 0)   
 	
     def updateACMastertargetTemp(self):
         print("############################  SET TEMP  ##########################")

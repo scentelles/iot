@@ -45,8 +45,11 @@ def on_connect(client, userdata, flags, rc):
     
     client.subscribe(MQTT_ESP_AERAULIC_STATE)   
     client.subscribe(MQTT_ESP_INIT_DONE) 
+    client.subscribe(MQTT_ESP_INIT_SERVO_DONE)     
     client.subscribe(MQTT_ESP_INIT_STARTED) 
     client.subscribe(MQTT_ESP_PONG)
+    client.subscribe(MQTT_AC_MODE)
+    
     
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
@@ -85,6 +88,11 @@ def on_message(client, userdata, msg):
         else:
             print("ERROR : INIT done received while Host not waiting for itESP32 connection OK\n")
 
+    elif(msg.topic == MQTT_ESP_INIT_SERVO_DONE):
+        if(myAirCManager.FSMState == STATE_WAIT_ESP_INIT):
+            print("ESP32 connection OK\n")
+            mqttClient.publish("AC/ERROR", "ESP CONNECTION OK")
+            myAirCManager.FSMState = STATE_READY
 
 
     elif(msg.topic == MQTT_ESP_PONG):
@@ -92,6 +100,26 @@ def on_message(client, userdata, msg):
         print("ping time : ")
         print((round(time.time() *1000) - myAirCManager.pingTime))
 
+
+    elif(msg.topic == MQTT_AC_MODE):
+        print("@@@@@@@@@@@@@@@@@@ AC MODE")
+        print(msg.payload)
+        if(msg.payload == MQTT_AC_MODE_OFF):
+            print("AC MODE OFF")
+            mqttClient.publish(MQTT_GREE_PREFIX + "/power/set", 0)   
+        if(msg.payload == MQTT_AC_MODE_HEAT):
+            print("AC MODE HEAT")
+            mqttClient.publish(MQTT_GREE_PREFIX + "/power/set", 1)   
+            mqttClient.publish(MQTT_GREE_PREFIX + "/mode/set", "HEAT")  
+        if(msg.payload == MQTT_AC_MODE_COOL):
+            print("AC MODE COOL")
+            mqttClient.publish(MQTT_GREE_PREFIX + "/power/set", 1)   
+            mqttClient.publish(MQTT_GREE_PREFIX + "/mode/set", "COOL")  
+        if(msg.payload == MQTT_AC_MODE_FAN):
+            print("AC MODE FAN")
+            mqttClient.publish(MQTT_GREE_PREFIX + "/power/set", 1)   
+            mqttClient.publish(MQTT_GREE_PREFIX + "/mode/set", "FAN")  
+	    	    
     else:
         myjson = json.loads(msg.payload)
         current_temperature = myjson['temperature']
