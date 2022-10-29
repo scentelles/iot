@@ -97,8 +97,8 @@ def on_message(client, userdata, msg):
 
     elif(msg.topic == MQTT_ESP_PONG):
         myAirCManager.pingAck = True
-        print("ping time : ")
-        print((round(time.time() *1000) - myAirCManager.pingTime))
+        print("ping time : " + str((round(time.time() *1000) - myAirCManager.pingTime)))
+
 
 
     elif(msg.topic == MQTT_AC_MODE):
@@ -150,7 +150,8 @@ def main():
     watchdogThread = Thread(target=myAirCManager.watchdog, args=(mqttClient,))    
     watchdogThread.start() 
 
-
+    greeStateMonitorThread = Thread(target=myAirCManager.greeStateMonitor, args=(mqttClient,))    
+    greeStateMonitorThread.start() 
 
 
 
