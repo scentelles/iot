@@ -28,9 +28,14 @@ else
     python3 -u /home/pi/Projects/iot/server/RFbridge.py >> /home/pi/Projects/RFbridge.log &
     sleep 1
 
+#    echo "startup TTS script"
+#    python3 -u /home/pi/Projects/iot/server/TTS_daemon.py >> /home/pi/Projects/TTS_daemon.log &
+#    sleep 1
+
     echo "startup TTS script"
-    python3 -u /home/pi/Projects/iot/server/TTS_daemon.py >> /home/pi/Projects/TTS_daemon.log &
+    python3 -u /home/pi/Projects/iot/server/AirC/airc_control.py >> /home/pi/Projects/AirC.log &
     sleep 1
+
     
 #    /usr/bin/node-red start >> /home/pi/Projects/node-red.log &
     
