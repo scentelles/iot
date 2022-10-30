@@ -1,4 +1,4 @@
-//#define LOLIN
+#define LOLIN
 
 #ifdef LOLIN
   #define SERVO1_TURNL_PIN        19

@@ -1,5 +1,5 @@
 #define TELNET_DEBUG
-//#define LOLIN
+#define LOLIN
 
 
 #ifdef LOLIN
@@ -387,8 +387,28 @@ void readModbusCoreValues()
       greeCurrentValueTemperature = resultHregs[GREE_HREG_RW_SET_TEMP];
       greeCurrentValueTempLowerLimitNrj = resultHregs[GREE_HREG_RW_TEMP_LOWER_LIMIT_NRJ];
       greeCurrentValueSleepMode = resultHregs[GREE_HREG_RW_SLEEP_MODE];
-      greeCurrentValueOutdoorTemp = resultHregs[GREE_HREG_R_OUTDOOR_TEMP];
-      greeCurrentValueAirReturnTemp = resultHregs[GREE_HREG_R_AIR_RETURN_TEMP];
+   } 
+   delay(50);
+   if (!mb.slave()) 
+   {
+      mb.readHreg(MODBUS_SLAVE_ID, GREE_HREG_R_OUTDOOR_TEMP, resultHregs, 2);
+      while(mb.slave()) { // Check if transaction is active
+      mb.task();
+      delay(10);
+      }
+   
+   greeCurrentValueOutdoorTemp = resultHregs[0];
+   }
+   delay(50);
+   if (!mb.slave()) 
+   {
+      mb.readHreg(MODBUS_SLAVE_ID, GREE_HREG_R_AIR_RETURN_TEMP, resultHregs, 2);
+      while(mb.slave()) { // Check if transaction is active
+      mb.task();
+      delay(10);
+      }
+      greeCurrentValueAirReturnTemp = resultHregs[0];
+   }
 
       debugPrintln(String("GREE POWER        : " + String(greeCurrentValuePower)).c_str());
       debugPrintln(String("GREE AMBIANT TEMP : " + String(greeCurrentValueAmbiantTemp)).c_str());
@@ -400,7 +420,7 @@ void readModbusCoreValues()
       debugPrintln(String("GREE OUTDOOR TEMP  : " + String(greeCurrentValueOutdoorTemp)).c_str());
       debugPrintln(String("GREE AIR RETURN TEMP  : " + String(greeCurrentValueAirReturnTemp)).c_str());
       
-   } 
+   
     
 }
 void sendModbusCoreValues(MqttConnection * myMqtt)
