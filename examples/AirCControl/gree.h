@@ -343,16 +343,16 @@ void readModbusSecondaryValues()
       greeCurrentValueNrjSavingHeat = resultCoils[GREE_SWITCH_RW_NRJ_SAVING_HEAT];  
       greeCurrentValueOutdoorFan = resultCoils[GREE_STATUS_R_OUTDOOR_FAN];  
       greeCurrentValueCompressor = resultCoils[GREE_STATUS_R_COMPRESSOR];  
-      greeCurrentValueSystemDefrosting = resultCoils[GREE_STATUS_R_COMPRESSOR];  
+      greeCurrentValueSystemDefrosting = resultCoils[GREE_STATUS_R_SYSTEM_DEFROSTING];  
                         
-      debugPrintln(String("GREE POWER        : " + String(greeCurrentValueTurbo)).c_str());
-      debugPrintln(String("GREE POWER        : " + String(greeCurrentValueSilent)).c_str());
-      debugPrintln(String("GREE POWER        : " + String(greeCurrentValueNrjSaving)).c_str());
-      debugPrintln(String("GREE POWER        : " + String(greeCurrentValueNrjSavingCool)).c_str());
-      debugPrintln(String("GREE POWER        : " + String(greeCurrentValueNrjSavingHeat)).c_str());
-      debugPrintln(String("GREE POWER        : " + String(greeCurrentValueOutdoorFan)).c_str());
-      debugPrintln(String("GREE POWER        : " + String(greeCurrentValueCompressor)).c_str());      
-      debugPrintln(String("GREE POWER        : " + String(greeCurrentValueSystemDefrosting)).c_str());     
+      debugPrintln(String("GREE TURBO        : " + String(greeCurrentValueTurbo)).c_str());
+      debugPrintln(String("GREE Silent        : " + String(greeCurrentValueSilent)).c_str());
+      debugPrintln(String("GREE NRJ SAVING        : " + String(greeCurrentValueNrjSaving)).c_str());
+      debugPrintln(String("GREE NRJ SAVING COOL        : " + String(greeCurrentValueNrjSavingCool)).c_str());
+      debugPrintln(String("GREE NRJ SAVING HEAT        : " + String(greeCurrentValueNrjSavingHeat)).c_str());
+      debugPrintln(String("GREE OUTDOOR FAN        : " + String(greeCurrentValueOutdoorFan)).c_str());
+      debugPrintln(String("GREE COMPRESSOR        : " + String(greeCurrentValueCompressor)).c_str());      
+      debugPrintln(String("GREE DEFROSTING        : " + String(greeCurrentValueSystemDefrosting)).c_str());     
 
       
    }
