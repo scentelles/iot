@@ -22,7 +22,7 @@ roomList[CHAMBRE2] = Room(mqttClient, CHAMBRE2, 25, masterChannel2)
 roomList[CHAMBRE3] = Room(mqttClient, CHAMBRE3, 25, masterChannel2)
 roomList[DREAMROOM] = Room(mqttClient, DREAMROOM, 35, masterChannel2)
 roomList[SALON] = Room(mqttClient, SALON, 80, 0)
-roomList[ETAGE] = Room(mqttClient, ETAGE, 35, 0)
+roomList[ETAGE] = Room(mqttClient, ETAGE, 25, 0)
 
 
 
@@ -49,7 +49,8 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe(MQTT_ESP_INIT_STARTED) 
     client.subscribe(MQTT_ESP_PONG)
     client.subscribe(MQTT_AC_MODE)
-    
+    client.subscribe(MQTT_ESP_GREE_AMBIANT_TEMP)    
+    client.subscribe(MQTT_AC_TURBO_FORCED)  
     
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
@@ -66,12 +67,6 @@ def on_message(client, userdata, msg):
         print( "target temp change received")
         room = getRoomFromAddress(msg.topic)
         roomList[room].setTemperatureTarget(msg.payload)
-
-    elif(msg.topic == MQTT_ESP_AERAULIC_STATE):
-        if(msg.payload == AERO_CONFIG_ONGOING):
-            print("Configuration ongoing - Toggle TBD")
-        if(msg.payload == b'3'):
-            myAirCManager.aeraulicState = AERO_CONFIGURED
 
 
     elif(msg.topic == MQTT_ESP_INIT_STARTED):
@@ -99,28 +94,42 @@ def on_message(client, userdata, msg):
         myAirCManager.pingAck = True
         print("ping time : " + str((round(time.time() *1000) - myAirCManager.pingTime)))
 
+    elif(msg.topic == MQTT_ESP_GREE_AMBIANT_TEMP):
+        print("received GREE ambiant temp : " + str(msg.payload) +" after /10 : " +  str(int(msg.payload) / 10)  )
+        myAirCManager.currentGreeAmbiantTemp = float(msg.payload) / 10
 
+    elif(msg.topic == MQTT_AC_TURBO_FORCED):
+        if(int(msg.payload) == 2):
+            print("Received TURBO FOCED 2")
+            myAirCManager.currentTurboForced = True
+        else:
+            print("Received TURBO FOCED SOMETHING ELSE THAN 2")
+            myAirCManager.currentTurboForced = False           
 
     elif(msg.topic == MQTT_AC_MODE):
         print("@@@@@@@@@@@@@@@@@@ AC MODE")
         print(msg.payload)
         if(msg.payload == MQTT_AC_MODE_OFF):
             print("AC MODE OFF")
+            myAirCManager.currentACMode = AC_MODE_OFF
             mqttClient.publish(MQTT_GREE_PREFIX + "/power/set", 0)   
         if(msg.payload == MQTT_AC_MODE_HEAT):
             print("AC MODE HEAT")
+            myAirCManager.currentACMode = AC_MODE_HEAT
             mqttClient.publish(MQTT_GREE_PREFIX + "/power/set", 1)   
             mqttClient.publish(MQTT_GREE_PREFIX + "/mode/set", "HEAT")  
         if(msg.payload == MQTT_AC_MODE_COOL):
             print("AC MODE COOL")
+            myAirCManager.currentACMode = AC_MODE_COOL
             mqttClient.publish(MQTT_GREE_PREFIX + "/power/set", 1)   
             mqttClient.publish(MQTT_GREE_PREFIX + "/mode/set", "COOL")  
         if(msg.payload == MQTT_AC_MODE_FAN):
             print("AC MODE FAN")
+            myAirCManager.currentACMode = AC_MODE_FAN
             mqttClient.publish(MQTT_GREE_PREFIX + "/power/set", 1)   
             mqttClient.publish(MQTT_GREE_PREFIX + "/mode/set", "FAN")  
 	    	    
-    else:
+    else: #by default, it should be zigbee2mqtt temperature devices
         myjson = json.loads(msg.payload)
         current_temperature = myjson['temperature']
         print ("New temperature for " + msg.topic + " : " + str(current_temperature))

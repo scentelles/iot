@@ -9,7 +9,7 @@ AERO_CONFIGURED 	= 3
 MQTT_SUFFIX_TARGETTEMP = "targettemp"
 MQTT_SUFFIX_AC_STATE = "state"
 MQTT_PREFIX = "AC"
-AC_STATE_OFF = 1
+#AC_STATE_OFF = 1
 
 
 
@@ -29,8 +29,11 @@ class AirCManager:
         self.FSMState = STATE_INIT
         self.ESP_Connected = False
         self.currentACTempTarget = 0
-        self.currentFanSpeed = 0
-        self.pringTime = 0
+        self.currentACMode = AC_MODE_OFF
+        self.currentFanSpeed = 1
+        self.currentGreeAmbiantTemp = 0
+        self.currentTurboForced = False
+       # self.pringTime = 0
 
 
     def initAfterBoot(self):
@@ -84,8 +87,11 @@ class AirCManager:
             self.pingTime = round(time.time() * 1000)
             self.mqttClient.publish("AC/ESP/PING", 1)
             self.pingAck = False
-
-            time.sleep(10)
+            if(self.FSMState != STATE_WAIT_ESP_INIT):
+                time.sleep(10)
+            else:
+                time.sleep(30)
+			    
             if(self.pingAck == False):
                 #self.mqttClient.publish("AC/ERROR", "ESP NOT RESPONDING!!!")
                 self.ESP_Connected = False
@@ -131,7 +137,7 @@ class AirCManager:
 
                 #Check and update first each room demand state
                 for r in self.roomList:
-                    self.roomList[r].updateDemand()
+                    self.roomList[r].updateDemand(self.currentACMode)
 
                 #manage the master channels separately
                 for r in self.roomList:
@@ -148,11 +154,8 @@ class AirCManager:
                     if(self.isAnyAeroAngleStaged() == True):
                         self.roomList[SAFETY_ROOM_CHANNEL].aeroChannel.clearSafetyFlag()
 
-                        self.runAeraulicConfig()
-
-                    if(self.aeraulicState == AERO_CONFIGURED):
-                        if(self.ACRunning == False):
-                            self.turnACOn()
+                    if(self.ACRunning == False):
+                        self.turnACOn()
 
                     self.updateACMastertargetTemp()
 
@@ -176,71 +179,79 @@ class AirCManager:
         demand = False
         for r in self.roomList:
             if (self.roomList[r].isInDemand()):
-                print("found room " + self.roomList[r].name + " in demand : " + str(self.roomList[r].getDeltaTemperature()) + "\n")
+                print("found room " + self.roomList[r].name + " in demand : " + str(self.roomList[r].getDeltaTemperature(self.currentACMode)) + "\n")
                 demand = True
         self.in_demand = demand
         return self.in_demand
 
-    def runAeraulicConfig(self):
-        print("####################### aeroconfigstate : " + str(self.aeraulicState))
-        if(self.aeraulicState != AERO_CONFIG_ONGOING):
-            self.aeraulicState = AERO_CONFIG_ONGOING
-            self.clearAllAeroStaged()
-            self.mqttClient.publish("AC/ESP/SERVO/RUN_ALL", 1)
-          #  while(self.aeraulicState == AERO_CONFIG_ONGOING): 
-          #      print("Waiting for end of Servo moves")
-          #      time.sleep(1)
-			    
-        else: 
-            print("WARNING : AERO config asked while it was already ongoing")
 	      	    
     def getMaxDeltaTemp(self):
        result = 0
        for r in self.roomList:
            thisRoom = self.roomList[r]
            if(thisRoom.isInDemand()):
-               if(thisRoom.getDeltaTemperature() > result):
-                   result = thisRoom.getDeltaTemperature()     
+               if(thisRoom.getDeltaTemperature(self.currentACMode) > result):
+                   result = thisRoom.getDeltaTemperature(self.currentACMode)     
+       print("result - delta temperature : " + str(result))
        return result
 
-    def calculatefanSpeedd(self):
-       totalVolumeInDemand = 0
-       for r in self.roomList:
+    def calculatefanSpeed(self):
+       if (self.currentTurboForced == True):
+           return GREE_FANSPEED_TURBO
+           print("\t\tFORCING TURBO!!!!")
+
+       else:
+         totalVolumeInDemand = 0
+         for r in self.roomList:
            thisRoom = self.roomList[r]
            if(thisRoom.isInDemand()):           
                totalVolumeInDemand += thisRoom.volume
-       print("########## : Volume total : " + str(totalVolumeInDemand))
+         print("########## : Volume total : " + str(totalVolumeInDemand))
  
-       if(totalVolumeInDemand < 26):
-           return GREE_FANSPEED_LOW
-       elif(totalVolumeInDemand < 36):
-           return GREE_FANSPEED_MEDIUMLOW
-       elif(totalVolumeInDemand < 51):
-           return GREE_FANSPEED_MEDIUM
-       elif(totalVolumeInDemand < 80):
-           return GREE_FANSPEED_MEDIUMHIGH
-       else:
-           return GREE_FANSPEED_HIGH	
+         if(totalVolumeInDemand < 26):
+             return GREE_FANSPEED_LOW
+         elif(totalVolumeInDemand < 36):
+             return GREE_FANSPEED_MEDIUMLOW
+         elif(totalVolumeInDemand < 51):
+             return GREE_FANSPEED_MEDIUM
+         elif(totalVolumeInDemand < 80):
+             return GREE_FANSPEED_MEDIUMHIGH
+         else:
+             if(self.getMaxDeltaTemp() < 0.3):
+                 return GREE_FANSPEED_MEDIUM
+             elif(self.getMaxDeltaTemp() < 0.5):
+                 return GREE_FANSPEED_MEDIUMHIGH
+             else:
+                 return GREE_FANSPEED_HIGH
+		 
+
 	   	   
     def turnACOn(self):
         print("############################   AC ON   ##########################")
         self.ACRunning = True
-#        self.mqttClient.publish(MQTT_GREE_PREFIX + "/fanspeed/set", self.calculatefanSpeedd())    
-
+        self.mqttClient.publish(MQTT_GREE_PREFIX + "/fanspeed/set", self.calculatefanSpeed())    
+ #       self.mqttClient.publish(MQTT_GREE_PREFIX + "/power/set", 1)   
+ 
     def turnACOff(self):
         print("############################   AC OFF   ##########################")
         self.ACRunning = False
- #       self.mqttClient.publish(MQTT_GREE_PREFIX + "/fanspeed/set", "low")
+        self.mqttClient.publish(MQTT_GREE_PREFIX + "/fanspeed/set", 1)
  #       self.mqttClient.publish(MQTT_GREE_PREFIX + "/power/set", 0)   
 	
     def updateACMastertargetTemp(self):
         print("############################  SET TEMP  ##########################")
-        newACTempTarget = self.roomList["ETAGE"].temperature - self.getMaxDeltaTemp()
+        print("Current ambiant temp : " + str(self.currentGreeAmbiantTemp))
+        if(self.currentACMode == AC_MODE_COOL):
+          newACTempTarget = int(self.currentGreeAmbiantTemp - self.getMaxDeltaTemp())
+        if(self.currentACMode == AC_MODE_HEAT):
+          newACTempTarget = int(self.currentGreeAmbiantTemp + self.getMaxDeltaTemp())	  
+	  
         if(self.currentACTempTarget != newACTempTarget):
-             self.currentACTempTarget = newACTempTarget
-             self.mqttClient.publish(MQTT_GREE_PREFIX + "/temperature/set", newACTempTarget)   
+           self.currentACTempTarget = newACTempTarget
+           self.mqttClient.publish(MQTT_GREE_PREFIX + "/temperature/set", newACTempTarget)   
         time.sleep(0.2) 
-        newFanSpeed = self.calculatefanSpeedd()
+	  
+        newFanSpeed = self.calculatefanSpeed()
         if(self.currentFanSpeed != newFanSpeed):
              self.currentFanSpeed = newFanSpeed
              self.mqttClient.publish(MQTT_GREE_PREFIX + "/fanspeed/set", newFanSpeed)    

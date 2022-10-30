@@ -25,15 +25,26 @@ class Room:
        self.AC_ON = int(value)
        
            
-   def getDeltaTemperature(self):
-       return self.temperature - self.temperature_target
+   def getDeltaTemperature(self, ACMode):
+       result = 0
+       if(ACMode == AC_MODE_COOL):
+           result = self.temperature - self.temperature_target
+       if(ACMode == AC_MODE_HEAT):
+           result = self.temperature_target - self.temperature	   
        
-   def updateDemand(self): 
+       if(result > 0):
+           return result
+       else:
+           return 0  
+       
+   def updateDemand(self, ACMode): 
        self.in_demand = False
-       if (self.AC_ON == 2):
-           if(self.getDeltaTemperature() > DELTATEMP_THRESHOLD):
-               self.in_demand = True
-       
+
+       if(self.AC_ON == 2):
+         #if(self.getDeltaTemperature(ACMode) > DELTATEMP_THRESHOLD):
+         self.in_demand = True
+       else:
+         self.in_demand = False
        
        if(self.in_demand == True):
            self.aeroChannel.stageOpenChannel()
