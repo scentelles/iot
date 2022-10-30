@@ -15,9 +15,6 @@
 MqttConnection * myMqtt;
 
 
-
-
-
 /************************* WiFi Access Point *********************************/
 
 #define WLAN_SSID       "SFR_34A8"
@@ -138,7 +135,7 @@ void processACMsg(char* topic, byte* payload, unsigned int length)
   else if(String(topic) == "AC/GREE/temperature/set")
   {
       debugPrintln(String("COMMAND : TEMPERATURE SET : " + strPayload).c_str());
-      greeSetTemperature(intPayload * 10) ;
+      greeSetTemperature(intPayload) ;
   }
   else if(String(topic) == "AC/GREE/corestatus/get")
   {
@@ -193,6 +190,7 @@ void initPositions()
     myMqtt->publishValue(String("ESP/SERVO/" + ID_TO_ROOM[servoId] + "/REAL_ANGLE").c_str(), "0");
   }
   // delay(5000);
+  debugPrintln("Starting init position");
   unsigned long   initStartTime = millis();
   while(millis() - initStartTime < NB_SECONDS_FOR_90_DEGREES * 1000)
   {
@@ -208,6 +206,8 @@ void initPositions()
     digitalWrite(ID_TO_SERVOL[SERVO_ETAGE], LOW) ; 
     blinkLED(50);
     myMqtt->loop(); //run mqttloop while initializing servos, as we are out of main loop
+    debugPrint(".");
+    Debug.handle();
   }
   for(int servoId = 0; servoId < NB_SERVO; servoId++)
   {
@@ -372,18 +372,6 @@ void turnOff(int servoId)
      }
 }
 
-bool allServoConfigured()
-{
-    for(int servoId = 0; servoId < NB_SERVO; servoId++)
-  {
-    if(servoRunning[servoId])
-    {
-      return false;
-    }
-  }
-  return true;
-}
-
 int loopCount = 0;
 bool ledHigh = false;
 void loop() {
@@ -400,17 +388,16 @@ void loop() {
     if(ledHigh)
     {
        ledHigh = false;
-    digitalWrite(LED_PIN, LOW);
+       digitalWrite(LED_PIN, LOW);
     }
     else
     {
-             ledHigh = true;
-      digitalWrite(LED_PIN, HIGH);
+       ledHigh = true;
+       digitalWrite(LED_PIN, HIGH);
     }
   }
   
     time_now = millis();
-  // put your main code here, to run repeatedly:
 
   if (!myMqtt->connected()) {
     debugPrintln("MQTT RECONNECT!!!!!!!!!!!!!!!!!!!!!");
@@ -423,16 +410,6 @@ void loop() {
       initBoot();
       bootComplete = true;
     }
-
-  if(endOfConfigRequestedFromHost)
-  {
-     if(allServoConfigured())
-     {
-       endOfConfigRequestedFromHost = false;
-       myMqtt->publishValue("ESP/AERAULIC_STATE", AERO_CONFIGURED);
-       
-     }
-  }
 
   for(int servoId = 0; servoId < NB_SERVO; servoId++)
   {

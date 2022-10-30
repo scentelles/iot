@@ -1,5 +1,5 @@
 #define TELNET_DEBUG
-//#define LOLIN
+#define LOLIN
 
 
 #ifdef LOLIN
@@ -343,16 +343,16 @@ void readModbusSecondaryValues()
       greeCurrentValueNrjSavingHeat = resultCoils[GREE_SWITCH_RW_NRJ_SAVING_HEAT];  
       greeCurrentValueOutdoorFan = resultCoils[GREE_STATUS_R_OUTDOOR_FAN];  
       greeCurrentValueCompressor = resultCoils[GREE_STATUS_R_COMPRESSOR];  
-      greeCurrentValueSystemDefrosting = resultCoils[GREE_STATUS_R_COMPRESSOR];  
+      greeCurrentValueSystemDefrosting = resultCoils[GREE_STATUS_R_SYSTEM_DEFROSTING];  
                         
-      debugPrintln(String("GREE POWER        : " + String(greeCurrentValueTurbo)).c_str());
-      debugPrintln(String("GREE POWER        : " + String(greeCurrentValueSilent)).c_str());
-      debugPrintln(String("GREE POWER        : " + String(greeCurrentValueNrjSaving)).c_str());
-      debugPrintln(String("GREE POWER        : " + String(greeCurrentValueNrjSavingCool)).c_str());
-      debugPrintln(String("GREE POWER        : " + String(greeCurrentValueNrjSavingHeat)).c_str());
-      debugPrintln(String("GREE POWER        : " + String(greeCurrentValueOutdoorFan)).c_str());
-      debugPrintln(String("GREE POWER        : " + String(greeCurrentValueCompressor)).c_str());      
-      debugPrintln(String("GREE POWER        : " + String(greeCurrentValueSystemDefrosting)).c_str());     
+      debugPrintln(String("GREE TURBO        : " + String(greeCurrentValueTurbo)).c_str());
+      debugPrintln(String("GREE Silent        : " + String(greeCurrentValueSilent)).c_str());
+      debugPrintln(String("GREE NRJ SAVING        : " + String(greeCurrentValueNrjSaving)).c_str());
+      debugPrintln(String("GREE NRJ SAVING COOL        : " + String(greeCurrentValueNrjSavingCool)).c_str());
+      debugPrintln(String("GREE NRJ SAVING HEAT        : " + String(greeCurrentValueNrjSavingHeat)).c_str());
+      debugPrintln(String("GREE OUTDOOR FAN        : " + String(greeCurrentValueOutdoorFan)).c_str());
+      debugPrintln(String("GREE COMPRESSOR        : " + String(greeCurrentValueCompressor)).c_str());      
+      debugPrintln(String("GREE DEFROSTING        : " + String(greeCurrentValueSystemDefrosting)).c_str());     
 
       
    }
@@ -387,8 +387,28 @@ void readModbusCoreValues()
       greeCurrentValueTemperature = resultHregs[GREE_HREG_RW_SET_TEMP];
       greeCurrentValueTempLowerLimitNrj = resultHregs[GREE_HREG_RW_TEMP_LOWER_LIMIT_NRJ];
       greeCurrentValueSleepMode = resultHregs[GREE_HREG_RW_SLEEP_MODE];
-      greeCurrentValueOutdoorTemp = resultHregs[GREE_HREG_R_OUTDOOR_TEMP];
-      greeCurrentValueAirReturnTemp = resultHregs[GREE_HREG_R_AIR_RETURN_TEMP];
+   } 
+   delay(50);
+   if (!mb.slave()) 
+   {
+      mb.readHreg(MODBUS_SLAVE_ID, GREE_HREG_R_OUTDOOR_TEMP, resultHregs, 2);
+      while(mb.slave()) { // Check if transaction is active
+      mb.task();
+      delay(10);
+      }
+   
+   greeCurrentValueOutdoorTemp = resultHregs[0];
+   }
+   delay(50);
+   if (!mb.slave()) 
+   {
+      mb.readHreg(MODBUS_SLAVE_ID, GREE_HREG_R_AIR_RETURN_TEMP, resultHregs, 2);
+      while(mb.slave()) { // Check if transaction is active
+      mb.task();
+      delay(10);
+      }
+      greeCurrentValueAirReturnTemp = resultHregs[0];
+   }
 
       debugPrintln(String("GREE POWER        : " + String(greeCurrentValuePower)).c_str());
       debugPrintln(String("GREE AMBIANT TEMP : " + String(greeCurrentValueAmbiantTemp)).c_str());
@@ -400,7 +420,7 @@ void readModbusCoreValues()
       debugPrintln(String("GREE OUTDOOR TEMP  : " + String(greeCurrentValueOutdoorTemp)).c_str());
       debugPrintln(String("GREE AIR RETURN TEMP  : " + String(greeCurrentValueAirReturnTemp)).c_str());
       
-   } 
+   
     
 }
 void sendModbusCoreValues(MqttConnection * myMqtt)
@@ -418,9 +438,10 @@ void sendModbusCoreValues(MqttConnection * myMqtt)
 
 void greeWriteHreg(int reg, int value)
 {
+   uint16_t tempValue = value;
    if (!mb.slave()) 
    {
-      mb.writeHreg(MODBUS_SLAVE_ID, reg, value);
+      mb.writeHreg(MODBUS_SLAVE_ID, reg, &tempValue, 1);
       while(mb.slave()) { // Check if transaction is active
       mb.task();
       delay(10);
