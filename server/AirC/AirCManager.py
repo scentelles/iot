@@ -58,6 +58,22 @@ class AirCManager:
         for r in self.roomList: 
             self.roomList[r].aeroChannel.clearAngledStaged()   
 
+
+#==========================
+# greeStateMonitor thread
+#==========================
+    def greeStateMonitor(self, mqttClient):
+        while(1):
+     
+            print("trigger get core status")
+            self.mqttClient.publish("AC/GREE/corestatus/get", 1)
+
+            time.sleep(5)
+
+            self.mqttClient.publish("AC/GREE/secondarystatus/get", 1)
+
+            time.sleep(5)                
+
 #==========================
 # watchdog thread
 #==========================
@@ -111,7 +127,6 @@ class AirCManager:
                 self.FSMState = STATE_INIT
             else:
                 print("============== STATE_READY") 
-                print ("aircManager loop\n")
                 print ("checking demand\n")
 
                 #Check and update first each room demand state
@@ -122,7 +137,7 @@ class AirCManager:
                 for r in self.roomList:
                     thisMasterChannel = self.roomList[r].aeroChannel.masterChannel
                     if(thisMasterChannel != 0):
-                        print("#NB master open :" + str(thisMasterChannel.nbOpen))
+                        #print("#NB master open :" + str(thisMasterChannel.nbOpen))
                         if(thisMasterChannel.nbOpen != 0):
                             thisMasterChannel.stageOpenChannel()
                         else:
@@ -142,7 +157,7 @@ class AirCManager:
                     self.updateACMastertargetTemp()
 
                 else:
-                    print("No demand")
+                    print("\tNo demand")
                     self.roomList[SAFETY_ROOM_CHANNEL].aeroChannel.safetyOpen()
                     if(self.ACRunning == True):
                         self.turnACOff()          
@@ -151,7 +166,7 @@ class AirCManager:
                     self.roomList[r].dumpValues()
 
 
-        print("looping\n")
+       
         time.sleep(2)
 	
 	

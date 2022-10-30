@@ -68,6 +68,6 @@ GREE_FANSPEED_HIGH = 255
 def getRoomFromAddress(address):
     for name in roomList:
         if(address.find(name) != -1):
-            print("Found room in address : " + name + "\n")
+            #print("Found room in address : " + name + "\n")
             return name
 	
