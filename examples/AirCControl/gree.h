@@ -418,9 +418,10 @@ void sendModbusCoreValues(MqttConnection * myMqtt)
 
 void greeWriteHreg(int reg, int value)
 {
+   uint16_t tempValue = value;
    if (!mb.slave()) 
    {
-      mb.writeHreg(MODBUS_SLAVE_ID, reg, value);
+      mb.writeHreg(MODBUS_SLAVE_ID, reg, &tempValue, 1);
       while(mb.slave()) { // Check if transaction is active
       mb.task();
       delay(10);

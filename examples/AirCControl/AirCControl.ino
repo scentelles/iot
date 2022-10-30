@@ -138,7 +138,7 @@ void processACMsg(char* topic, byte* payload, unsigned int length)
   else if(String(topic) == "AC/GREE/temperature/set")
   {
       debugPrintln(String("COMMAND : TEMPERATURE SET : " + strPayload).c_str());
-      greeSetTemperature(intPayload * 10) ;
+      greeSetTemperature(intPayload) ;
   }
   else if(String(topic) == "AC/GREE/corestatus/get")
   {
