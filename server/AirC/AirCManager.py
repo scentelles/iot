@@ -44,7 +44,7 @@ class AirCManager:
         for r in self.roomList: 
             roomList[r].aeroChannel.init()
             self.mqttClient.publish(MQTT_PREFIX + "/" + r + "/" + MQTT_SUFFIX_AC_STATE, AC_STATE_OFF)   
-            self.mqttClient.publish(MQTT_PREFIX + "/" + r + "/" + MQTT_SUFFIX_TARGETTEMP, 24)  
+            self.mqttClient.publish(MQTT_PREFIX + "/" + r + "/" + MQTT_SUFFIX_TARGETTEMP, DEFAULT_TARGET_TEMP)  
             self.mqttClient.publish("AC/ESP/SERVO/" + r + "/ANGLE", 0) #can be removed when ESP will send live angle
         self.mqttClient.publish("AC/ESP/SERVO/MASTER2/ANGLE", 0) #can be removed when ESP will send live angle
 
@@ -242,10 +242,14 @@ class AirCManager:
         print("############################  SET TEMP  ##########################")
         print("Current ambiant temp : " + str(self.currentGreeAmbiantTemp))
         if(self.currentACMode == AC_MODE_COOL):
-          newACTempTarget = int(self.currentGreeAmbiantTemp - self.getMaxDeltaTemp())
+          newACTempTarget = round(self.currentGreeAmbiantTemp - self.getMaxDeltaTemp())
+          if(self.getMaxDeltaTemp() == 0): #Take into account target has been reached.
+            newACTempTarget = newACTempTarget + 1 
         if(self.currentACMode == AC_MODE_HEAT):
-          newACTempTarget = int(self.currentGreeAmbiantTemp + self.getMaxDeltaTemp())	  
-	  
+          newACTempTarget = round(self.currentGreeAmbiantTemp + self.getMaxDeltaTemp())	  
+          if(self.getMaxDeltaTemp() == 0):  #Take into account target has been reached.
+            newACTempTarget = newACTempTarget - 1
+	    	  
         if(self.currentACTempTarget != newACTempTarget):
            self.currentACTempTarget = newACTempTarget
            self.mqttClient.publish(MQTT_GREE_PREFIX + "/temperature/set", newACTempTarget)   
