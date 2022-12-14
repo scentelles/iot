@@ -81,23 +81,32 @@ class AirCManager:
 # watchdog thread
 #==========================
     def watchdog(self, mqttClient):
+        nbConnectionLosss = 0
         while(1):
-     
-            print("!!!!!!!!!!!!!  PINGING ESP  !!!!!!!!!!!!!")
-            self.pingTime = round(time.time() * 1000)
-            self.mqttClient.publish("AC/ESP/PING", 1)
-            self.pingAck = False
-            if(self.FSMState != STATE_WAIT_ESP_INIT):
+            if(self.FSMState == STATE_WAIT_ESP_INIT):   #timout of ESP init
+                time.sleep(300)
+                if(self.FSMState == STATE_WAIT_ESP_INIT):
+                    self.FSMState =  STATE_INIT #force reset state, network loss has made the ESP unreachable
+		
+            else:     #exlude ping while servos are under init
+                print("!!!!!!!!!!!!!  PINGING ESP  !!!!!!!!!!!!!")
+                self.pingTime = round(time.time() * 1000)
+                self.mqttClient.publish("AC/ESP/PING", 1)
+
+                self.pingAck = False
                 time.sleep(10)
-            else:
-                time.sleep(30)
+
 			    
-            if(self.pingAck == False):
-                #self.mqttClient.publish("AC/ERROR", "ESP NOT RESPONDING!!!")
-                self.ESP_Connected = False
-            else:
-                self.ESP_Connected = True
-                
+                if(self.pingAck == False):
+                    if(self.ESP_Connected != False):
+                      nbConnectionLosss += 1
+                      if(nbConnectionLosss == 3):
+                        self.ESP_Connected = False
+                        self.mqttClient.publish("AC/ERROR", "ESP NOT RESPONDING!!!")
+                        nbConnectionLosss = 0
+                else:
+                    self.ESP_Connected = True
+                    nbConnectionLosss = 0
 		
 		
 #======================
@@ -217,6 +226,8 @@ class AirCManager:
          elif(totalVolumeInDemand < 80):
              return GREE_FANSPEED_MEDIUMHIGH
          else:
+             if(self.getMaxDeltaTemp() < 0.2):
+                 return GREE_FANSPEED_MEDIUMLOW
              if(self.getMaxDeltaTemp() < 0.3):
                  return GREE_FANSPEED_MEDIUM
              elif(self.getMaxDeltaTemp() < 0.5):
