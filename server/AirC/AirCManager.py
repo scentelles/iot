@@ -44,7 +44,7 @@ class AirCManager:
         for r in self.roomList: 
             roomList[r].aeroChannel.init()
             self.mqttClient.publish(MQTT_PREFIX + "/" + r + "/" + MQTT_SUFFIX_AC_STATE, AC_STATE_OFF)   
-            self.mqttClient.publish(MQTT_PREFIX + "/" + r + "/" + MQTT_SUFFIX_TARGETTEMP, 24)  
+            self.mqttClient.publish(MQTT_PREFIX + "/" + r + "/" + MQTT_SUFFIX_TARGETTEMP, DEFAULT_TARGET_TEMP)  
             self.mqttClient.publish("AC/ESP/SERVO/" + r + "/ANGLE", 0) #can be removed when ESP will send live angle
         self.mqttClient.publish("AC/ESP/SERVO/MASTER2/ANGLE", 0) #can be removed when ESP will send live angle
 
@@ -81,23 +81,32 @@ class AirCManager:
 # watchdog thread
 #==========================
     def watchdog(self, mqttClient):
+        nbConnectionLosss = 0
         while(1):
-     
-            print("!!!!!!!!!!!!!  PINGING ESP  !!!!!!!!!!!!!")
-            self.pingTime = round(time.time() * 1000)
-            self.mqttClient.publish("AC/ESP/PING", 1)
-            self.pingAck = False
-            if(self.FSMState != STATE_WAIT_ESP_INIT):
+            if(self.FSMState == STATE_WAIT_ESP_INIT):   #timout of ESP init
+                time.sleep(300)
+                if(self.FSMState == STATE_WAIT_ESP_INIT):
+                    self.FSMState =  STATE_INIT #force reset state, network loss has made the ESP unreachable
+		
+            else:     #exlude ping while servos are under init
+                print("!!!!!!!!!!!!!  PINGING ESP  !!!!!!!!!!!!!")
+                self.pingTime = round(time.time() * 1000)
+                self.mqttClient.publish("AC/ESP/PING", 1)
+
+                self.pingAck = False
                 time.sleep(10)
-            else:
-                time.sleep(30)
+
 			    
-            if(self.pingAck == False):
-                #self.mqttClient.publish("AC/ERROR", "ESP NOT RESPONDING!!!")
-                self.ESP_Connected = False
-            else:
-                self.ESP_Connected = True
-                
+                if(self.pingAck == False):
+                    if(self.ESP_Connected != False):
+                      nbConnectionLosss += 1
+                      if(nbConnectionLosss == 3):
+                        self.ESP_Connected = False
+                        self.mqttClient.publish("AC/ERROR", "ESP NOT RESPONDING!!!")
+                        nbConnectionLosss = 0
+                else:
+                    self.ESP_Connected = True
+                    nbConnectionLosss = 0
 		
 		
 #======================
@@ -217,6 +226,8 @@ class AirCManager:
          elif(totalVolumeInDemand < 80):
              return GREE_FANSPEED_MEDIUMHIGH
          else:
+             if(self.getMaxDeltaTemp() < 0.2):
+                 return GREE_FANSPEED_MEDIUMLOW
              if(self.getMaxDeltaTemp() < 0.3):
                  return GREE_FANSPEED_MEDIUM
              elif(self.getMaxDeltaTemp() < 0.5):
@@ -242,10 +253,14 @@ class AirCManager:
         print("############################  SET TEMP  ##########################")
         print("Current ambiant temp : " + str(self.currentGreeAmbiantTemp))
         if(self.currentACMode == AC_MODE_COOL):
-          newACTempTarget = int(self.currentGreeAmbiantTemp - self.getMaxDeltaTemp())
+          newACTempTarget = round(self.currentGreeAmbiantTemp - self.getMaxDeltaTemp())
+          if(self.getMaxDeltaTemp() == 0): #Take into account target has been reached.
+            newACTempTarget = newACTempTarget + 1 
         if(self.currentACMode == AC_MODE_HEAT):
-          newACTempTarget = int(self.currentGreeAmbiantTemp + self.getMaxDeltaTemp())	  
-	  
+          newACTempTarget = round(self.currentGreeAmbiantTemp + self.getMaxDeltaTemp())	  
+          if(self.getMaxDeltaTemp() == 0):  #Take into account target has been reached.
+            newACTempTarget = newACTempTarget - 1
+	    	  
         if(self.currentACTempTarget != newACTempTarget):
            self.currentACTempTarget = newACTempTarget
            self.mqttClient.publish(MQTT_GREE_PREFIX + "/temperature/set", newACTempTarget)   

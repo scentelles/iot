@@ -1,5 +1,7 @@
 #from AirCManager import *
 
+DEFAULT_TARGET_TEMP = 22
+
 DEBUG = False
 
 pingTime = 0
