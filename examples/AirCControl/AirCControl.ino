@@ -137,6 +137,28 @@ void processACMsg(char* topic, byte* payload, unsigned int length)
       debugPrintln(String("COMMAND : TEMPERATURE SET : " + strPayload).c_str());
       greeSetTemperature(intPayload) ;
   }
+  else if(String(topic) == "AC/GREE/silent/set")
+  {
+      debugPrintln(String("COMMAND : SILENT MODE SET : " + strPayload).c_str());
+      greeSetSilent((bool)intPayload) ;
+  }
+
+
+  else if(String(topic) == "AC/GREE/templowerlimitnrj/set")
+  {
+      debugPrintln(String("COMMAND : NRJSAVING TEMPERATURE LOWER LIMIT NRJ SET : " + strPayload).c_str());
+      greeSetTemperatureLowerLimitNrj(intPayload) ;
+  }
+  else if(String(topic) == "AC/GREE/tempupperlimitnrj/set")
+  {
+      debugPrintln(String("COMMAND : NRJSAVING TEMPERATURE UPPER LIMIT NRJ SET : " + strPayload).c_str());
+      greeSetTemperatureUpperLimitNrj(intPayload) ;
+  }  
+  else if(String(topic) == "AC/GREE/nrjsaving/set")
+  {
+      debugPrintln(String("COMMAND : NRJSAVING SET : " + strPayload).c_str());
+      greeSetNRJSaving((bool)intPayload) ;
+  }
   else if(String(topic) == "AC/GREE/corestatus/get")
   {
       debugPrintln("COMMAND : CORE STATUS GET REQUEST");
@@ -308,6 +330,12 @@ void setup() {
   myMqtt->addSubscription("GREE/corestatus/get"); 
   myMqtt->addSubscription("GREE/secondarystatus/get"); 
   myMqtt->addSubscription("GREE/coils/get"); 
+  myMqtt->addSubscription("GREE/silent/set"); 
+  myMqtt->addSubscription("GREE/templowerlimitnrj/set"); 
+  myMqtt->addSubscription("GREE/tempupperlimitnrj/set"); 
+  myMqtt->addSubscription("GREE/nrjsaving/set"); 
+
+
 
   initCoils();
   initHregs();
@@ -316,6 +344,8 @@ void setup() {
 
   // init remote debug
   Debug.begin("ESP32");  
+
+WiFi.setSleep(false);
   
 }
 
@@ -385,6 +415,9 @@ void loop() {
     loopCount = 0;
     debugPrintln("AC Alive, looping\n");
     Serial.println("Alive, looping\n");
+    unsigned long delta = millis() - time_now;
+    time_now = millis(); 
+    debugPrintln(String(delta).c_str());
     if(ledHigh)
     {
        ledHigh = false;
@@ -397,7 +430,7 @@ void loop() {
     }
   }
   
-    time_now = millis();
+
 
   if (!myMqtt->connected()) {
     debugPrintln("MQTT RECONNECT!!!!!!!!!!!!!!!!!!!!!");
