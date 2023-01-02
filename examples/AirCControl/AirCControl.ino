@@ -62,6 +62,19 @@ bool endOfConfigRequestedFromHost = false;
 
 //============================
 
+bool isAnyServoRunning()
+{
+   for (int i = 0; i < NB_SERVO; i++)
+   {
+       if(servoRunning[i] == true)
+       {
+         return true; 
+       }  
+   }
+   return false;
+}
+
+
 void processACMsg(char* topic, byte* payload, unsigned int length)
 {
  
@@ -161,17 +174,26 @@ void processACMsg(char* topic, byte* payload, unsigned int length)
   }
   else if(String(topic) == "AC/GREE/corestatus/get")
   {
-      debugPrintln("COMMAND : CORE STATUS GET REQUEST");
-      readModbusCoreValues();
-      sendModbusCoreValues(myMqtt);
+      myMqtt->unsubscribe("GREE/corestatus/get"); //unsubscribe to avoid beeing flood
 
+      if(isAnyServoRunning() == false)
+      {
+        debugPrintln("COMMAND : CORE STATUS GET REQUEST");
+        readModbusCoreValues();
+        sendModbusCoreValues(myMqtt);
+      }
+      myMqtt->subscribe("GREE/corestatus/get"); 
   }
   else if(String(topic) == "AC/GREE/secondarystatus/get")
   {
-      debugPrintln("COMMAND : SECONDARY STATUS GET REQUEST");
-      readModbusSecondaryValues();
-      sendModbusSecondaryValues(myMqtt);
-
+      myMqtt->unsubscribe("GREE/secondarystatus/get"); //unsubscribe to avoid beeing flood
+      if(isAnyServoRunning() == false)
+      {
+        debugPrintln("COMMAND : SECONDARY STATUS GET REQUEST");
+        readModbusSecondaryValues();
+        sendModbusSecondaryValues(myMqtt);
+      }
+      myMqtt->unsubscribe("GREE/secondarystatus/get"); 
   }
   else if(String(topic) == "AC/GREE/coils/get")
   {
