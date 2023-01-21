@@ -67,15 +67,15 @@ class AirCManager:
 #==========================
     def greeStateMonitor(self, mqttClient):
         while(1):
-     
-            print("trigger get core status")
-            self.mqttClient.publish("AC/GREE/corestatus/get", 1)
+            if(self.FSMState != STATE_WAIT_ESP_INIT):
+              print("trigger get core status")
+              self.mqttClient.publish("AC/GREE/corestatus/get", 1)
 
-            time.sleep(5)
+              time.sleep(5)
 
-            self.mqttClient.publish("AC/GREE/secondarystatus/get", 1)
+              self.mqttClient.publish("AC/GREE/secondarystatus/get", 1)
 
-            time.sleep(5)                
+              time.sleep(5)                
 
 #==========================
 # watchdog thread
