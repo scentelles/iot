@@ -62,6 +62,19 @@ bool endOfConfigRequestedFromHost = false;
 
 //============================
 
+bool isAnyServoRunning()
+{
+   for (int i = 0; i < NB_SERVO; i++)
+   {
+       if(servoRunning[i] == true)
+       {
+         return true; 
+       }  
+   }
+   return false;
+}
+
+
 void processACMsg(char* topic, byte* payload, unsigned int length)
 {
  
@@ -137,19 +150,50 @@ void processACMsg(char* topic, byte* payload, unsigned int length)
       debugPrintln(String("COMMAND : TEMPERATURE SET : " + strPayload).c_str());
       greeSetTemperature(intPayload) ;
   }
+  else if(String(topic) == "AC/GREE/silent/set")
+  {
+      debugPrintln(String("COMMAND : SILENT MODE SET : " + strPayload).c_str());
+      greeSetSilent((bool)intPayload) ;
+  }
+
+
+  else if(String(topic) == "AC/GREE/templowerlimitnrj/set")
+  {
+      debugPrintln(String("COMMAND : NRJSAVING TEMPERATURE LOWER LIMIT NRJ SET : " + strPayload).c_str());
+      greeSetTemperatureLowerLimitNrj(intPayload) ;
+  }
+  else if(String(topic) == "AC/GREE/tempupperlimitnrj/set")
+  {
+      debugPrintln(String("COMMAND : NRJSAVING TEMPERATURE UPPER LIMIT NRJ SET : " + strPayload).c_str());
+      greeSetTemperatureUpperLimitNrj(intPayload) ;
+  }  
+  else if(String(topic) == "AC/GREE/nrjsaving/set")
+  {
+      debugPrintln(String("COMMAND : NRJSAVING SET : " + strPayload).c_str());
+      greeSetNRJSaving((bool)intPayload) ;
+  }
   else if(String(topic) == "AC/GREE/corestatus/get")
   {
-      debugPrintln("COMMAND : CORE STATUS GET REQUEST");
-      readModbusCoreValues();
-      sendModbusCoreValues(myMqtt);
+      myMqtt->unsubscribe("GREE/corestatus/get"); //unsubscribe to avoid beeing flood
 
+      if(isAnyServoRunning() == false)
+      {
+        debugPrintln("COMMAND : CORE STATUS GET REQUEST");
+        readModbusCoreValues();
+        sendModbusCoreValues(myMqtt);
+      }
+      myMqtt->subscribe("GREE/corestatus/get"); 
   }
   else if(String(topic) == "AC/GREE/secondarystatus/get")
   {
-      debugPrintln("COMMAND : SECONDARY STATUS GET REQUEST");
-      readModbusSecondaryValues();
-      sendModbusSecondaryValues(myMqtt);
-
+      myMqtt->unsubscribe("GREE/secondarystatus/get"); //unsubscribe to avoid beeing flood
+      if(isAnyServoRunning() == false)
+      {
+        debugPrintln("COMMAND : SECONDARY STATUS GET REQUEST");
+        readModbusSecondaryValues();
+        sendModbusSecondaryValues(myMqtt);
+      }
+      myMqtt->unsubscribe("GREE/secondarystatus/get"); 
   }
   else if(String(topic) == "AC/GREE/coils/get")
   {
@@ -308,6 +352,12 @@ void setup() {
   myMqtt->addSubscription("GREE/corestatus/get"); 
   myMqtt->addSubscription("GREE/secondarystatus/get"); 
   myMqtt->addSubscription("GREE/coils/get"); 
+  myMqtt->addSubscription("GREE/silent/set"); 
+  myMqtt->addSubscription("GREE/templowerlimitnrj/set"); 
+  myMqtt->addSubscription("GREE/tempupperlimitnrj/set"); 
+  myMqtt->addSubscription("GREE/nrjsaving/set"); 
+
+
 
   initCoils();
   initHregs();
@@ -316,6 +366,8 @@ void setup() {
 
   // init remote debug
   Debug.begin("ESP32");  
+
+WiFi.setSleep(false);
   
 }
 
@@ -385,6 +437,9 @@ void loop() {
     loopCount = 0;
     debugPrintln("AC Alive, looping\n");
     Serial.println("Alive, looping\n");
+    unsigned long delta = millis() - time_now;
+    time_now = millis(); 
+    debugPrintln(String(delta).c_str());
     if(ledHigh)
     {
        ledHigh = false;
@@ -397,7 +452,7 @@ void loop() {
     }
   }
   
-    time_now = millis();
+
 
   if (!myMqtt->connected()) {
     debugPrintln("MQTT RECONNECT!!!!!!!!!!!!!!!!!!!!!");

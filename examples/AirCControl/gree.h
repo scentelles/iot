@@ -31,10 +31,21 @@ int greeCurrentValueMode = 0;
 int greeCurrentValueFanSpeed = 0;      
 int greeCurrentValueTemperature = 0;
 int greeCurrentValueTempLowerLimitNrj = 0;
+int greeCurrentValueTempUpperLimitNrj = 0;
 int greeCurrentValueSleepMode = 0;
 int greeCurrentValueOutdoorTemp = 0;
 int greeCurrentValueAirReturnTemp = 0;
 
+int greeCurrentValuePowerNew = 0;
+int greeCurrentValueAmbiantTempNew = 0;      
+int greeCurrentValueModeNew = 0;      
+int greeCurrentValueFanSpeedNew = 0;      
+int greeCurrentValueTemperatureNew = 0;
+int greeCurrentValueTempLowerLimitNrjNew = 0;
+int greeCurrentValueTempUpperLimitNrjNew = 0;
+int greeCurrentValueSleepModeNew = 0;
+int greeCurrentValueOutdoorTempNew = 0;
+int greeCurrentValueAirReturnTempNew = 0;
 
 bool greeCurrentValueTurbo = false;      
 bool greeCurrentValueSilent = false;  
@@ -45,6 +56,14 @@ bool greeCurrentValueOutdoorFan = false;
 bool greeCurrentValueCompressor = false;    
 bool greeCurrentValueSystemDefrosting = false;  
 
+bool greeCurrentValueTurboNew = false;      
+bool greeCurrentValueSilentNew = false;  
+bool greeCurrentValueNrjSavingNew = false;  
+bool greeCurrentValueNrjSavingCoolNew = false;  
+bool greeCurrentValueNrjSavingHeatNew = false;  
+bool greeCurrentValueOutdoorFanNew = false;   
+bool greeCurrentValueCompressorNew = false;    
+bool greeCurrentValueSystemDefrostingNew = false;  
 
 //================== HREGS ====================
 #define GREE_HREG_RW_ONOFF 2
@@ -69,7 +88,7 @@ bool greeCurrentValueSystemDefrosting = false;
 #define GREE_HREG_RW_SLEEP_MODE         25
 #define GREE_HREG_RW_CLEAN_FUNCTION     34
 #define GREE_HREG_RW_TEMP_LOWER_LIMIT_NRJ  35
-#define GREE_HREG_RW_SLEEP_MODE            36
+#define GREE_HREG_RW_TEMP_UPPER_LIMIT_NRJ  36  //mismatch with sleep
 #define GREE_HREG_R_AMBIANT_TEMP_SELECT   39
 #define GREE_AMBIANT_AIR_RETURN    1
 #define GREE_AMBIANT_WIRED_CONTROLLER  2
@@ -101,7 +120,7 @@ void initHregs()
   hregs[25] = "GREE_HREG_RW_SLEEP_MODE";
   hregs[34] = "GREE_HREG_RW_CLEAN_FUNCTION";
   hregs[35] = "GREE_HREG_RW_TEMP_LOWER_LIMIT_NRJ";
-  hregs[36] = "GREE_HREG_RW_SLEEP_MODE";   //seems there is a mismatch in the doc. between sleep mode and fresh air valve
+  hregs[36] = "GREE_HREG_RW_TEMP_UPPER_LIMIT_NRJ";   //seems there is a mismatch in the doc. between sleep mode and fresh air valve
   hregs[39] = "GREE_HREG_R_AMBIANT_TEMP_SELECT"; 
   hregs[49] = "GREE_HREG_R_OUTDOOR_TEMP";
   hregs[77] = "GREE_HREG_R_DRED";
@@ -283,7 +302,7 @@ void debugPrintln(const char * msg)
 #ifdef TELNET_DEBUG    
     Debug.println(F(msg));
 #else
-    debugPrintln(msg);
+    Serial.println(msg);
 #endif
 }
 void debugPrint(const char * msg)
@@ -291,7 +310,7 @@ void debugPrint(const char * msg)
 #ifdef TELNET_DEBUG    
     Debug.print(F(msg));
 #else
-    debugPrint(msg);
+    Serial.print(msg);
 #endif
 }
 
@@ -336,23 +355,23 @@ void readModbusSecondaryValues()
       delay(10);
       }
 
-      greeCurrentValueTurbo = resultCoils[GREE_SWITCH_RW_TURBO];      
-      greeCurrentValueSilent = resultCoils[GREE_SWITCH_RW_SILENT];   
+      greeCurrentValueTurboNew = resultCoils[GREE_SWITCH_RW_TURBO];      
+      greeCurrentValueSilentNew = resultCoils[GREE_SWITCH_RW_SILENT];   
       greeCurrentValueNrjSaving = resultCoils[GREE_SWITCH_RW_NRJ_SAVING];  
-      greeCurrentValueNrjSavingCool = resultCoils[GREE_SWITCH_RW_NRJ_SAVING_COOL];  
-      greeCurrentValueNrjSavingHeat = resultCoils[GREE_SWITCH_RW_NRJ_SAVING_HEAT];  
-      greeCurrentValueOutdoorFan = resultCoils[GREE_STATUS_R_OUTDOOR_FAN];  
-      greeCurrentValueCompressor = resultCoils[GREE_STATUS_R_COMPRESSOR];  
-      greeCurrentValueSystemDefrosting = resultCoils[GREE_STATUS_R_SYSTEM_DEFROSTING];  
+    //  greeCurrentValueNrjSavingCool = resultCoils[GREE_SWITCH_RW_NRJ_SAVING_COOL];  
+    //  greeCurrentValueNrjSavingHeat = resultCoils[GREE_SWITCH_RW_NRJ_SAVING_HEAT];  
+      greeCurrentValueOutdoorFanNew = resultCoils[GREE_STATUS_R_OUTDOOR_FAN];  
+      greeCurrentValueCompressorNew = resultCoils[GREE_STATUS_R_COMPRESSOR];  
+      greeCurrentValueSystemDefrostingNew = resultCoils[GREE_STATUS_R_SYSTEM_DEFROSTING];  
                         
-      debugPrintln(String("GREE TURBO        : " + String(greeCurrentValueTurbo)).c_str());
-      debugPrintln(String("GREE Silent        : " + String(greeCurrentValueSilent)).c_str());
-      debugPrintln(String("GREE NRJ SAVING        : " + String(greeCurrentValueNrjSaving)).c_str());
-      debugPrintln(String("GREE NRJ SAVING COOL        : " + String(greeCurrentValueNrjSavingCool)).c_str());
-      debugPrintln(String("GREE NRJ SAVING HEAT        : " + String(greeCurrentValueNrjSavingHeat)).c_str());
-      debugPrintln(String("GREE OUTDOOR FAN        : " + String(greeCurrentValueOutdoorFan)).c_str());
-      debugPrintln(String("GREE COMPRESSOR        : " + String(greeCurrentValueCompressor)).c_str());      
-      debugPrintln(String("GREE DEFROSTING        : " + String(greeCurrentValueSystemDefrosting)).c_str());     
+      debugPrintln(String("GREE TURBO        : " + String(greeCurrentValueTurboNew)).c_str());
+      debugPrintln(String("GREE Silent        : " + String(greeCurrentValueSilentNew)).c_str());
+      debugPrintln(String("GREE NRJ SAVING        : " + String(greeCurrentValueNrjSavingNew)).c_str());
+    //  debugPrintln(String("GREE NRJ SAVING COOL        : " + String(greeCurrentValueNrjSavingCool)).c_str());
+    //  debugPrintln(String("GREE NRJ SAVING HEAT        : " + String(greeCurrentValueNrjSavingHeat)).c_str());
+      debugPrintln(String("GREE OUTDOOR FAN        : " + String(greeCurrentValueOutdoorFanNew)).c_str());
+      debugPrintln(String("GREE COMPRESSOR        : " + String(greeCurrentValueCompressorNew)).c_str());      
+      debugPrintln(String("GREE DEFROSTING        : " + String(greeCurrentValueSystemDefrostingNew)).c_str());     
 
       
    }
@@ -360,14 +379,40 @@ void readModbusSecondaryValues()
 
 void sendModbusSecondaryValues(MqttConnection * myMqtt)
 {
-      myMqtt->publishValue("GREE/secondarystatus/turbo", String(greeCurrentValueTurbo).c_str());
-      myMqtt->publishValue("GREE/secondarystatus/silent", String(greeCurrentValueSilent).c_str());
-      myMqtt->publishValue("GREE/secondarystatus/nrjsaving", String(greeCurrentValueNrjSaving).c_str());
-      myMqtt->publishValue("GREE/secondarystatus/nrjsavingcool", String(greeCurrentValueNrjSavingCool).c_str());
-      myMqtt->publishValue("GREE/secondarystatus/nrjsavingheat", String(greeCurrentValueNrjSavingHeat).c_str());
-      myMqtt->publishValue("GREE/secondarystatus/outdoorfan", String(greeCurrentValueOutdoorFan).c_str());
-      myMqtt->publishValue("GREE/secondarystatus/compressor", String(greeCurrentValueCompressor).c_str());
-      myMqtt->publishValue("GREE/secondarystatus/systemdefrosting", String(greeCurrentValueSystemDefrosting).c_str());
+      if(greeCurrentValueTurboNew != greeCurrentValueTurbo)
+      {
+        greeCurrentValueTurbo = greeCurrentValueTurboNew;
+        myMqtt->publishValue("GREE/secondarystatus/turbo", String(greeCurrentValueTurbo).c_str());
+      }
+      if(greeCurrentValueSilentNew != greeCurrentValueSilent)
+      {
+        greeCurrentValueSilent = greeCurrentValueSilentNew;
+        myMqtt->publishValue("GREE/secondarystatus/silent", String(greeCurrentValueSilent).c_str());
+      }
+      if(greeCurrentValueNrjSavingNew != greeCurrentValueNrjSaving)
+      {
+        greeCurrentValueNrjSaving = greeCurrentValueNrjSavingNew;
+        myMqtt->publishValue("GREE/secondarystatus/nrjsaving", String(greeCurrentValueNrjSaving).c_str());
+      }
+      if(greeCurrentValueOutdoorFanNew != greeCurrentValueOutdoorFan)
+      {
+        greeCurrentValueOutdoorFan = greeCurrentValueOutdoorFanNew;
+        myMqtt->publishValue("GREE/secondarystatus/outdoorfan", String(greeCurrentValueOutdoorFan).c_str());
+      }
+     // myMqtt->publishValue("GREE/secondarystatus/nrjsavingcool", String(greeCurrentValueNrjSavingCool).c_str());
+     // myMqtt->publishValue("GREE/secondarystatus/nrjsavingheat", String(greeCurrentValueNrjSavingHeat).c_str());
+
+      if(greeCurrentValueCompressorNew != greeCurrentValueCompressor)
+      {
+        greeCurrentValueCompressor = greeCurrentValueCompressorNew;
+        myMqtt->publishValue("GREE/secondarystatus/compressor", String(greeCurrentValueCompressor).c_str());
+      }
+      if(greeCurrentValueSystemDefrostingNew != greeCurrentValueSystemDefrosting)
+      {
+        greeCurrentValueSystemDefrosting = greeCurrentValueSystemDefrostingNew;
+        myMqtt->publishValue("GREE/secondarystatus/systemdefrosting", String(greeCurrentValueSystemDefrosting).c_str());
+      }
+
 }
 
 void readModbusCoreValues()
@@ -380,13 +425,12 @@ void readModbusCoreValues()
       delay(10);
       }
 
-      greeCurrentValuePower = resultHregs[GREE_HREG_RW_ONOFF];
-      greeCurrentValueAmbiantTemp = resultHregs[GREE_HREG_R_AMBIANT_TEMP];      
-      greeCurrentValueMode = resultHregs[GREE_HREG_RW_SET_MODE];      
-      greeCurrentValueFanSpeed = resultHregs[GREE_HREG_RW_SET_FAN_SPEED];      
-      greeCurrentValueTemperature = resultHregs[GREE_HREG_RW_SET_TEMP];
-      greeCurrentValueTempLowerLimitNrj = resultHregs[GREE_HREG_RW_TEMP_LOWER_LIMIT_NRJ];
-      greeCurrentValueSleepMode = resultHregs[GREE_HREG_RW_SLEEP_MODE];
+      greeCurrentValuePowerNew = resultHregs[GREE_HREG_RW_ONOFF];
+      greeCurrentValueAmbiantTempNew = resultHregs[GREE_HREG_R_AMBIANT_TEMP];      
+      greeCurrentValueModeNew = resultHregs[GREE_HREG_RW_SET_MODE];      
+      greeCurrentValueFanSpeedNew = resultHregs[GREE_HREG_RW_SET_FAN_SPEED];      
+      greeCurrentValueTemperatureNew = resultHregs[GREE_HREG_RW_SET_TEMP];
+      greeCurrentValueSleepModeNew = resultHregs[GREE_HREG_RW_SLEEP_MODE];
    } 
    delay(50);
    if (!mb.slave()) 
@@ -397,7 +441,7 @@ void readModbusCoreValues()
       delay(10);
       }
    
-   greeCurrentValueOutdoorTemp = resultHregs[0];
+      greeCurrentValueOutdoorTempNew = resultHregs[0];
    }
    delay(50);
    if (!mb.slave()) 
@@ -407,33 +451,86 @@ void readModbusCoreValues()
       mb.task();
       delay(10);
       }
-      greeCurrentValueAirReturnTemp = resultHregs[0];
+      greeCurrentValueAirReturnTempNew = resultHregs[0];
    }
+  /* if (!mb.slave()) 
+   {      
+      mb.readHreg(MODBUS_SLAVE_ID, GREE_HREG_RW_TEMP_LOWER_LIMIT_NRJ, resultHregs, 2);
+      while(mb.slave()) { // Check if transaction is active
+      mb.task();
+      delay(10);
+      }
+      greeCurrentValueTempLowerLimitNrj = resultHregs[0];
+   }
+   if (!mb.slave()) 
+   {      
+      mb.readHreg(MODBUS_SLAVE_ID, GREE_HREG_RW_TEMP_UPPER_LIMIT_NRJ, resultHregs, 2);
+      while(mb.slave()) { // Check if transaction is active
+      mb.task();
+      delay(10);
+      }
+      greeCurrentValueTempUpperLimitNrj = resultHregs[0];
+   }*/
 
-      debugPrintln(String("GREE POWER        : " + String(greeCurrentValuePower)).c_str());
-      debugPrintln(String("GREE AMBIANT TEMP : " + String(greeCurrentValueAmbiantTemp)).c_str());
-      debugPrintln(String("GREE MODE         : " + String(greeCurrentValueMode)).c_str());
-      debugPrintln(String("GREE FAN SPEED    : " + String(greeCurrentValueFanSpeed)).c_str());   
-      debugPrintln(String("GREE TEMPERATURE  : " + String(greeCurrentValueTemperature)).c_str());
-      debugPrintln(String("GREE TEMP LOWER LIMIT NRJ  : " + String(greeCurrentValueTempLowerLimitNrj)).c_str());      
-      debugPrintln(String("GREE SLEEP MODE  : " + String(greeCurrentValueSleepMode)).c_str());   
-      debugPrintln(String("GREE OUTDOOR TEMP  : " + String(greeCurrentValueOutdoorTemp)).c_str());
-      debugPrintln(String("GREE AIR RETURN TEMP  : " + String(greeCurrentValueAirReturnTemp)).c_str());
+      debugPrintln(String("GREE POWER        : " + String(greeCurrentValuePowerNew)).c_str());
+      debugPrintln(String("GREE AMBIANT TEMP : " + String(greeCurrentValueAmbiantTempNew)).c_str());
+      debugPrintln(String("GREE MODE         : " + String(greeCurrentValueModeNew)).c_str());
+      debugPrintln(String("GREE FAN SPEED    : " + String(greeCurrentValueFanSpeedNew)).c_str());   
+      debugPrintln(String("GREE TEMPERATURE  : " + String(greeCurrentValueTemperatureNew)).c_str());
+    //  debugPrintln(String("GREE TEMP LOWER LIMIT NRJ  : " + String(greeCurrentValueTempLowerLimitNrj)).c_str());      
+    //  debugPrintln(String("GREE TEMP UPPER LIMIT NRJ  : " + String(greeCurrentValueTempUpperLimitNrj)).c_str()); 
+      debugPrintln(String("GREE SLEEP MODE  : " + String(greeCurrentValueSleepModeNew)).c_str());   
+      debugPrintln(String("GREE OUTDOOR TEMP  : " + String(greeCurrentValueOutdoorTempNew)).c_str());
+      debugPrintln(String("GREE AIR RETURN TEMP  : " + String(greeCurrentValueAirReturnTempNew)).c_str());
       
    
     
 }
 void sendModbusCoreValues(MqttConnection * myMqtt)
 {
-      myMqtt->publishValue("GREE/corestatus/power", String(greeCurrentValuePower).c_str());
-      myMqtt->publishValue("GREE/corestatus/ambianttemp", String(greeCurrentValueAmbiantTemp).c_str());
-      myMqtt->publishValue("GREE/corestatus/mode", String(greeCurrentValueMode).c_str());
-      myMqtt->publishValue("GREE/corestatus/fanspeed", String(greeCurrentValueFanSpeed).c_str());
-      myMqtt->publishValue("GREE/corestatus/temperature", String(greeCurrentValueTemperature).c_str());
-      myMqtt->publishValue("GREE/corestatus/templowerlimitnrj", String(greeCurrentValueTempLowerLimitNrj).c_str());
-      myMqtt->publishValue("GREE/corestatus/sleepmode", String(greeCurrentValueSleepMode).c_str());
-      myMqtt->publishValue("GREE/corestatus/outdoortemp", String(greeCurrentValueOutdoorTemp).c_str());
-      myMqtt->publishValue("GREE/corestatus/airreturntemp", String(greeCurrentValueAirReturnTemp).c_str());      
+      if(greeCurrentValuePowerNew != greeCurrentValuePower)
+      {
+        greeCurrentValuePower = greeCurrentValuePowerNew;
+        myMqtt->publishValue("GREE/corestatus/power", String(greeCurrentValuePower).c_str());
+      }
+      if(greeCurrentValueAmbiantTempNew != greeCurrentValueAmbiantTemp)
+      {
+        greeCurrentValueAmbiantTemp = greeCurrentValueAmbiantTempNew;      
+        myMqtt->publishValue("GREE/corestatus/ambianttemp", String(greeCurrentValueAmbiantTemp).c_str());
+      }
+      if(greeCurrentValueModeNew != greeCurrentValueMode)
+      {
+        greeCurrentValueMode = greeCurrentValueModeNew;      
+        myMqtt->publishValue("GREE/corestatus/mode", String(greeCurrentValueMode).c_str());
+      }
+      if(greeCurrentValueFanSpeedNew != greeCurrentValueFanSpeed)
+      {
+        greeCurrentValueFanSpeed = greeCurrentValueFanSpeedNew;      
+        myMqtt->publishValue("GREE/corestatus/fanspeed", String(greeCurrentValueFanSpeed).c_str());
+      }
+      if(greeCurrentValueTemperatureNew != greeCurrentValueTemperature)
+      {
+        greeCurrentValueTemperature = greeCurrentValueTemperatureNew;      
+        myMqtt->publishValue("GREE/corestatus/temperature", String(greeCurrentValueTemperature).c_str());
+      }
+    //  myMqtt->publishValue("GREE/corestatus/templowerlimitnrj", String(greeCurrentValueTempLowerLimitNrj).c_str());
+    //  myMqtt->publishValue("GREE/corestatus/tempupperlimitnrj", String(greeCurrentValueTempUpperLimitNrj).c_str());
+      if(greeCurrentValueSleepModeNew != greeCurrentValueSleepMode)
+      {
+        greeCurrentValueSleepMode = greeCurrentValueSleepModeNew;      
+        myMqtt->publishValue("GREE/corestatus/sleepmode", String(greeCurrentValueSleepMode).c_str());
+      }
+      if(greeCurrentValueOutdoorTempNew != greeCurrentValueOutdoorTemp)
+      {
+        greeCurrentValueOutdoorTemp = greeCurrentValueOutdoorTempNew;      
+        myMqtt->publishValue("GREE/corestatus/outdoortemp", String(greeCurrentValueOutdoorTemp).c_str());
+      }
+      if(greeCurrentValueAirReturnTempNew != greeCurrentValueAirReturnTemp)
+      {
+        greeCurrentValueAirReturnTemp = greeCurrentValueAirReturnTempNew;      
+        myMqtt->publishValue("GREE/corestatus/airreturntemp", String(greeCurrentValueAirReturnTemp).c_str());
+      }
+ 
 }
 
 void greeWriteHreg(int reg, int value)
@@ -448,17 +545,20 @@ void greeWriteHreg(int reg, int value)
     }
    } 
 }
+
 void greeWriteCoil(int coil, bool value)
 {
+   bool tempValue = value;
    if (!mb.slave()) 
    {
-      mb.writeCoil(MODBUS_SLAVE_ID, coil, value);
+      mb.writeCoil(MODBUS_SLAVE_ID, coil, &tempValue, 1);
       while(mb.slave()) { // Check if transaction is active
       mb.task();
       delay(10);
     }
    } 
 }
+
 void greeSetPower(bool value)
 {
     if(value == true)
@@ -483,6 +583,14 @@ void greeSetTemperature(int value)
 {
     greeWriteHreg(GREE_HREG_RW_SET_TEMP, value);
 }
+void greeSetTemperatureLowerLimitNrj(int value)
+{
+    greeWriteHreg(GREE_HREG_RW_TEMP_LOWER_LIMIT_NRJ, value);
+}
+void greeSetTemperatureUpperLimitNrj(int value)
+{
+    greeWriteHreg(GREE_HREG_RW_TEMP_UPPER_LIMIT_NRJ, value);
+}
 void greeSetTurbo(bool value)
 {
     greeWriteCoil(GREE_SWITCH_RW_TURBO, value);
@@ -490,4 +598,10 @@ void greeSetTurbo(bool value)
 void greeSetSilent(bool value)
 {
     greeWriteCoil(GREE_SWITCH_RW_SILENT, value);
+}
+void greeSetNRJSaving(bool value)
+{
+    greeWriteCoil(GREE_SWITCH_RW_NRJ_SAVING, value);
+    greeWriteCoil(GREE_SWITCH_RW_NRJ_SAVING_COOL, value);
+    greeWriteCoil(GREE_SWITCH_RW_NRJ_SAVING_HEAT, value);    
 }
