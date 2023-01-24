@@ -33,20 +33,26 @@ class AirCManager:
         self.currentFanSpeed = 1
         self.currentGreeAmbiantTemp = 0
         self.currentTurboForced = False
-       # self.pringTime = 0
+        self.sumOfAngles =0
+        self.safetyAngle = 0
+        self.masterAlreadyForced = False
 
 
     def initAfterBoot(self):
 
 
         self.mqttClient.publish("AC/ERROR", "INITIALIZING CONNECTION")
+	
+        self.mqttClient.publish(MQTT_AC_TURBO_FORCED, 1)
+
+
 
         for r in self.roomList: 
             roomList[r].aeroChannel.init()
             self.mqttClient.publish(MQTT_PREFIX + "/" + r + "/" + MQTT_SUFFIX_AC_STATE, AC_STATE_OFF)   
             self.mqttClient.publish(MQTT_PREFIX + "/" + r + "/" + MQTT_SUFFIX_TARGETTEMP, DEFAULT_TARGET_TEMP)  
-            self.mqttClient.publish("AC/ESP/SERVO/" + r + "/ANGLE", 0) #can be removed when ESP will send live angle
-        self.mqttClient.publish("AC/ESP/SERVO/MASTER2/ANGLE", 0) #can be removed when ESP will send live angle
+            self.mqttClient.publish("AC/ESP/SERVO/" + r + "/ANGLE", 0) 
+        self.mqttClient.publish("AC/ESP/SERVO/MASTER2/ANGLE", 0) 
 
         self.mqttClient.publish("AC/ESP/SERVO/RESET", 1)
 	    
@@ -135,8 +141,9 @@ class AirCManager:
             print("============== WAIT_ESP_INIT") 
             if(self.ESP_Connected == False):
                  self.FSMState = STATE_INIT
-          		
-			
+            	
+            #self.FSMState = STATE_READY #remove	
+	     		
         if(self.FSMState == STATE_READY):
             if(self.ESP_Connected == False):
                 self.FSMState = STATE_INIT
@@ -144,39 +151,60 @@ class AirCManager:
                 print("============== STATE_READY") 
                 print ("checking demand\n")
 
+                if(self.masterAlreadyForced == False):
+                    self.mqttClient.publish("AC/ESP/SERVO/MASTER2/ANGLE", 90) #always open master at init
+                    self.masterAlreadyForced = True
+
                 #Check and update first each room demand state
                 for r in self.roomList:
                     self.roomList[r].updateDemand(self.currentACMode)
 
+	    
                 #manage the master channels separately
                 for r in self.roomList:
                     thisMasterChannel = self.roomList[r].aeroChannel.masterChannel
                     if(thisMasterChannel != 0):
                         #print("#NB master open :" + str(thisMasterChannel.nbOpen))
                         if(thisMasterChannel.nbOpen != 0):
-                            thisMasterChannel.stageOpenChannel()
+                            thisMasterChannel.stageOpenChannel(MAX_OPEN_ANGLE)
                         else:
-                            thisMasterChannel.stageCloseChannel()		    
+                           # thisMasterChannel.stageCloseChannel()
+                            thisMasterChannel.stageOpenChannel(MAX_OPEN_ANGLE)	#finally we want it always opened!	    
 
                 if(self.isACInDemand() == True):
                     print("At least one room is in demand")
                     if(self.isAnyAeroAngleStaged() == True):
-                        self.roomList[SAFETY_ROOM_CHANNEL].aeroChannel.clearSafetyFlag()
+                        self.roomList[SAFETY_ROOM_CHANNEL].aeroChannel.resetSafetyAngle()
 
                     if(self.ACRunning == False):
                         self.turnACOn()
 
                     self.updateACMastertargetTemp()
 
+                    #check if a partial safety opening must be trigered
+                    self.sumOfAngles = 0
+                    for r in self.roomList:
+                        if self.roomList[r].isInDemand():
+                            self.sumOfAngles += self.roomList[r].aeroChannel.getCurrentAngle()
+                    tempSafetyAngle = MAX_OPEN_ANGLE - self.sumOfAngles
+                    if(tempSafetyAngle > 0):
+                        self.safetyAngle = min(tempSafetyAngle, MAX_OPEN_ANGLE)
+                        self.roomList[SAFETY_ROOM_CHANNEL].aeroChannel.setSafetyAngle(self.safetyAngle)
+                    else:
+                        self.roomList[SAFETY_ROOM_CHANNEL].aeroChannel.resetSafetyAngle()
                 else:
                     print("\tNo demand")
-                    self.roomList[SAFETY_ROOM_CHANNEL].aeroChannel.safetyOpen()
+                    self.roomList[SAFETY_ROOM_CHANNEL].aeroChannel.setSafetyAngle(MAX_OPEN_ANGLE)
                     if(self.ACRunning == True):
                         self.turnACOff()          
 
+
+
+
+
                 for r in self.roomList:
                     self.roomList[r].dumpValues()
-
+                    self.roomList[r].aeroChannel.flushStagedAngle()
 
        
         time.sleep(2)
@@ -226,14 +254,12 @@ class AirCManager:
          elif(totalVolumeInDemand < 80):
              return GREE_FANSPEED_MEDIUMHIGH
          else:
-             if(self.getMaxDeltaTemp() < 0.2):
-                 return GREE_FANSPEED_MEDIUMLOW
-             if(self.getMaxDeltaTemp() < 0.3):
-                 return GREE_FANSPEED_MEDIUM
-             elif(self.getMaxDeltaTemp() < 0.5):
-                 return GREE_FANSPEED_MEDIUMHIGH
-             else:
+             if(self.getMaxDeltaTemp() < 0.5):
+                 return GREE_FANSPEED_MEDIUM_HIGH
+             elif(self.getMaxDeltaTemp() < 0.8):
                  return GREE_FANSPEED_HIGH
+             else:
+                 return GREE_FANSPEED_TURBO
 		 
 
 	   	   

@@ -79,6 +79,7 @@ def on_message(client, userdata, msg):
         if(myAirCManager.FSMState == STATE_WAIT_ESP_INIT):
             print("ESP32 connection OK\n")
             mqttClient.publish("AC/ERROR", "ESP CONNECTION OK")
+            mqttClient.publish("AC/ESP/SERVO/MASTER2/ANGLE", 90) #Keep master always opened	    
             myAirCManager.FSMState = STATE_READY
         else:
             print("ERROR : INIT done received while Host not waiting for itESP32 connection OK\n")
@@ -100,10 +101,10 @@ def on_message(client, userdata, msg):
 
     elif(msg.topic == MQTT_AC_TURBO_FORCED):
         if(int(msg.payload) == 2):
-            print("Received TURBO FOCED 2")
+            print("Received TURBO FORCED 2")
             myAirCManager.currentTurboForced = True
         else:
-            print("Received TURBO FOCED SOMETHING ELSE THAN 2")
+            print("Received TURBO FORCED SOMETHING ELSE THAN 2")
             myAirCManager.currentTurboForced = False           
 
     elif(msg.topic == MQTT_AC_MODE):

@@ -13,6 +13,7 @@ class Room:
        self.temperature_target = 0
        self.AC_ON = 1
        self.in_demand = False 
+       self.tempAngle = 0
        self.aeroChannel = AeroChannel(mqttClient, masterChannel, name)   
           
    def setTemperature(self, value):
@@ -36,6 +37,22 @@ class Room:
            return result
        else:
            return 0  
+  
+   def getAngleRequired(self, deltaTemp):
+       result = 0
+       print("\rRoom delta temp : " + str(deltaTemp))
+       if (deltaTemp < 0.1):
+           result = 0
+       elif (deltaTemp < 0.3):
+           result = 25
+       elif (deltaTemp < 0.5):       
+           result = 45
+       elif (deltaTemp < 1):    
+           result = 75
+       else :
+           result = 90
+       print("Angle required for room " + self.name + " in demand : " + str(result))
+       return result
        
    def updateDemand(self, ACMode): 
        self.in_demand = False
@@ -47,9 +64,11 @@ class Room:
          self.in_demand = False
        
        if(self.in_demand == True):
-           self.aeroChannel.stageOpenChannel()
+           self.tempAngle = self.getAngleRequired(self.getDeltaTemperature(ACMode))
+           self.aeroChannel.stageOpenChannel(self.tempAngle)
        else:
-           self.aeroChannel.stageCloseChannel()
+          # if(self.aeroChannel.getSafetyFlag() == False):
+               self.aeroChannel.stageCloseChannel()
 	   
    def isInDemand(self):	       
        return self.in_demand 
