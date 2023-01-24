@@ -240,14 +240,14 @@ void initPositions()
   {
     for(int servoId = 0; servoId < NB_SERVO; servoId++)
     {
-      if(servoId != SERVO_ETAGE)
+      if(servoId != SERVO_SAFETY_CHANNEL)
       {
         digitalWrite(ID_TO_SERVOR[servoId], LOW);
         digitalWrite(ID_TO_SERVOL[servoId], HIGH) ; 
       }
     }
-    digitalWrite(ID_TO_SERVOR[SERVO_ETAGE], HIGH);
-    digitalWrite(ID_TO_SERVOL[SERVO_ETAGE], LOW) ; 
+    digitalWrite(ID_TO_SERVOR[SERVO_SAFETY_CHANNEL], HIGH);
+    digitalWrite(ID_TO_SERVOL[SERVO_SAFETY_CHANNEL], LOW) ; 
     blinkLED(50);
     myMqtt->loop(); //run mqttloop while initializing servos, as we are out of main loop
     debugPrint(".");
@@ -255,11 +255,11 @@ void initPositions()
   }
   for(int servoId = 0; servoId < NB_SERVO; servoId++)
   {
-    if(servoId != SERVO_ETAGE)
-    {
+    //if(servoId != SERVO_ETAGE)
+    //{
       digitalWrite(ID_TO_SERVOR[servoId], LOW);
       digitalWrite(ID_TO_SERVOL[servoId], LOW) ; 
-    }
+    //}
   }
         
   debugPrintln("Servo init Done");
