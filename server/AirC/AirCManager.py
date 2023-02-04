@@ -161,15 +161,15 @@ class AirCManager:
 
 	    
                 #manage the master channels separately
-                for r in self.roomList:
-                    thisMasterChannel = self.roomList[r].aeroChannel.masterChannel
-                    if(thisMasterChannel != 0):
+            #    for r in self.roomList:
+            #        thisMasterChannel = self.roomList[r].aeroChannel.masterChannel
+            #        if(thisMasterChannel != 0):
                         #print("#NB master open :" + str(thisMasterChannel.nbOpen))
-                        if(thisMasterChannel.nbOpen != 0):
-                            thisMasterChannel.stageOpenChannel(MAX_OPEN_ANGLE)
-                        else:
+             #           if(thisMasterChannel.nbOpen != 0):
+             #               thisMasterChannel.stageOpenChannel(MAX_OPEN_ANGLE)
+            #            else:
                            # thisMasterChannel.stageCloseChannel()
-                            thisMasterChannel.stageOpenChannel(MAX_OPEN_ANGLE)	#finally we want it always opened!	    
+             #               thisMasterChannel.stageOpenChannel(MAX_OPEN_ANGLE)	#finally we want it always opened!	    
 
                 if(self.isACInDemand() == True):
                     print("At least one room is in demand")
@@ -255,7 +255,7 @@ class AirCManager:
              return GREE_FANSPEED_MEDIUMHIGH
          else:
              if(self.getMaxDeltaTemp() < 0.5):
-                 return GREE_FANSPEED_MEDIUM_HIGH
+                 return GREE_FANSPEED_MEDIUMHIGH
              elif(self.getMaxDeltaTemp() < 0.8):
                  return GREE_FANSPEED_HIGH
              else:
