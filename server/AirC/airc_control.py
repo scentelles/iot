@@ -64,7 +64,7 @@ def on_message(client, userdata, msg):
         roomList[room].setAC_ON(msg.payload)
 	
     elif(msg.topic.find(MQTT_SUFFIX_TARGETTEMP) != -1):
-        print( "target temp change received")
+        print( "target temp change received : " + str(msg.payload))
         room = getRoomFromAddress(msg.topic)
         roomList[room].setTemperatureTarget(msg.payload)
 
@@ -117,12 +117,12 @@ def on_message(client, userdata, msg):
         if(msg.payload == MQTT_AC_MODE_HEAT):
             print("AC MODE HEAT")
             myAirCManager.currentACMode = AC_MODE_HEAT
-            mqttClient.publish(MQTT_GREE_PREFIX + "/power/set", 1)   
+         #   mqttClient.publish(MQTT_GREE_PREFIX + "/power/set", 1)   
             mqttClient.publish(MQTT_GREE_PREFIX + "/mode/set", "HEAT")  
         if(msg.payload == MQTT_AC_MODE_COOL):
             print("AC MODE COOL")
             myAirCManager.currentACMode = AC_MODE_COOL
-            mqttClient.publish(MQTT_GREE_PREFIX + "/power/set", 1)   
+        #    mqttClient.publish(MQTT_GREE_PREFIX + "/power/set", 1)   
             mqttClient.publish(MQTT_GREE_PREFIX + "/mode/set", "COOL")  
         if(msg.payload == MQTT_AC_MODE_FAN):
             print("AC MODE FAN")

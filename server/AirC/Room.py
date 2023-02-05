@@ -1,7 +1,7 @@
 from AirCDefines import *
 from AeroChannel import *
 
-DELTATEMP_THRESHOLD = 0.3
+#DELTATEMP_THRESHOLD = 0.3
 
 
 class Room:
@@ -9,8 +9,8 @@ class Room:
    def __init__(self, mqttClient, name, volume, masterChannel):
        self.name = name
        self.volume = volume
-       self.temperature = 0
-       self.temperature_target = 0
+       self.temperature = 0.0
+       self.temperature_target = 0.0
        self.AC_ON = 1
        self.in_demand = False 
        self.tempAngle = 0
@@ -27,12 +27,12 @@ class Room:
        
            
    def getDeltaTemperature(self, ACMode):
-       result = 0
+       result = 0.0
        if(ACMode == AC_MODE_COOL):
            result = round(self.temperature) - self.temperature_target
        if(ACMode == AC_MODE_HEAT):
-           result = round(self.temperature_target) - self.temperature	   
-       
+         #  result = round(self.temperature_target) - self.temperature	   
+           result = self.temperature_target - self.temperature	       
        if(result > 0):
            return result
        else:
@@ -58,10 +58,10 @@ class Room:
        self.in_demand = False
 
        if(self.AC_ON == 2):
-         #if(self.getDeltaTemperature(ACMode) > DELTATEMP_THRESHOLD):
-         self.in_demand = True
-       else:
-         self.in_demand = False
+         if(self.getDeltaTemperature(ACMode) !=  0):
+           self.in_demand = True
+         else:
+           self.in_demand = False
        
        if(self.in_demand == True):
            self.tempAngle = self.getAngleRequired(self.getDeltaTemperature(ACMode))

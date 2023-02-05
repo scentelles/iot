@@ -1,6 +1,8 @@
 import time
 from Room import *
 from AirCDefines import *
+import time
+
 
 AERO_INIT		= 0
 AERO_IDLE 		= 1
@@ -23,6 +25,8 @@ class AirCManager:
         self.in_demand = False
         self.aeraulicState = AERO_INIT
         self.ACRunning = False
+        self.lastACSwitchOnTime = 0
+        self.lastACSwitchOffTime = 0
         self.mqttClient = mqttClient
         self.initDone = False
         self.pingAck = False
@@ -127,7 +131,7 @@ class AirCManager:
         if(self.FSMState == STATE_INIT):
             print("============== STATE_INIT") 
             if(self.ESP_Connected == True):
-                self.turnACOff()
+                #self.turnACOff()
                 self.initAfterBoot()
                 self.FSMState = STATE_WAIT_ESP_INIT
                 self.mqttClient.publish(MQTT_ESP_HOST_INIT_REQUEST, 1)
@@ -223,7 +227,7 @@ class AirCManager:
 
 	      	    
     def getMaxDeltaTemp(self):
-       result = 0
+       result = 0.0
        for r in self.roomList:
            thisRoom = self.roomList[r]
            if(thisRoom.isInDemand()):
@@ -264,16 +268,38 @@ class AirCManager:
 
 	   	   
     def turnACOn(self):
-        print("############################   AC ON   ##########################")
-        self.ACRunning = True
-        self.mqttClient.publish(MQTT_GREE_PREFIX + "/fanspeed/set", self.calculatefanSpeed())    
- #       self.mqttClient.publish(MQTT_GREE_PREFIX + "/power/set", 1)   
+        print("AC ON request")
+        if(self.currentACMode != AC_MODE_OFF):
+
+            tempTime = time.time()
+
+            if(tempTime - self.lastACSwitchOffTime > SWITCH_ON_TIMER_LIMIT):
+                print("############################   AC ON   ##########################")
+                self.lastACSwitchOnTime = tempTime
+                self.ACRunning = True
+                self.mqttClient.publish(MQTT_GREE_PREFIX + "/fanspeed/set", self.calculatefanSpeed())    
+                self.mqttClient.publish(MQTT_GREE_PREFIX + "/power/set", 1)   
+            else:
+                print("Skipping AC ON to preserve compressor - too early power request")
+                print(str(tempTime - self.lastACSwitchOffTime))
+        else:
+            print("Warning - AC mode seems inconsistent")
+
  
     def turnACOff(self):
-        print("############################   AC OFF   ##########################")
-        self.ACRunning = False
-        self.mqttClient.publish(MQTT_GREE_PREFIX + "/fanspeed/set", 1)
- #       self.mqttClient.publish(MQTT_GREE_PREFIX + "/power/set", 0)   
+        tempTime = time.time()
+
+        print("AC OFF request")
+        if(tempTime - self.lastACSwitchOnTime > SWITCH_OFF_TIMER_LIMIT):
+            print("############################   AC OFF   ##########################")
+            self.lastACSwitchOffTime = tempTime
+            self.ACRunning = False
+            self.mqttClient.publish(MQTT_GREE_PREFIX + "/fanspeed/set", 1)
+            self.mqttClient.publish(MQTT_GREE_PREFIX + "/power/set", 0)   
+        else:
+            print("Skipping AC OFF to preserve compressor - too early power request")
+            print(str(tempTime - self.lastACSwitchOnTime))
+
 	
     def updateACMastertargetTemp(self):
         print("############################  SET TEMP  ##########################")

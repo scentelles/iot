@@ -2,6 +2,8 @@
 
 DEFAULT_TARGET_TEMP = 22
 
+SWITCH_ON_TIMER_LIMIT = 1200 #20 minutes
+SWITCH_OFF_TIMER_LIMIT = 300 #5 minutes
 DEBUG = False
 
 pingTime = 0
@@ -22,8 +24,8 @@ ETAGE = "ETAGE"
 
 AC_MODE_OFF  = 1
 AC_MODE_COOL = 2
-AC_MODE_HEAT = 1
-AC_MODE_FAN  = 1
+AC_MODE_HEAT = 3
+AC_MODE_FAN  = 4
 
 
 roomList = {}
