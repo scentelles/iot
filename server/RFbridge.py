@@ -121,6 +121,24 @@ def on_message(client, userdata, msg):
         getImageFromCamera1();
         time.sleep(1)
         client.publish("Door/dorian", payload='Portail Dorian', qos=1, retain=False)
+
+#Elisa
+    if msg.payload == b'16736113':
+        print("Remote 3 A trigger received")
+        print("trigger external door")
+        client.publish("Door/open", payload='12', qos=1, retain=False)
+	#getImageFromCamera2();
+        getImageFromCamera1();
+        time.sleep(1)
+        client.publish("Door/dorian", payload='Portail Elisa', qos=1, retain=False)
+
+    if msg.payload == b'16736114':
+        print("Remote 1 C trigger received")
+        print("trigger external door")
+        client.publish("Door/open", payload='2', qos=1, retain=False)
+        getImageFromCamera1();
+        time.sleep(1)
+        client.publish("Door/dorian", payload='Portail Elisa', qos=1, retain=False)
 	
 #Gael
     if msg.payload == b'14993777':
