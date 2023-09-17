@@ -17,8 +17,8 @@ MqttConnection * myMqtt;
 
 /************************* WiFi Access Point *********************************/
 
-#define WLAN_SSID       "SFR_34A8"
-#define WLAN_PASS       "ab4ingrograstanstorc"
+#define WLAN_SSID       "Wifi_Home_Ext"
+#define WLAN_PASS       "060877040178"
 
 
 #define SENSOR_ID "AC"

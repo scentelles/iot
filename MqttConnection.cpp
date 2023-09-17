@@ -72,6 +72,10 @@ void MqttConnection::wifiSetup(const char* ssid, const char* pass) {
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
 
+  WiFi.setAutoReconnect(true);
+  WiFi.persistent(true);
+
+
 }
 
 void MqttConnection::registerCustomProcessing(void (*myFunc)(char* topic, byte* payload, unsigned int length) )
@@ -128,6 +132,13 @@ void MqttConnection::subscribeAll()
 }
 
 void MqttConnection::reconnect() {
+	
+	//first, check Wifi is connected
+  //while (WiFi.status() != WL_CONNECTED) {
+   // Serial.print('.');
+    //delay(1000);
+ // }
+  
   // Loop until we're reconnected
   while (!connected()) {
     Serial.print("Attempting MQTT connection...");
