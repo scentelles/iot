@@ -40,6 +40,7 @@ class AirCManager:
         self.sumOfAngles =0
         self.safetyAngle = 0
         self.masterAlreadyForced = False
+        self.HAStarted = False
 
 
     def initAfterBoot(self):
@@ -110,7 +111,7 @@ class AirCManager:
                 if(self.pingAck == False):
                     if(self.ESP_Connected != False):
                       nbConnectionLosss += 1
-                      if(nbConnectionLosss == 3):
+                      if(nbConnectionLosss == 5):
                         self.ESP_Connected = False
                         self.mqttClient.publish("AC/ERROR", "ESP NOT RESPONDING!!!")
                         nbConnectionLosss = 0
@@ -123,8 +124,11 @@ class AirCManager:
 #Main Loop	
 #======================		
     def aircManagerLoop(self, mqttClient):
-      #while(1):
-      #  time.sleep(2)     
+      #wait for HA to start      
+      while(self.HAStarted == False):
+        print("waiting for HA to start\n")
+        time.sleep(2) 
+	      
       while(1):
         print("DEBUG"  + str(self.FSMState) + " CONNECTED : " + str(self.ESP_Connected) )
 	

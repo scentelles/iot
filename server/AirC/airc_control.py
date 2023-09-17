@@ -51,7 +51,8 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe(MQTT_AC_MODE)
     client.subscribe(MQTT_ESP_GREE_AMBIANT_TEMP)    
     client.subscribe(MQTT_AC_TURBO_FORCED)  
-    
+    client.subscribe(MQTT_HA_STARTED) 
+        
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
 
@@ -90,7 +91,15 @@ def on_message(client, userdata, msg):
             mqttClient.publish("AC/ERROR", "ESP CONNECTION OK")
             myAirCManager.FSMState = STATE_READY
 
+    elif(msg.topic == MQTT_HA_STARTED):
+        print("Home assistant (re)started \n")
+        time.sleep(4) #do not reinit immediately. default values are beeing set just after HA start finalized
+        if(myAirCManager.HAStarted == False):
+            myAirCManager.HAStarted = True        
+        else:
+            myAirCManager.FSMState = STATE_INIT
 
+	
     elif(msg.topic == MQTT_ESP_PONG):
         myAirCManager.pingAck = True
         print("ping time : " + str((round(time.time() *1000) - myAirCManager.pingTime)))
