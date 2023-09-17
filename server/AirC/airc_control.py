@@ -56,8 +56,8 @@ def on_connect(client, userdata, flags, rc):
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
 
-    print((msg.topic+":"+str(msg.payload)+":\n"))
-    print (msg.payload)
+    #print((msg.topic+":"+str(msg.payload)+":\n"))
+    #print (msg.payload)
     
     if(msg.topic.find(MQTT_SUFFIX_AC_STATE) != -1):
         print( "AC state change received")
@@ -102,10 +102,13 @@ def on_message(client, userdata, msg):
 	
     elif(msg.topic == MQTT_ESP_PONG):
         myAirCManager.pingAck = True
-        print("ping time : " + str((round(time.time() *1000) - myAirCManager.pingTime)))
-
+        tempPingTime = round(time.time() *1000) - myAirCManager.pingTime
+        print(Fore.RED + "ping time : " + str(tempPingTime))
+        print(Style.RESET_ALL)
+        mqttClient.publish("AC/ESP/PINGDELAY", tempPingTime)
+	
     elif(msg.topic == MQTT_ESP_GREE_AMBIANT_TEMP):
-        print("received GREE ambiant temp : " + str(msg.payload) +" after /10 : " +  str(int(msg.payload) / 10)  )
+        print("received GREE ambiant temp : " + str(int(msg.payload) / 10)  )
         myAirCManager.currentGreeAmbiantTemp = float(msg.payload) / 10
 
     elif(msg.topic == MQTT_AC_TURBO_FORCED):

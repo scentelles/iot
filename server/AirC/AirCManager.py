@@ -2,7 +2,7 @@ import time
 from Room import *
 from AirCDefines import *
 import time
-
+from colorama import Fore, Back, Style
 
 AERO_INIT		= 0
 AERO_IDLE 		= 1
@@ -79,7 +79,6 @@ class AirCManager:
     def greeStateMonitor(self, mqttClient):
         while(1):
             if(self.FSMState != STATE_WAIT_ESP_INIT):
-              print("trigger get core status")
               self.mqttClient.publish("AC/GREE/corestatus/get", 1)
 
               time.sleep(5)
@@ -95,7 +94,7 @@ class AirCManager:
         nbConnectionLosss = 0
         while(1):
             if(self.FSMState == STATE_WAIT_ESP_INIT):   #timout of ESP init
-                time.sleep(300)
+                time.sleep(120) #Wait for all servos t o be initialized
                 if(self.FSMState == STATE_WAIT_ESP_INIT):
                     self.FSMState =  STATE_INIT #force reset state, network loss has made the ESP unreachable
 		
@@ -130,8 +129,6 @@ class AirCManager:
         time.sleep(2) 
 	      
       while(1):
-        print("DEBUG"  + str(self.FSMState) + " CONNECTED : " + str(self.ESP_Connected) )
-	
         if(self.FSMState == STATE_INIT):
             print("============== STATE_INIT") 
             if(self.ESP_Connected == True):
@@ -157,8 +154,6 @@ class AirCManager:
                 self.FSMState = STATE_INIT
             else:
                 print("============== STATE_READY") 
-                print ("checking demand\n")
-
                 if(self.masterAlreadyForced == False):
                     self.mqttClient.publish("AC/ESP/SERVO/MASTER2/ANGLE", 90) #always open master at init
                     self.masterAlreadyForced = True
@@ -237,7 +232,7 @@ class AirCManager:
            if(thisRoom.isInDemand()):
                if(thisRoom.getDeltaTemperature(self.currentACMode) > result):
                    result = thisRoom.getDeltaTemperature(self.currentACMode)     
-       print("result - delta temperature : " + str(result))
+
        return result
 
     def calculatefanSpeed(self):
@@ -308,13 +303,15 @@ class AirCManager:
     def updateACMastertargetTemp(self):
         print("############################  SET TEMP  ##########################")
         print("Current ambiant temp : " + str(self.currentGreeAmbiantTemp))
+        tempMaxDeltaTemp = self.getMaxDeltaTemp()
+        print("Max Delta temp : " + str(tempMaxDeltaTemp))
         if(self.currentACMode == AC_MODE_COOL):
-          newACTempTarget = round(self.currentGreeAmbiantTemp - self.getMaxDeltaTemp())
-          if(self.getMaxDeltaTemp() == 0): #Take into account target has been reached.
+          newACTempTarget = round(self.currentGreeAmbiantTemp - tempMaxDeltaTemp)
+          if(tempMaxDeltaTemp == 0): #Take into account target has been reached.
             newACTempTarget = newACTempTarget + 1 
         if(self.currentACMode == AC_MODE_HEAT):
-          newACTempTarget = round(self.currentGreeAmbiantTemp + self.getMaxDeltaTemp())	  
-          if(self.getMaxDeltaTemp() == 0):  #Take into account target has been reached.
+          newACTempTarget = round(self.currentGreeAmbiantTemp + tempMaxDeltaTemp)	  
+          if(tempMaxDeltaTemp == 0):  #Take into account target has been reached.
             newACTempTarget = newACTempTarget - 1
 	    	  
         if(self.currentACTempTarget != newACTempTarget):
