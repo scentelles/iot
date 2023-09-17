@@ -52,9 +52,9 @@ def on_message(client, userdata, msg):
            msg_at_boot = 0
            return
         if msg.payload == b'2':
-           print("trigger external door")
+           print("trigger external door 2")
            GPIO.output(door1Pin, GPIO.LOW)
-           time.sleep(0.5)
+           time.sleep(1)
            GPIO.output(door1Pin, GPIO.HIGH)
         if msg.payload == b'3':
            print("trigger auto close external door")
@@ -67,12 +67,12 @@ def on_message(client, userdata, msg):
            GPIO.output(door1Pin, GPIO.HIGH)	
            client.publish("Door/open", payload=0, qos=0, retain=True)
         if msg.payload == b'12':
-           print("trigger external door")
+           print("trigger external door 12")
            GPIO.output(door2Pin, GPIO.LOW)
            time.sleep(1)
            GPIO.output(door2Pin, GPIO.HIGH)
         if msg.payload == b'13':
-           print("trigger auto close external door")
+           print("trigger auto close external door 13")
            GPIO.output(door2Pin, GPIO.LOW)
            time.sleep(1)
            GPIO.output(door2Pin, GPIO.HIGH)
