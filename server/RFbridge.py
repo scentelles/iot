@@ -7,10 +7,12 @@ import socket
 
 import paho.mqtt.client as mqtt
 
-import RPi.GPIO as GPIO
+#import RPi.GPIO as GPIO
 import sys
 
 import smtplib
+
+MQTT_IP_ADDRESS = "192.168.1.27"
 
 #SWITCH 1 (Door)
 #home/OpenMQTTGateway/SRFBtoMQTT 3151714
@@ -192,7 +194,7 @@ client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
 
-client.connect("localhost")
+client.connect(MQTT_IP_ADDRESS)
 
 # Blocking call that processes network traffic, dispatches callbacks and
 # handles reconnecting.
