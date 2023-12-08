@@ -27,7 +27,7 @@ door2Pin.direction = digitalio.Direction.OUTPUT
 
 
 # Initial state :
-door1Pin.value = False
+door1Pin.value = True
 door2Pin.value = False
 
 msg_at_boot = 1
@@ -58,33 +58,33 @@ def on_message(client, userdata, msg):
            return
         if msg.payload == b'2':
            print("trigger external door 2")
-           door1Pin.value = True
-           time.sleep(1)
            door1Pin.value = False
+           time.sleep(1)
+           door1Pin.value = True
         if msg.payload == b'3':
            print("trigger auto close external door")
-           door1Pin.value = True
-           time.sleep(1)
            door1Pin.value = False
-           time.sleep(60)
-           door1Pin.value = True
            time.sleep(1)
-           door1Pin.value = False	
+           door1Pin.value = True
+           time.sleep(60)
+           door1Pin.value = False
+           time.sleep(1)
+           door1Pin.value = True	
            client.publish("Door/open", payload=0, qos=0, retain=True)
         if msg.payload == b'12':
            print("trigger external door 12")
-           door2Pin.value = True
-           time.sleep(1)
            door2Pin.value = False
+           time.sleep(1)
+           door2Pin.value = True
         if msg.payload == b'13':
            print("trigger auto close external door 13")
-           door2Pin.value = True
-           time.sleep(1)
            door2Pin.value = False
-           time.sleep(60)
-           door2Pin.value = True
            time.sleep(1)
-           door2Pin.value = False    
+           door2Pin.value = True
+           time.sleep(60)
+           door2Pin.value = False
+           time.sleep(1)
+           door2Pin.value = True    
            client.publish("Door/open", payload=0, qos=0, retain=True)
 
     
