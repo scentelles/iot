@@ -55,7 +55,7 @@ MQTT_ADDRESS[CHAMBRE1]  = "zigbee2mqtt/ZB_temp_Ch1"
 MQTT_ADDRESS[CHAMBRE2] 	= "zigbee2mqtt/ZB_temp_Ch2"
 MQTT_ADDRESS[CHAMBRE3] 	= "zigbee2mqtt/ZB_temp_Ch3"
 MQTT_ADDRESS[DREAMROOM] = "zigbee2mqtt/ZB_temp_DR" 
-MQTT_ADDRESS[SALON] 	= "zigbee2mqtt/ZB_temp_salon"
+MQTT_ADDRESS[SALON] 	= "zigbee2mqtt/ZB_temp_Salon"
 MQTT_ADDRESS[ETAGE] 	= "zigbee2mqtt/ZB_temp_Etage"
 
 MQTT_TO_ROOM = {}
