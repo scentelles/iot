@@ -32,6 +32,9 @@ door2Pin.value = False
 
 msg_at_boot = 1
 
+PAYLOAD_DORIAN = b'24'
+PAYLOAD_ELISA = b'8'
+
 class MyException(Exception):
     pass
 
@@ -56,6 +59,20 @@ def on_message(client, userdata, msg):
            print("skipping first message at boot")
            msg_at_boot = 0
            return
+        if msg.payload == PAYLOAD_ELISA:
+           print("trigger Elisa door")
+           door2Pin.value = False
+           time.sleep(1)
+           door2Pin.value = True
+           client.publish("Door/elisa", payload=0, qos=0, retain=False)
+        if msg.payload == PAYLOAD_DORIAN:
+           print("trigger Elisa door")
+           door2Pin.value = False
+           time.sleep(1)
+           door2Pin.value = True
+           client.publish("Door/dorian", payload=0, qos=0, retain=False)
+
+
         if msg.payload == b'2':
            print("trigger external door 2")
            door1Pin.value = False
