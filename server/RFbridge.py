@@ -7,10 +7,18 @@ import socket
 
 import paho.mqtt.client as mqtt
 
-import RPi.GPIO as GPIO
+#import RPi.GPIO as GPIO
 import sys
 
 import smtplib
+
+from paramiko import SSHClient
+from scp import SCPClient
+
+
+
+
+MQTT_IP_ADDRESS = "192.168.1.27"
 
 #SWITCH 1 (Door)
 #home/OpenMQTTGateway/SRFBtoMQTT 3151714
@@ -58,30 +66,35 @@ except:
 
 
 def getImageFromCamera1():
-    if os.path.exists("/home/pi/camera1.jpg"):
-        os.remove("/home/pi/camera1.jpg")
+    if os.path.exists("/home/iot/camera1.jpg"):
+        os.remove("/home/iot/camera1.jpg")
     #url = "http://192.168.2.122:554/snapshot"
     #url = "http://192.168.2.80:554/snapshot"
     url = "http://192.168.2.29/snap.jpg?usr=admin&pwd=admin"
     try:
         r = requests.get(url, verify = False, timeout=2)
-        open("/home/pi/camera1.jpg", 'w+b').write(r.content)
+        open("/home/iot/camera1.jpg", 'w+b').write(r.content)
     except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as error:
         print("Time out! or connection error :")
         print(error)
-        os.system('cp /home/pi/camera_disconnected.jpg /home/pi/camera1.jpg')
+        #os.system('cp /home/iot/camera_disconnected.jpg /home/pi/camera1.jpg')
 	
+    ssh = SSHClient()
+    ssh.load_system_host_keys()
+    ssh.connect("192.168.1.114", username="node", password="totototo", look_for_keys=False)
+    SCPClient(ssh.get_transport()).put("/home/iot/camera1.jpg", remote_path="/media/camera/camera1.jpg")
+
 def getImageFromCamera2():
-    if os.path.exists("/home/pi/camera2.jpg"):
-        os.remove("/home/pi/camera2.jpg")
+    if os.path.exists("/home/iot/camera2.jpg"):
+        os.remove("/home/iot/camera2.jpg")
     url = "http://192.168.2.13/snap.jpg?usr=admin&pwd=admin"
     try:
         r = requests.get(url, verify = False, timeout=2)
-        open("/home/pi/camera2.jpg", 'w+b').write(r.content)
+        open("/home/iot/camera2.jpg", 'w+b').write(r.content)
     except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as error:
         print("Time out! or connection error :")
         print(error)
-        os.system('cp /home/pi/camera_disconnected.jpg /home/pi/camera2.jpg')
+        os.system('cp /home/iot/camera_disconnected.jpg /home/pi/camera2.jpg')
 
 
 # The callback for when the client receives a CONNACK response from the server.
@@ -93,12 +106,23 @@ def on_connect(client, userdata, flags, rc):
 
     client.subscribe("home/OpenMQTTGateway/SRFBtoMQTT")
     
+    client.subscribe("Door/open")
+    
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
     global deck_state
     print((msg.topic+" "+str(msg.payload)+"\n"))
-#    if msg.topic == "Door/open":
-#        print msg.topic
+    if msg.topic == "Door/open":
+        print (msg.topic)
+        print ("payload : ")
+        print (msg.payload)
+        if msg.payload != b'0':
+            getImageFromCamera1()
+
+        
+        return 
+
+
     if msg.payload == b'3151714':
         print("Switch 1 trigger received")
         print("trigger external door")
@@ -192,7 +216,7 @@ client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
 
-client.connect("localhost")
+client.connect(MQTT_IP_ADDRESS)
 
 # Blocking call that processes network traffic, dispatches callbacks and
 # handles reconnecting.

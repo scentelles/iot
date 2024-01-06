@@ -51,12 +51,13 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe(MQTT_AC_MODE)
     client.subscribe(MQTT_ESP_GREE_AMBIANT_TEMP)    
     client.subscribe(MQTT_AC_TURBO_FORCED)  
-    
+    client.subscribe(MQTT_HA_STARTED) 
+        
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
 
-    print((msg.topic+":"+str(msg.payload)+":\n"))
-    print (msg.payload)
+    #print((msg.topic+":"+str(msg.payload)+":\n"))
+    #print (msg.payload)
     
     if(msg.topic.find(MQTT_SUFFIX_AC_STATE) != -1):
         print( "AC state change received")
@@ -90,13 +91,24 @@ def on_message(client, userdata, msg):
             mqttClient.publish("AC/ERROR", "ESP CONNECTION OK")
             myAirCManager.FSMState = STATE_READY
 
+    elif(msg.topic == MQTT_HA_STARTED):
+        print("Home assistant (re)started \n")
+        time.sleep(4) #do not reinit immediately. default values are beeing set just after HA start finalized
+        if(myAirCManager.HAStarted == False):
+            myAirCManager.HAStarted = True        
+        else:
+            myAirCManager.FSMState = STATE_INIT
 
+	
     elif(msg.topic == MQTT_ESP_PONG):
         myAirCManager.pingAck = True
-        print("ping time : " + str((round(time.time() *1000) - myAirCManager.pingTime)))
-
+        tempPingTime = round(time.time() *1000) - myAirCManager.pingTime
+        print(Fore.RED + "ping time : " + str(tempPingTime))
+        print(Style.RESET_ALL)
+        mqttClient.publish("AC/ESP/PINGDELAY", tempPingTime)
+	
     elif(msg.topic == MQTT_ESP_GREE_AMBIANT_TEMP):
-        print("received GREE ambiant temp : " + str(msg.payload) +" after /10 : " +  str(int(msg.payload) / 10)  )
+        print("received GREE ambiant temp : " + str(int(msg.payload) / 10)  )
         myAirCManager.currentGreeAmbiantTemp = float(msg.payload) / 10
 
     elif(msg.topic == MQTT_AC_TURBO_FORCED):

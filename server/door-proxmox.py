@@ -1,31 +1,39 @@
-import http.client, urllib.request, urllib.parse, urllib.error
-import time
+#import http.client, urllib.request, urllib.parse, urllib.error
 import os
-import urllib.request, urllib.error, urllib.parse
-import socket
+os.environ['BLINKA_FT232H'] = "1"
+
+import time
+#import os
+#import urllib.request, urllib.error, urllib.parse
+#import socket
 
 import paho.mqtt.client as mqtt
 
-import RPi.GPIO as GPIO
-import sys
+#import sys
+
+import board
+import digitalio
 
 
 
-door1Pin = 17 #(must be pull down at reset) 
-door2Pin = 18 #(must be pull down at reset) 
+
+MQTT_IP_ADDRESS = "192.168.1.27"
+
+door1Pin = digitalio.DigitalInOut(board.C0) #(must be pull down at reset) 
+door1Pin.direction = digitalio.Direction.OUTPUT
+
+door2Pin = digitalio.DigitalInOut(board.C1) #(must be pull down at reset) 
+door2Pin.direction = digitalio.Direction.OUTPUT
 
 
-GPIO.setmode(GPIO.BCM)
-
-# Pin Setup:
-GPIO.setup(door1Pin, GPIO.OUT) # LED pin set as output
-GPIO.setup(door2Pin, GPIO.OUT) # LED pin set as output
-
-# Initial state for LEDs:
-GPIO.output(door1Pin, GPIO.HIGH)
-GPIO.output(door2Pin, GPIO.HIGH)
+# Initial state :
+door1Pin.value = True
+door2Pin.value = False
 
 msg_at_boot = 1
+
+PAYLOAD_DORIAN = b'24'
+PAYLOAD_ELISA = b'8'
 
 class MyException(Exception):
     pass
@@ -51,35 +59,49 @@ def on_message(client, userdata, msg):
            print("skipping first message at boot")
            msg_at_boot = 0
            return
+        if msg.payload == PAYLOAD_ELISA:
+           print("trigger Elisa door")
+           door2Pin.value = False
+           time.sleep(1)
+           door2Pin.value = True
+           client.publish("Door/elisa", payload=0, qos=0, retain=False)
+        if msg.payload == PAYLOAD_DORIAN:
+           print("trigger Elisa door")
+           door2Pin.value = False
+           time.sleep(1)
+           door2Pin.value = True
+           client.publish("Door/dorian", payload=0, qos=0, retain=False)
+
+
         if msg.payload == b'2':
            print("trigger external door 2")
-           GPIO.output(door1Pin, GPIO.LOW)
+           door1Pin.value = False
            time.sleep(1)
-           GPIO.output(door1Pin, GPIO.HIGH)
+           door1Pin.value = True
         if msg.payload == b'3':
            print("trigger auto close external door")
-           GPIO.output(door1Pin, GPIO.LOW)
+           door1Pin.value = False
            time.sleep(1)
-           GPIO.output(door1Pin, GPIO.HIGH)
+           door1Pin.value = True
            time.sleep(60)
-           GPIO.output(door1Pin, GPIO.LOW)
+           door1Pin.value = False
            time.sleep(1)
-           GPIO.output(door1Pin, GPIO.HIGH)	
+           door1Pin.value = True	
            client.publish("Door/open", payload=0, qos=0, retain=True)
         if msg.payload == b'12':
            print("trigger external door 12")
-           GPIO.output(door2Pin, GPIO.LOW)
+           door2Pin.value = False
            time.sleep(1)
-           GPIO.output(door2Pin, GPIO.HIGH)
+           door2Pin.value = True
         if msg.payload == b'13':
            print("trigger auto close external door 13")
-           GPIO.output(door2Pin, GPIO.LOW)
+           door2Pin.value = False
            time.sleep(1)
-           GPIO.output(door2Pin, GPIO.HIGH)
+           door2Pin.value = True
            time.sleep(60)
-           GPIO.output(door2Pin, GPIO.LOW)
+           door2Pin.value = False
            time.sleep(1)
-           GPIO.output(door2Pin, GPIO.HIGH)	
+           door2Pin.value = True    
            client.publish("Door/open", payload=0, qos=0, retain=True)
 
     
@@ -87,7 +109,7 @@ client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
 
-client.connect("localhost")
+client.connect(MQTT_IP_ADDRESS)
 
 # Blocking call that processes network traffic, dispatches callbacks and
 # handles reconnecting.

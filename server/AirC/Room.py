@@ -29,9 +29,8 @@ class Room:
    def getDeltaTemperature(self, ACMode):
        result = 0.0
        if(ACMode == AC_MODE_COOL):
-           result = round(self.temperature) - self.temperature_target
+           result = self.temperature - self.temperature_target
        if(ACMode == AC_MODE_HEAT):
-         #  result = round(self.temperature_target) - self.temperature	   
            result = self.temperature_target - self.temperature	       
        if(result > 0):
            return result
