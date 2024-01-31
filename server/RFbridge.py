@@ -77,8 +77,8 @@ def getImageFromCamera1():
     except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as error:
         print("Time out! or connection error :")
         print(error)
-        #os.system('cp /home/iot/camera_disconnected.jpg /home/pi/camera1.jpg')
-	
+        os.system('cp /home/iot/camera_disconnected.jpg /home/pi/camera1.jpg')
+        	
     ssh = SSHClient()
     ssh.load_system_host_keys()
     ssh.connect("192.168.1.114", username="node", password="totototo", look_for_keys=False)
