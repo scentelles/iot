@@ -1,4 +1,5 @@
-#define TELNET_DEBUG
+//#define TELNET_DEBUG
+//#define MY_SERIAL_DEBUG
 #define LOLIN
 
 
@@ -23,6 +24,7 @@ String coils[NB_COILS];
 ModbusRTU mb;
 bool resultCoils[NB_COILS];
 uint16_t resultHregs[NB_HREGS];
+
 
 
 int greeCurrentValuePower = 0;
@@ -302,7 +304,11 @@ void debugPrintln(const char * msg)
 #ifdef TELNET_DEBUG    
     Debug.println(F(msg));
 #else
-    Serial.println(msg);
+    #ifdef MY_SERIAL_DEBUG
+        Serial.println(msg);
+    #else
+        return;
+    #endif
 #endif
 }
 void debugPrint(const char * msg)
@@ -352,7 +358,7 @@ void readModbusSecondaryValues()
      mb.readCoil(MODBUS_SLAVE_ID, 0, resultCoils, GREE_STATUS_R_SYSTEM_DEFROSTING+1);
       while(mb.slave()) { // Check if transaction is active
       mb.task();
-      delay(10);
+      delay(15);
       }
 
       greeCurrentValueTurboNew = resultCoils[GREE_SWITCH_RW_TURBO];      
@@ -417,6 +423,7 @@ void sendModbusSecondaryValues(MqttConnection * myMqtt)
 
 void readModbusCoreValues()
 {
+    
    if (!mb.slave()) 
    {
       mb.readHreg(MODBUS_SLAVE_ID, 0, resultHregs, GREE_HREG_RW_SET_TEMP+1);
@@ -430,29 +437,32 @@ void readModbusCoreValues()
       greeCurrentValueModeNew = resultHregs[GREE_HREG_RW_SET_MODE];      
       greeCurrentValueFanSpeedNew = resultHregs[GREE_HREG_RW_SET_FAN_SPEED];      
       greeCurrentValueTemperatureNew = resultHregs[GREE_HREG_RW_SET_TEMP];
-      greeCurrentValueSleepModeNew = resultHregs[GREE_HREG_RW_SLEEP_MODE];
+      //greeCurrentValueSleepModeNew = resultHregs[GREE_HREG_RW_SLEEP_MODE];
    } 
-   delay(50);
-   if (!mb.slave()) 
-   {
-      mb.readHreg(MODBUS_SLAVE_ID, GREE_HREG_R_OUTDOOR_TEMP, resultHregs, 2);
-      while(mb.slave()) { // Check if transaction is active
-      mb.task();
-      delay(10);
-      }
-   
-      greeCurrentValueOutdoorTempNew = resultHregs[0];
-   }
-   delay(50);
-   if (!mb.slave()) 
-   {
-      mb.readHreg(MODBUS_SLAVE_ID, GREE_HREG_R_AIR_RETURN_TEMP, resultHregs, 2);
-      while(mb.slave()) { // Check if transaction is active
-      mb.task();
-      delay(10);
-      }
-      greeCurrentValueAirReturnTempNew = resultHregs[0];
-   }
+  
+
+     if (!mb.slave()) 
+     {
+        mb.readHreg(MODBUS_SLAVE_ID, GREE_HREG_R_OUTDOOR_TEMP, resultHregs, 2);
+        while(mb.slave()) { // Check if transaction is active
+        mb.task();
+        delay(10);
+        }
+     
+        greeCurrentValueOutdoorTempNew = resultHregs[0];
+     }
+  
+ 
+     if (!mb.slave()) 
+     {
+        mb.readHreg(MODBUS_SLAVE_ID, GREE_HREG_R_AIR_RETURN_TEMP, resultHregs, 2);
+        while(mb.slave()) { // Check if transaction is active
+        mb.task();
+        delay(10);
+        }
+        greeCurrentValueAirReturnTempNew = resultHregs[0];
+     }
+  
   /* if (!mb.slave()) 
    {      
       mb.readHreg(MODBUS_SLAVE_ID, GREE_HREG_RW_TEMP_LOWER_LIMIT_NRJ, resultHregs, 2);

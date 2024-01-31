@@ -17,8 +17,8 @@ MqttConnection * myMqtt;
 
 /************************* WiFi Access Point *********************************/
 
-#define WLAN_SSID       "Wifi_Home_Ext"
-#define WLAN_PASS       "060877040178"
+#define WLAN_SSID       "SFR_34A8"
+#define WLAN_PASS       "ab4ingrograstanstorc"
 
 
 #define SENSOR_ID "AC"
@@ -180,6 +180,7 @@ void processACMsg(char* topic, byte* payload, unsigned int length)
       {
         debugPrintln("COMMAND : CORE STATUS GET REQUEST");
         readModbusCoreValues();
+        delay(10);//Debug check if maybe to early.
         sendModbusCoreValues(myMqtt);
       }
       myMqtt->subscribe("GREE/corestatus/get"); 
@@ -424,14 +425,40 @@ void turnOff(int servoId)
      }
 }
 
+
+
+
 int loopCount = 0;
 bool ledHigh = false;
+int nbTry = 0;
+
+void blinkLedShort(int nbBlink)
+{
+  for(int i = 0; i < nbBlink; i++)
+    if(ledHigh)
+    {
+       ledHigh = false;
+       digitalWrite(LED_PIN, LOW);
+    }
+    else
+    {
+       ledHigh = true;
+       digitalWrite(LED_PIN, HIGH);
+    }
+    delay(100);
+}
+
+
+
 void loop() {
 
+
+  if(WiFi.status() == WL_CONNECTED) {
   ArduinoOTA.handle();
   Debug.handle();
 
   loopCount++;
+
   if(loopCount > 2000)
   {
     loopCount = 0;
@@ -457,9 +484,18 @@ void loop() {
   if (!myMqtt->connected()) {
     debugPrintln("MQTT RECONNECT!!!!!!!!!!!!!!!!!!!!!");
     myMqtt->reconnect();
+    blinkLedShort(5);
+    nbTry++;
+    if(nbTry > 20)
+    {
+      ESP.restart();
+    }
   }
+  nbTry = 0;
+  
   myMqtt->loop();
-
+  
+  
     if(bootComplete == false)
     {
       initBoot();
@@ -487,7 +523,12 @@ void loop() {
 
 
   }
-
+  }
+  else
+  {
+    debugPrintln("Wifi reconnect ongoing");
+    delay(100);  
+  }
    /*
     while(millis() < time_now + LOOP_PERIOD){
         //wait approx. [period] ms
