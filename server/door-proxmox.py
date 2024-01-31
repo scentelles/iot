@@ -28,7 +28,7 @@ door2Pin.direction = digitalio.Direction.OUTPUT
 
 # Initial state :
 door1Pin.value = True
-door2Pin.value = False
+door2Pin.value = True
 
 msg_at_boot = 1
 
