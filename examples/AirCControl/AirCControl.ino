@@ -45,6 +45,8 @@ unsigned long time_now = 0;
 
 
 
+
+
 /************************* MQTT *********************************/
 
 #define MQTT_SERVER  "192.168.1.27"
@@ -431,6 +433,7 @@ void turnOff(int servoId)
 int loopCount = 0;
 bool ledHigh = false;
 int nbTry = 0;
+int wifi_timeout_counter = 0;
 
 void blinkLedShort(int nbBlink)
 {
@@ -483,6 +486,7 @@ void loop() {
 
   if (!myMqtt->connected()) {
     debugPrintln("MQTT RECONNECT!!!!!!!!!!!!!!!!!!!!!");
+    Serial.println("SERIAL : MQTT RECONNECT!!!!!!!!!!!!!!!!!!!!!");
     myMqtt->reconnect();
     blinkLedShort(5);
     nbTry++;
@@ -526,8 +530,16 @@ void loop() {
   }
   else
   {
-    debugPrintln("Wifi reconnect ongoing");
+    //debugPrintln("Wifi reconnect ongoing");
+    Serial.println("SERIAL : Wifi reconnect ongoing");
     delay(100);  
+    wifi_timeout_counter++;
+    if(wifi_timeout_counter > 200) // 20secs
+    {
+        ESP.restart();
+        wifi_timeout_counter = 0;
+    }
+    
   }
    /*
     while(millis() < time_now + LOOP_PERIOD){
