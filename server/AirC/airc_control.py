@@ -22,7 +22,7 @@ roomList[CHAMBRE2] = Room(mqttClient, CHAMBRE2, 25, masterChannel2)
 roomList[CHAMBRE3] = Room(mqttClient, CHAMBRE3, 25, masterChannel2)
 roomList[DREAMROOM] = Room(mqttClient, DREAMROOM, 35, masterChannel2)
 roomList[SALON] = Room(mqttClient, SALON, 80, 0)
-roomList[ETAGE] = Room(mqttClient, ETAGE, 25, 0)
+roomList[ETAGE] = Room(mqttClient, ETAGE, 40, 0)
 
 
 
