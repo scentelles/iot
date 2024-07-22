@@ -104,7 +104,7 @@ class AirCManager:
                 self.mqttClient.publish("AC/ESP/PING", 1)
 
                 self.pingAck = False
-                time.sleep(10)
+                time.sleep(20)
 
 			    
                 if(self.pingAck == False):
@@ -186,15 +186,25 @@ class AirCManager:
 
                     #check if a partial safety opening must be trigered
                     self.sumOfAngles = 0
+                    tempNbRoomInDemand = 0
                     for r in self.roomList:
                         if self.roomList[r].isInDemand():
                             self.sumOfAngles += self.roomList[r].aeroChannel.getCurrentAngle()
+                            tempNbRoomInDemand += 1
                     tempSafetyAngle = MAX_OPEN_ANGLE - self.sumOfAngles
-                    if(tempSafetyAngle > 0):
+                    if(tempSafetyAngle > 0): #spread the safety angle on all rooms in demand
+                        #first reset safety angles
+                        for r in self.roomList:
+                            self.roomList[r].aeroChannel.resetSafetyAngle()
                         self.safetyAngle = min(tempSafetyAngle, MAX_OPEN_ANGLE)
-                        self.roomList[SAFETY_ROOM_CHANNEL].aeroChannel.setSafetyAngle(self.safetyAngle)
+                        for r in self.roomList:
+                            if self.roomList[r].isInDemand():
+                                self.roomList[r].aeroChannel.setSafetyAngle(self.safetyAngle / tempNbRoomInDemand)
+                        #self.roomList[SAFETY_ROOM_CHANNEL].aeroChannel.setSafetyAngle(self.safetyAngle)
                     else:
-                        self.roomList[SAFETY_ROOM_CHANNEL].aeroChannel.resetSafetyAngle()
+                        for r in self.roomList:
+                            self.roomList[r].aeroChannel.resetSafetyAngle()
+                        #self.roomList[SAFETY_ROOM_CHANNEL].aeroChannel.resetSafetyAngle()
                 else:
                     print("\tNo demand")
                     self.roomList[SAFETY_ROOM_CHANNEL].aeroChannel.setSafetyAngle(MAX_OPEN_ANGLE)
