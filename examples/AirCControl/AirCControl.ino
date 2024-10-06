@@ -118,6 +118,11 @@ void processACMsg(char* topic, byte* payload, unsigned int length)
           debugPrintln("\tMODBUS SET MODE : FAN");
           greeSetMode(GREE_MODE_FAN);
       }
+      else if(strPayload == "DRY")
+      {
+          debugPrintln("\tMODBUS SET MODE : DRY");
+          greeSetMode(GREE_MODE_DRY);
+      }
       else
       {
         

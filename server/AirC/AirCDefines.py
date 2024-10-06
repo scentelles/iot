@@ -27,6 +27,8 @@ AC_MODE_OFF  = 1
 AC_MODE_COOL = 2
 AC_MODE_HEAT = 3
 AC_MODE_FAN  = 4
+AC_MODE_FAN  = 5
+
 
 
 roomList = {}
