@@ -141,10 +141,10 @@ def on_message(client, userdata, msg):
             myAirCManager.currentACMode = AC_MODE_FAN
             mqttClient.publish(MQTT_GREE_PREFIX + "/power/set", 1)   
             mqttClient.publish(MQTT_GREE_PREFIX + "/mode/set", "FAN")  
-        if(msg.payload == MQTT_AC_MODE_DEMOIST):
+        if(msg.payload == MQTT_AC_MODE_DRY):
             print("AC MODE DRY")
             myAirCManager.currentACMode = AC_MODE_DRY
-            mqttClient.publish(MQTT_GREE_PREFIX + "/power/set", 1)   
+        #    mqttClient.publish(MQTT_GREE_PREFIX + "/power/set", 1)   
             mqttClient.publish(MQTT_GREE_PREFIX + "/mode/set", "DRY")  
 	
 

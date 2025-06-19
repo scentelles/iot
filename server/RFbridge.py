@@ -66,6 +66,10 @@ except:
 
 
 def getImageFromCamera1():
+
+    return
+
+
     if os.path.exists("/home/iot/camera1.jpg"):
         os.remove("/home/iot/camera1.jpg")
     #url = "http://192.168.2.122:554/snapshot"

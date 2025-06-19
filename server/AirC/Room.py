@@ -57,13 +57,17 @@ class Room:
        self.in_demand = False
 
        if(self.AC_ON == 2):
-         if(self.getDeltaTemperature(ACMode) !=  0):
+         if(self.getDeltaTemperature(ACMode) !=  0 or ACMode == AC_MODE_DRY):
            self.in_demand = True
          else:
            self.in_demand = False
        
        if(self.in_demand == True):
-           self.tempAngle = self.getAngleRequired(self.getDeltaTemperature(ACMode))
+           if(ACMode != AC_MODE_DRY):
+               self.tempAngle = self.getAngleRequired(self.getDeltaTemperature(ACMode))
+           else:
+               print("MODE DRY : opening channel as we d'ont care about temperature")
+               self.tempAngle = 90
            self.aeroChannel.stageOpenChannel(self.tempAngle)
        else:
           # if(self.aeroChannel.getSafetyFlag() == False):

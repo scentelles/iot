@@ -40,7 +40,7 @@ class AirCManager:
         self.sumOfAngles =0
         self.safetyAngle = 0
         self.masterAlreadyForced = False
-        self.HAStarted = False
+        self.HAStarted = True
 
 
     def initAfterBoot(self):
@@ -182,7 +182,8 @@ class AirCManager:
                     if(self.ACRunning == False):
                         self.turnACOn()
 
-                    self.updateACMastertargetTemp()
+                    if(self.currentACMode != AC_MODE_DRY):
+                        self.updateACMastertargetTemp()
 
                     #check if a partial safety opening must be trigered
                     self.sumOfAngles = 0
