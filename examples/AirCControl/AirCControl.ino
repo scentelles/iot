@@ -4,7 +4,9 @@
 
 #include <ArduinoOTA.h>
 
-#include <RemoteDebug.h> //https://github.com/JoaoLopesF/RemoteDebug v2.1.2
+#ifdef TELNET_DEBUG 
+  #include <RemoteDebug.h> //https://github.com/JoaoLopesF/RemoteDebug v2.1.2
+#endif
 
 //#include <ESPmDNS.h>
 
@@ -259,7 +261,9 @@ void initPositions()
     blinkLED(50);
     myMqtt->loop(); //run mqttloop while initializing servos, as we are out of main loop
     debugPrint(".");
+    #ifdef TELNET_DEBUG 
     Debug.handle();
+    #endif
   }
   for(int servoId = 0; servoId < NB_SERVO; servoId++)
   {
@@ -373,8 +377,10 @@ void setup() {
   initOTA();
 
   // init remote debug
+  #ifdef TELNET_DEBUG 
   Debug.begin("ESP32");  
-
+  #endif 
+  
 WiFi.setSleep(false);
   
 }
@@ -463,8 +469,9 @@ void loop() {
 
   if(WiFi.status() == WL_CONNECTED) {
   ArduinoOTA.handle();
+  #ifdef TELNET_DEBUG 
   Debug.handle();
-
+  #endif
   loopCount++;
 
   if(loopCount > 2000)
