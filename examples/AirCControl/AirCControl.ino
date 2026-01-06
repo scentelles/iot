@@ -27,7 +27,11 @@ MqttConnection * myMqtt;
 
 #ifdef LOLIN
   #define LED_PIN 22 //for lolin32 lite
-#else
+#endif
+#ifdef WEMOSMINI
+  #define LED_PIN 2
+#endif
+#ifdef ESP32_DEVKIT
   #define LED_PIN 2
 #endif
 

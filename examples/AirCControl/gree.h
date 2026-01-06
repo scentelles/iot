@@ -1,16 +1,23 @@
 //#define TELNET_DEBUG
 //#define MY_SERIAL_DEBUG
-#define LOLIN
-
+//#define LOLIN
+//#define WEMOSMINI
+#define ESP32_DEVKIT
 
 #ifdef LOLIN
   #define UART_RX 25
   #define UART_TX 16
   #define UART_RXTX 4
-#else //for Wemos mini 32
+#endif
+#ifdef WEMOSMINI 
   #define UART_RX 26
   #define UART_TX 0
   #define UART_RXTX 2
+#endif
+#ifdef ESP32_DEVKIT 
+  #define UART_RX 33
+  #define UART_TX 18
+  #define UART_RXTX 5
 #endif
 
 #define MODBUS_SLAVE_ID 1
