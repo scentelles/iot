@@ -2,6 +2,11 @@
 #include <ModbusRTU.h>  
 //#include <pthread.h>
 
+#include <freertos/FreeRTOS.h>
+#include <freertos/task.h>
+#include <freertos/queue.h>
+#include <string.h>
+
 #include <ArduinoOTA.h>
 
 #ifdef TELNET_DEBUG 
@@ -48,6 +53,65 @@ int positionTargetArray[NB_SERVO];
 
 
 unsigned long time_now = 0;
+
+enum ModbusCmdType : uint8_t
+{
+  MODBUS_CMD_SET_MODE,
+  MODBUS_CMD_SET_POWER,
+  MODBUS_CMD_SET_FAN_SPEED,
+  MODBUS_CMD_SET_TEMPERATURE,
+  MODBUS_CMD_SET_SILENT,
+  MODBUS_CMD_SET_NRJ_SAVING,
+  MODBUS_CMD_SET_TEMP_LOWER_LIMIT_NRJ,
+  MODBUS_CMD_SET_TEMP_UPPER_LIMIT_NRJ,
+  MODBUS_CMD_READ_CORE,
+  MODBUS_CMD_READ_SECONDARY,
+  MODBUS_CMD_READ_COILS
+};
+
+struct ModbusCommand
+{
+  ModbusCmdType type;
+  int value;
+};
+
+struct MqttPublish
+{
+  char leafTopic[64];
+  char payload[32];
+};
+
+QueueHandle_t modbusQueue = NULL;
+QueueHandle_t mqttQueue = NULL;
+TaskHandle_t modbusTaskHandle = NULL;
+TaskHandle_t mqttTaskHandle = NULL;
+
+void taskModbus(void * param);
+void taskMqttWifi(void * param);
+
+bool enqueueModbusCommand(ModbusCmdType type, int value)
+{
+  if (modbusQueue == NULL)
+  {
+    return false;
+  }
+  ModbusCommand cmd = {type, value};
+  return xQueueSend(modbusQueue, &cmd, 0) == pdTRUE;
+}
+
+bool enqueueMqttPublish(const char * leafTopic, const char * payload)
+{
+  if (mqttQueue == NULL)
+  {
+    return false;
+  }
+  MqttPublish msg;
+  strncpy(msg.leafTopic, leafTopic, sizeof(msg.leafTopic) - 1);
+  msg.leafTopic[sizeof(msg.leafTopic) - 1] = '\0';
+  strncpy(msg.payload, payload, sizeof(msg.payload) - 1);
+  msg.payload[sizeof(msg.payload) - 1] = '\0';
+  return xQueueSend(mqttQueue, &msg, 0) == pdTRUE;
+}
 
 
 
@@ -112,22 +176,22 @@ void processACMsg(char* topic, byte* payload, unsigned int length)
       if(strPayload == "COOL")
       {
           debugPrintln("\tMODBUS SET MODE : COOL");
-          greeSetMode(GREE_MODE_COOL);
+          enqueueModbusCommand(MODBUS_CMD_SET_MODE, GREE_MODE_COOL);
       }
       else if(strPayload == "HEAT")
       {
           debugPrintln("\tMODBUS SET MODE : HEAT");
-          greeSetMode(GREE_MODE_HEAT);
+          enqueueModbusCommand(MODBUS_CMD_SET_MODE, GREE_MODE_HEAT);
       }
       else if(strPayload == "FAN")
       {
           debugPrintln("\tMODBUS SET MODE : FAN");
-          greeSetMode(GREE_MODE_FAN);
+          enqueueModbusCommand(MODBUS_CMD_SET_MODE, GREE_MODE_FAN);
       }
       else if(strPayload == "DRY")
       {
           debugPrintln("\tMODBUS SET MODE : DRY");
-          greeSetMode(GREE_MODE_DRY);
+          enqueueModbusCommand(MODBUS_CMD_SET_MODE, GREE_MODE_DRY);
       }
       else
       {
@@ -141,11 +205,11 @@ void processACMsg(char* topic, byte* payload, unsigned int length)
       debugPrintln(String("COMMAND : POWER SET : " + strPayload).c_str());
       if(intPayload == 1)
       {
-        greeSetPower(true);
+        enqueueModbusCommand(MODBUS_CMD_SET_POWER, 1);
       }
       else if(intPayload == 0)
       {
-        greeSetPower(false);        
+        enqueueModbusCommand(MODBUS_CMD_SET_POWER, 0);
       }
       else
       {
@@ -156,34 +220,34 @@ void processACMsg(char* topic, byte* payload, unsigned int length)
   else if(String(topic) == "AC/GREE/fanspeed/set")
   {
       debugPrintln(String("COMMAND : FANSPEED SET : " + strPayload).c_str());
-      greeSetFanSpeed(intPayload);
+      enqueueModbusCommand(MODBUS_CMD_SET_FAN_SPEED, intPayload);
   }
   else if(String(topic) == "AC/GREE/temperature/set")
   {
       debugPrintln(String("COMMAND : TEMPERATURE SET : " + strPayload).c_str());
-      greeSetTemperature(intPayload) ;
+      enqueueModbusCommand(MODBUS_CMD_SET_TEMPERATURE, intPayload);
   }
   else if(String(topic) == "AC/GREE/silent/set")
   {
       debugPrintln(String("COMMAND : SILENT MODE SET : " + strPayload).c_str());
-      greeSetSilent((bool)intPayload) ;
+      enqueueModbusCommand(MODBUS_CMD_SET_SILENT, intPayload);
   }
 
 
   else if(String(topic) == "AC/GREE/templowerlimitnrj/set")
   {
       debugPrintln(String("COMMAND : NRJSAVING TEMPERATURE LOWER LIMIT NRJ SET : " + strPayload).c_str());
-      greeSetTemperatureLowerLimitNrj(intPayload) ;
+      enqueueModbusCommand(MODBUS_CMD_SET_TEMP_LOWER_LIMIT_NRJ, intPayload);
   }
   else if(String(topic) == "AC/GREE/tempupperlimitnrj/set")
   {
       debugPrintln(String("COMMAND : NRJSAVING TEMPERATURE UPPER LIMIT NRJ SET : " + strPayload).c_str());
-      greeSetTemperatureUpperLimitNrj(intPayload) ;
+      enqueueModbusCommand(MODBUS_CMD_SET_TEMP_UPPER_LIMIT_NRJ, intPayload);
   }  
   else if(String(topic) == "AC/GREE/nrjsaving/set")
   {
       debugPrintln(String("COMMAND : NRJSAVING SET : " + strPayload).c_str());
-      greeSetNRJSaving((bool)intPayload) ;
+      enqueueModbusCommand(MODBUS_CMD_SET_NRJ_SAVING, intPayload);
   }
   else if(String(topic) == "AC/GREE/corestatus/get")
   {
@@ -192,9 +256,7 @@ void processACMsg(char* topic, byte* payload, unsigned int length)
       if(isAnyServoRunning() == false)
       {
         debugPrintln("COMMAND : CORE STATUS GET REQUEST");
-        readModbusCoreValues();
-        delay(10);//Debug check if maybe to early.
-        sendModbusCoreValues(myMqtt);
+        enqueueModbusCommand(MODBUS_CMD_READ_CORE, 0);
       }
       myMqtt->subscribe("GREE/corestatus/get"); 
   }
@@ -204,15 +266,14 @@ void processACMsg(char* topic, byte* payload, unsigned int length)
       if(isAnyServoRunning() == false)
       {
         debugPrintln("COMMAND : SECONDARY STATUS GET REQUEST");
-        readModbusSecondaryValues();
-        sendModbusSecondaryValues(myMqtt);
+        enqueueModbusCommand(MODBUS_CMD_READ_SECONDARY, 0);
       }
       myMqtt->unsubscribe("GREE/secondarystatus/get"); 
   }
   else if(String(topic) == "AC/GREE/coils/get")
   {
       debugPrintln("COMMAND : COILS GET REQUEST");
-      readAllCoils();
+      enqueueModbusCommand(MODBUS_CMD_READ_COILS, 0);
 
   }  
    else if(String(topic) == "AC/ESP/SERVO/CHAMBRE1/ANGLE"){ debugPrint("Received Angle setting : "); debugPrintln(strPayload.c_str()); positionTargetArray[SERVO_CHAMBRE1] = intPayload; servoRunning[SERVO_CHAMBRE1] = true;}
@@ -385,7 +446,16 @@ void setup() {
   Debug.begin("ESP32");  
   #endif 
   
-WiFi.setSleep(false);
+  WiFi.setSleep(false);
+
+  modbusQueue = xQueueCreate(10, sizeof(ModbusCommand));
+  mqttQueue = xQueueCreate(20, sizeof(MqttPublish));
+
+  if (modbusQueue != NULL && mqttQueue != NULL)
+  {
+    xTaskCreatePinnedToCore(taskModbus, "ModbusTask", 4096, NULL, 1, &modbusTaskHandle, 1);
+    xTaskCreatePinnedToCore(taskMqttWifi, "MqttTask", 8192, NULL, 2, &mqttTaskHandle, 0);
+  }
   
 }
 
@@ -466,101 +536,161 @@ void blinkLedShort(int nbBlink)
     delay(100);
 }
 
-
-
-void loop() {
-
-
-  if(WiFi.status() == WL_CONNECTED) {
-  ArduinoOTA.handle();
-  #ifdef TELNET_DEBUG 
-  Debug.handle();
-  #endif
-  loopCount++;
-
-  if(loopCount > 2000)
+void taskModbus(void * param)
+{
+  ModbusCommand cmd;
+  for(;;)
   {
-    loopCount = 0;
-    debugPrintln("AC Alive, looping\n");
-    Serial.println("Alive, looping\n");
-    unsigned long delta = millis() - time_now;
-    time_now = millis(); 
-    debugPrintln(String(delta).c_str());
-    if(ledHigh)
+    if (xQueueReceive(modbusQueue, &cmd, portMAX_DELAY) == pdTRUE)
     {
-       ledHigh = false;
-       digitalWrite(LED_PIN, LOW);
+      switch(cmd.type)
+      {
+        case MODBUS_CMD_SET_MODE:
+          greeSetMode(cmd.value);
+          break;
+        case MODBUS_CMD_SET_POWER:
+          greeSetPower(cmd.value != 0);
+          break;
+        case MODBUS_CMD_SET_FAN_SPEED:
+          greeSetFanSpeed(cmd.value);
+          break;
+        case MODBUS_CMD_SET_TEMPERATURE:
+          greeSetTemperature(cmd.value);
+          break;
+        case MODBUS_CMD_SET_SILENT:
+          greeSetSilent(cmd.value != 0);
+          break;
+        case MODBUS_CMD_SET_NRJ_SAVING:
+          greeSetNRJSaving(cmd.value != 0);
+          break;
+        case MODBUS_CMD_SET_TEMP_LOWER_LIMIT_NRJ:
+          greeSetTemperatureLowerLimitNrj(cmd.value);
+          break;
+        case MODBUS_CMD_SET_TEMP_UPPER_LIMIT_NRJ:
+          greeSetTemperatureUpperLimitNrj(cmd.value);
+          break;
+        case MODBUS_CMD_READ_CORE:
+          readModbusCoreValues();
+          sendModbusCoreValues();
+          break;
+        case MODBUS_CMD_READ_SECONDARY:
+          readModbusSecondaryValues();
+          sendModbusSecondaryValues();
+          break;
+        case MODBUS_CMD_READ_COILS:
+          readAllCoils();
+          break;
+        default:
+          break;
+      }
+    }
+  }
+}
+
+void taskMqttWifi(void * param)
+{
+  MqttPublish msg;
+  for(;;)
+  {
+    if(WiFi.status() == WL_CONNECTED) {
+      ArduinoOTA.handle();
+      #ifdef TELNET_DEBUG 
+      Debug.handle();
+      #endif
+      loopCount++;
+
+      if(loopCount > 2000)
+      {
+        loopCount = 0;
+        debugPrintln("AC Alive, looping\n");
+        Serial.println("Alive, looping\n");
+        unsigned long delta = millis() - time_now;
+        time_now = millis(); 
+        debugPrintln(String(delta).c_str());
+        if(ledHigh)
+        {
+           ledHigh = false;
+           digitalWrite(LED_PIN, LOW);
+        }
+        else
+        {
+           ledHigh = true;
+           digitalWrite(LED_PIN, HIGH);
+        }
+      }
+      
+
+
+      if (!myMqtt->connected()) {
+        debugPrintln("MQTT RECONNECT!!!!!!!!!!!!!!!!!!!!!");
+        Serial.println("SERIAL : MQTT RECONNECT!!!!!!!!!!!!!!!!!!!!!");
+        myMqtt->reconnect();
+        blinkLedShort(5);
+        nbTry++;
+        if(nbTry > 20)
+        {
+          ESP.restart();
+        }
+      }
+      nbTry = 0;
+      
+      myMqtt->loop();
+      
+      
+        if(bootComplete == false)
+        {
+          initBoot();
+          bootComplete = true;
+        }
+
+      if (myMqtt->connected())
+      {
+        while (xQueueReceive(mqttQueue, &msg, 0) == pdTRUE)
+        {
+          myMqtt->publishValue(msg.leafTopic, msg.payload);
+        }
+      }
+
+      for(int servoId = 0; servoId < NB_SERVO; servoId++)
+      {
+        if(positionArray[servoId] < positionTargetArray[servoId])
+        {
+          turn(servoId, true);
+        }
+        else 
+        {
+          if(positionArray[servoId] > positionTargetArray[servoId])
+          {
+            turn(servoId, false);
+          }
+          else
+          {
+            turnOff(servoId);
+          }
+        }
+
+
+
+      }
     }
     else
     {
-       ledHigh = true;
-       digitalWrite(LED_PIN, HIGH);
-    }
-  }
-  
-
-
-  if (!myMqtt->connected()) {
-    debugPrintln("MQTT RECONNECT!!!!!!!!!!!!!!!!!!!!!");
-    Serial.println("SERIAL : MQTT RECONNECT!!!!!!!!!!!!!!!!!!!!!");
-    myMqtt->reconnect();
-    blinkLedShort(5);
-    nbTry++;
-    if(nbTry > 20)
-    {
-      ESP.restart();
-    }
-  }
-  nbTry = 0;
-  
-  myMqtt->loop();
-  
-  
-    if(bootComplete == false)
-    {
-      initBoot();
-      bootComplete = true;
-    }
-
-  for(int servoId = 0; servoId < NB_SERVO; servoId++)
-  {
-    if(positionArray[servoId] < positionTargetArray[servoId])
-    {
-      turn(servoId, true);
-    }
-    else 
-    {
-      if(positionArray[servoId] > positionTargetArray[servoId])
+      //debugPrintln("Wifi reconnect ongoing");
+      Serial.println("SERIAL : Wifi reconnect ongoing");
+      vTaskDelay(pdMS_TO_TICKS(100));
+      wifi_timeout_counter++;
+      if(wifi_timeout_counter > 200) // 20secs
       {
-        turn(servoId, false);
+          ESP.restart();
+          wifi_timeout_counter = 0;
       }
-      else
-      {
-        turnOff(servoId);
-      }
+      continue;
     }
-
-
-
+    vTaskDelay(pdMS_TO_TICKS(1));
   }
-  }
-  else
-  {
-    //debugPrintln("Wifi reconnect ongoing");
-    Serial.println("SERIAL : Wifi reconnect ongoing");
-    delay(100);  
-    wifi_timeout_counter++;
-    if(wifi_timeout_counter > 200) // 20secs
-    {
-        ESP.restart();
-        wifi_timeout_counter = 0;
-    }
-    
-  }
-   /*
-    while(millis() < time_now + LOOP_PERIOD){
-        //wait approx. [period] ms
-    }*/
+}
 
 
+void loop() {
+  vTaskDelay(pdMS_TO_TICKS(1000));
 }

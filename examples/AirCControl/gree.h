@@ -1,8 +1,8 @@
 //#define TELNET_DEBUG
 //#define MY_SERIAL_DEBUG
-//#define LOLIN
+#define LOLIN
 //#define WEMOSMINI
-#define ESP32_DEVKIT
+//#define ESP32_DEVKIT
 
 #ifdef LOLIN
   #define UART_RX 25
@@ -21,6 +21,8 @@
 #endif
 
 #define MODBUS_SLAVE_ID 1
+
+extern bool enqueueMqttPublish(const char * leafTopic, const char * payload);
 
 
 #define NB_HREGS 84
@@ -390,27 +392,27 @@ void readModbusSecondaryValues()
    }
 }
 
-void sendModbusSecondaryValues(MqttConnection * myMqtt)
+void sendModbusSecondaryValues()
 {
       if(greeCurrentValueTurboNew != greeCurrentValueTurbo)
       {
         greeCurrentValueTurbo = greeCurrentValueTurboNew;
-        myMqtt->publishValue("GREE/secondarystatus/turbo", String(greeCurrentValueTurbo).c_str());
+        enqueueMqttPublish("GREE/secondarystatus/turbo", String(greeCurrentValueTurbo).c_str());
       }
       if(greeCurrentValueSilentNew != greeCurrentValueSilent)
       {
         greeCurrentValueSilent = greeCurrentValueSilentNew;
-        myMqtt->publishValue("GREE/secondarystatus/silent", String(greeCurrentValueSilent).c_str());
+        enqueueMqttPublish("GREE/secondarystatus/silent", String(greeCurrentValueSilent).c_str());
       }
       if(greeCurrentValueNrjSavingNew != greeCurrentValueNrjSaving)
       {
         greeCurrentValueNrjSaving = greeCurrentValueNrjSavingNew;
-        myMqtt->publishValue("GREE/secondarystatus/nrjsaving", String(greeCurrentValueNrjSaving).c_str());
+        enqueueMqttPublish("GREE/secondarystatus/nrjsaving", String(greeCurrentValueNrjSaving).c_str());
       }
       if(greeCurrentValueOutdoorFanNew != greeCurrentValueOutdoorFan)
       {
         greeCurrentValueOutdoorFan = greeCurrentValueOutdoorFanNew;
-        myMqtt->publishValue("GREE/secondarystatus/outdoorfan", String(greeCurrentValueOutdoorFan).c_str());
+        enqueueMqttPublish("GREE/secondarystatus/outdoorfan", String(greeCurrentValueOutdoorFan).c_str());
       }
      // myMqtt->publishValue("GREE/secondarystatus/nrjsavingcool", String(greeCurrentValueNrjSavingCool).c_str());
      // myMqtt->publishValue("GREE/secondarystatus/nrjsavingheat", String(greeCurrentValueNrjSavingHeat).c_str());
@@ -418,12 +420,12 @@ void sendModbusSecondaryValues(MqttConnection * myMqtt)
       if(greeCurrentValueCompressorNew != greeCurrentValueCompressor)
       {
         greeCurrentValueCompressor = greeCurrentValueCompressorNew;
-        myMqtt->publishValue("GREE/secondarystatus/compressor", String(greeCurrentValueCompressor).c_str());
+        enqueueMqttPublish("GREE/secondarystatus/compressor", String(greeCurrentValueCompressor).c_str());
       }
       if(greeCurrentValueSystemDefrostingNew != greeCurrentValueSystemDefrosting)
       {
         greeCurrentValueSystemDefrosting = greeCurrentValueSystemDefrostingNew;
-        myMqtt->publishValue("GREE/secondarystatus/systemdefrosting", String(greeCurrentValueSystemDefrosting).c_str());
+        enqueueMqttPublish("GREE/secondarystatus/systemdefrosting", String(greeCurrentValueSystemDefrosting).c_str());
       }
 
 }
@@ -503,49 +505,49 @@ void readModbusCoreValues()
    
     
 }
-void sendModbusCoreValues(MqttConnection * myMqtt)
+void sendModbusCoreValues()
 {
       if(greeCurrentValuePowerNew != greeCurrentValuePower)
       {
         greeCurrentValuePower = greeCurrentValuePowerNew;
-        myMqtt->publishValue("GREE/corestatus/power", String(greeCurrentValuePower).c_str());
+        enqueueMqttPublish("GREE/corestatus/power", String(greeCurrentValuePower).c_str());
       }
       if(greeCurrentValueAmbiantTempNew != greeCurrentValueAmbiantTemp)
       {
         greeCurrentValueAmbiantTemp = greeCurrentValueAmbiantTempNew;      
-        myMqtt->publishValue("GREE/corestatus/ambianttemp", String(greeCurrentValueAmbiantTemp).c_str());
+        enqueueMqttPublish("GREE/corestatus/ambianttemp", String(greeCurrentValueAmbiantTemp).c_str());
       }
       if(greeCurrentValueModeNew != greeCurrentValueMode)
       {
         greeCurrentValueMode = greeCurrentValueModeNew;      
-        myMqtt->publishValue("GREE/corestatus/mode", String(greeCurrentValueMode).c_str());
+        enqueueMqttPublish("GREE/corestatus/mode", String(greeCurrentValueMode).c_str());
       }
       if(greeCurrentValueFanSpeedNew != greeCurrentValueFanSpeed)
       {
         greeCurrentValueFanSpeed = greeCurrentValueFanSpeedNew;      
-        myMqtt->publishValue("GREE/corestatus/fanspeed", String(greeCurrentValueFanSpeed).c_str());
+        enqueueMqttPublish("GREE/corestatus/fanspeed", String(greeCurrentValueFanSpeed).c_str());
       }
       if(greeCurrentValueTemperatureNew != greeCurrentValueTemperature)
       {
         greeCurrentValueTemperature = greeCurrentValueTemperatureNew;      
-        myMqtt->publishValue("GREE/corestatus/temperature", String(greeCurrentValueTemperature).c_str());
+        enqueueMqttPublish("GREE/corestatus/temperature", String(greeCurrentValueTemperature).c_str());
       }
     //  myMqtt->publishValue("GREE/corestatus/templowerlimitnrj", String(greeCurrentValueTempLowerLimitNrj).c_str());
     //  myMqtt->publishValue("GREE/corestatus/tempupperlimitnrj", String(greeCurrentValueTempUpperLimitNrj).c_str());
       if(greeCurrentValueSleepModeNew != greeCurrentValueSleepMode)
       {
         greeCurrentValueSleepMode = greeCurrentValueSleepModeNew;      
-        myMqtt->publishValue("GREE/corestatus/sleepmode", String(greeCurrentValueSleepMode).c_str());
+        enqueueMqttPublish("GREE/corestatus/sleepmode", String(greeCurrentValueSleepMode).c_str());
       }
       if(greeCurrentValueOutdoorTempNew != greeCurrentValueOutdoorTemp)
       {
         greeCurrentValueOutdoorTemp = greeCurrentValueOutdoorTempNew;      
-        myMqtt->publishValue("GREE/corestatus/outdoortemp", String(greeCurrentValueOutdoorTemp).c_str());
+        enqueueMqttPublish("GREE/corestatus/outdoortemp", String(greeCurrentValueOutdoorTemp).c_str());
       }
       if(greeCurrentValueAirReturnTempNew != greeCurrentValueAirReturnTemp)
       {
         greeCurrentValueAirReturnTemp = greeCurrentValueAirReturnTempNew;      
-        myMqtt->publishValue("GREE/corestatus/airreturntemp", String(greeCurrentValueAirReturnTemp).c_str());
+        enqueueMqttPublish("GREE/corestatus/airreturntemp", String(greeCurrentValueAirReturnTemp).c_str());
       }
  
 }

@@ -1,6 +1,6 @@
-//#define LOLIN
+#define LOLIN
 //#define WEMOSMINI
-#define ESP32_DEVKIT
+//#define ESP32_DEVKIT
 
 
 #ifdef LOLIN
