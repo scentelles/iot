@@ -108,8 +108,10 @@ class AirCManager:
 
 			    
                 if(self.pingAck == False):
+                    print("ACK FALSE")
                     if(self.ESP_Connected != False):
                       nbConnectionLosss += 1
+                      print("NEW CONNECTION LOSS")
                       if(nbConnectionLosss == 5):
                         self.ESP_Connected = False
                         self.mqttClient.publish("AC/ERROR", "ESP NOT RESPONDING!!!")
@@ -182,8 +184,7 @@ class AirCManager:
                     if(self.ACRunning == False):
                         self.turnACOn()
 
-                    if(self.currentACMode != AC_MODE_DRY):
-                        self.updateACMastertargetTemp()
+                    self.updateACMastertargetTemp()
 
                     #check if a partial safety opening must be trigered
                     self.sumOfAngles = 0
@@ -316,7 +317,7 @@ class AirCManager:
         print("Current ambiant temp : " + str(self.currentGreeAmbiantTemp))
         tempMaxDeltaTemp = self.getMaxDeltaTemp()
         print("Max Delta temp : " + str(tempMaxDeltaTemp))
-        if(self.currentACMode == AC_MODE_COOL):
+        if(self.currentACMode == AC_MODE_COOL or self.currentACMode == AC_MODE_DRY):
           newACTempTarget = round(self.currentGreeAmbiantTemp - tempMaxDeltaTemp)
           if(tempMaxDeltaTemp == 0): #Take into account target has been reached.
             newACTempTarget = newACTempTarget + 1 
