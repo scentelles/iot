@@ -87,6 +87,8 @@ TaskHandle_t modbusTaskHandle = NULL;
 TaskHandle_t mqttTaskHandle = NULL;
 
 volatile uint32_t mqttDropCount = 0;
+volatile bool pongPending = false;
+char pongPayload[32] = {0};
 
 const int MQTT_PUBLISH_BURST_MAX = 5;
 const unsigned long SERVO_PUBLISH_INTERVAL_MS = 300;
@@ -181,13 +183,12 @@ void processACMsg(char* topic, byte* payload, unsigned int length)
       if (Serial && Serial.availableForWrite() > 32) {
         Serial.println("--------------pong");
       }
-      char pongPayload[32];
       if (strPayload.length() > 0) {
         snprintf(pongPayload, sizeof(pongPayload), "%s|%lu", strPayload.c_str(), millis());
       } else {
         snprintf(pongPayload, sizeof(pongPayload), "%lu", millis());
       }
-      enqueueMqttPublish("ESP/PONG", pongPayload);
+      pongPending = true;
      
   }
   else if(String(topic) == "AC/GREE/mode/set")
@@ -666,8 +667,8 @@ void taskMqttWifi(void * param)
         loopCount = 0;
         debugPrintln("AC Alive, looping\n");
         Serial.println("Alive, looping\n");
-        Serial.print("SERIAL : MQTT DROPS=");
-        Serial.println(mqttDropCount);
+        debugPrintln("SERIAL : MQTT DROPS=");
+        debugPrintln(String(mqttDropCount).c_str());
         unsigned long delta = millis() - time_now;
         time_now = millis(); 
         debugPrintln(String(delta).c_str());
@@ -718,6 +719,10 @@ void taskMqttWifi(void * param)
 
       if (myMqtt->connected())
       {
+        if (pongPending) {
+          myMqtt->publishValue("ESP/PONG", pongPayload);
+          pongPending = false;
+        }
         int publishCount = 0;
         while (publishCount < MQTT_PUBLISH_BURST_MAX && xQueueReceive(mqttQueue, &msg, 0) == pdTRUE)
         {

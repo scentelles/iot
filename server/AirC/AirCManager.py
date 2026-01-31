@@ -83,11 +83,11 @@ class AirCManager:
             if(self.FSMState != STATE_WAIT_ESP_INIT):
               self.mqttClient.publish("AC/GREE/corestatus/get", 1)
 
-              time.sleep(5)
+              time.sleep(15)
 
               self.mqttClient.publish("AC/GREE/secondarystatus/get", 1)
 
-              time.sleep(5)                
+              time.sleep(15)                
 
 #==========================
 # watchdog thread

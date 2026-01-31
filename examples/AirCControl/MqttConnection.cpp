@@ -106,7 +106,7 @@ void MqttConnection::publishValue(const char * leafTopic, float value, int preci
     
     snprintf (msg, 75, "%.*f", precision, value);
     //String tmp = value;
-    serialLogf("Publish message: %s\n", msg);
+    //serialLogf("Publish message: %s\n", msg);
     
     
     String outTopic = sensorId_ + "/";
