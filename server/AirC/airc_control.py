@@ -196,7 +196,7 @@ def main():
     mqttClient.on_connect = on_connect
     mqttClient.on_message = on_message
 
-    mqttClient.connect("localhost")
+    mqttClient.connect("192.168.1.27")
 
 
 

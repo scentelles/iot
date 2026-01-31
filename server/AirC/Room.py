@@ -28,7 +28,7 @@ class Room:
            
    def getDeltaTemperature(self, ACMode):
        result = 0.0
-       if(ACMode == AC_MODE_COOL):
+       if(ACMode == AC_MODE_COOL or ACMode == AC_MODE_DRY):
            result = self.temperature - self.temperature_target
        if(ACMode == AC_MODE_HEAT):
            result = self.temperature_target - self.temperature	       
@@ -57,17 +57,13 @@ class Room:
        self.in_demand = False
 
        if(self.AC_ON == 2):
-         if(self.getDeltaTemperature(ACMode) !=  0 or ACMode == AC_MODE_DRY):
+         if(self.getDeltaTemperature(ACMode) !=  0):
            self.in_demand = True
          else:
            self.in_demand = False
        
        if(self.in_demand == True):
-           if(ACMode != AC_MODE_DRY):
-               self.tempAngle = self.getAngleRequired(self.getDeltaTemperature(ACMode))
-           else:
-               print("MODE DRY : opening channel as we d'ont care about temperature")
-               self.tempAngle = 90
+           self.tempAngle = self.getAngleRequired(self.getDeltaTemperature(ACMode))
            self.aeroChannel.stageOpenChannel(self.tempAngle)
        else:
           # if(self.aeroChannel.getSafetyFlag() == False):
