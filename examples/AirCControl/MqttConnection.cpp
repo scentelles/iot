@@ -1,4 +1,5 @@
 #include "MqttConnection.h"
+#include <stdarg.h>
 
 
 char tmpChars[32];
@@ -6,25 +7,35 @@ char tmpChars[32];
 PubSubClient * g_mqttClient;
 void (* customMsgProcessing)(char* topic, byte* payload, unsigned int length) = NULL;
 
-void  mycallback(char* topic, byte* payload, unsigned int length) {
-  Serial.print("Message arrived [");
-  Serial.print(topic);
-  Serial.print("] ");
-  for (int i = 0; i < length; i++) {
-    Serial.print((char)payload[i]);
+static void serialLogf(const char *fmt, ...)
+{
+  if (!Serial) {
+    return;
   }
-  Serial.println();
+  if (Serial.availableForWrite() < 32) {
+    return;
+  }
+  char buf[192];
+  va_list args;
+  va_start(args, fmt);
+  vsnprintf(buf, sizeof(buf), fmt, args);
+  va_end(args);
+  Serial.print(buf);
+}
+
+void  mycallback(char* topic, byte* payload, unsigned int length) {
+  serialLogf("Message arrived [%s] %.*s\n", topic, length, (char *)payload);
 
   if(String(topic) == "PING_LEAF_TOPIC"){
 	  if ((char)payload[0] == '1') {
-		Serial.println("Ping received");
+		serialLogf("Ping received\n");
 		String tmp_string = topic;
 		tmp_string += " : I'm alive!!!!";
 		
 		g_mqttClient->publish("connection_events", tmp_string.c_str());
-		Serial.println("after publish");
+		serialLogf("after publish\n");
 	  } else {
-		Serial.println("doing nothing");
+		serialLogf("doing nothing\n");
 	  }
   }
   else{
@@ -43,34 +54,25 @@ void  mycallback(char* topic, byte* payload, unsigned int length) {
 /****************************** Wifi connect function ***************************************/
 void MqttConnection::wifiSetup(const char* ssid, const char* pass) {
 
-  int nbTry = 0;
   delay(10);
   // We start by connecting to a WiFi network
-  Serial.println();
-  Serial.print("Connecting to ");
-  Serial.println(ssid);
+  serialLogf("\nConnecting to %s\n", ssid);
   
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, pass);
 
-  while (WiFi.status() != WL_CONNECTED) {
+  const unsigned long connectTimeoutMs = 20000;
+  unsigned long start = millis();
+  while (WiFi.status() != WL_CONNECTED && millis() - start < connectTimeoutMs) {
     delay(1000);
-    Serial.print(".");
-	nbTry++;
-	if(nbTry > 20)
-	{
-      nbTry = 0;
-      Serial.println("Too long to connect - Rebooting");
-	  ESP.restart();
-	}
+    serialLogf(".");
   }
 
   randomSeed(micros());
 
-  Serial.println("");
-  Serial.println("WiFi connected");
-  Serial.println("IP address: ");
-  Serial.println(WiFi.localIP());
+  if (WiFi.status() == WL_CONNECTED) {
+    serialLogf("\nWiFi connected\nIP address: %s\n", WiFi.localIP().toString().c_str());
+  }
 
   WiFi.setAutoReconnect(true);
   WiFi.persistent(true);
@@ -86,8 +88,7 @@ void MqttConnection::registerCustomProcessing(void (*myFunc)(char* topic, byte* 
 
 void MqttConnection::publishValue(const char * leafTopic, const char* msg)
 {
-   // Serial.print("Publish message: ");
-   // Serial.println(msg);
+    serialLogf("Publish message: %s\n", msg);
     
     
     String outTopic = sensorId_ + "/";
@@ -105,14 +106,13 @@ void MqttConnection::publishValue(const char * leafTopic, float value, int preci
     
     snprintf (msg, 75, "%.*f", precision, value);
     //String tmp = value;
-    Serial.print("Publish message: ");
-    Serial.println(msg);
+    serialLogf("Publish message: %s\n", msg);
     
     
     String outTopic = sensorId_ + "/";
     outTopic += leafTopic;
     //Serial.print("on topic: ");
-   // Serial.println(outTopic.c_str());
+    //Serial.println(outTopic.c_str());
     publish(outTopic.c_str(), msg);
 }
 
@@ -124,14 +124,14 @@ void MqttConnection::subscribeAll()
       String tmp_string = sensorId_;
 	  tmp_string += "/";
       tmp_string += tmpLeafTopic;
-	  Serial.print("Subscribing to : ");
-	  Serial.println(tmp_string.c_str());
+	  serialLogf("Subscribing to : %s\n", tmp_string.c_str());
 	  subscribe(tmp_string.c_str());		
 	}
 	
 }
 
-void MqttConnection::reconnect() {
+bool MqttConnection::reconnect() {
+  static unsigned long lastAttempt = 0;
 	
 	//first, check Wifi is connected
   //while (WiFi.status() != WL_CONNECTED) {
@@ -140,29 +140,33 @@ void MqttConnection::reconnect() {
  // }
   
   // Loop until we're reconnected
-  while (!connected()) {
-    Serial.print("Attempting MQTT connection...");
-    // Create a random client ID
-    String clientId = sensorId_;
-
-    // Attempt to connect
-    if (connect(clientId.c_str())) {
-      Serial.println("connected");
-      // Once connected, publish an announcement...
-      String connectMsg = "New connection from " + clientId;
-      publish("connection_events", connectMsg.c_str());
-      // ... and resubscribe
-	  subscribeAll();
-
-    } 
-    else {
-      Serial.print("failed, rc=");
-      Serial.print(state());
-      Serial.println(" try again in 5 seconds");
-      // Wait 5 seconds before retrying
-      delay(5000);
-    }
+  if (connected()) {
+    return false;
   }
+
+  unsigned long now = millis();
+  if (now - lastAttempt < 5000) {
+    return false;
+  }
+  lastAttempt = now;
+
+  serialLogf("Attempting MQTT connection...");
+  // Create a random client ID
+  String clientId = sensorId_;
+
+  // Attempt to connect
+  if (connect(clientId.c_str())) {
+    serialLogf("connected\n");
+    // Once connected, publish an announcement...
+    String connectMsg = "New connection from " + clientId;
+    publish("connection_events", connectMsg.c_str());
+    // ... and resubscribe
+    subscribeAll();
+  } 
+  else {
+    serialLogf("failed, rc=%d try again in 5 seconds\n", state());
+  }
+  return true;
 }
 
 void MqttConnection::addSubscription(const char * leafTopic)
@@ -174,7 +178,7 @@ void MqttConnection::addSubscription(const char * leafTopic)
 	}
 	else
 	{
-		Serial.print("Error : too many topics to subscribe");
+		serialLogf("Error : too many topics to subscribe\n");
 	}
 }
 
@@ -189,6 +193,7 @@ MqttConnection::MqttConnection(const char* sensorId, const char* ssid, const cha
   strcpy(tmpChars, mqttServer);
   setServer(tmpChars, mqttPort);
   setCallback(mycallback);
+  setKeepAlive(60);
   g_mqttClient = this;
   
 

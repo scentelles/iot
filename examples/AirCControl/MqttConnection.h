@@ -18,7 +18,7 @@ class MqttConnection : public PubSubClient
 	  String sensorId_;
 	  WiFiClient wifiClient_;
 	  MqttConnection(const char* sensorId, const char* ssid, const char* pass, const char* mqttServer, int mqttPort)  ;
-	  void reconnect();
+	  bool reconnect();
       void publishValue(const char * leafTopic, const char* msg);
 	  void publishValue(const char * leafTopic, float value, int precision);
       void addSubscription(const char * leafTopic);

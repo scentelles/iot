@@ -86,6 +86,13 @@ QueueHandle_t mqttQueue = NULL;
 TaskHandle_t modbusTaskHandle = NULL;
 TaskHandle_t mqttTaskHandle = NULL;
 
+volatile uint32_t mqttDropCount = 0;
+
+const int MQTT_PUBLISH_BURST_MAX = 5;
+const unsigned long SERVO_PUBLISH_INTERVAL_MS = 300;
+
+unsigned long lastServoPublishMs[NB_SERVO] = {0};
+
 void taskModbus(void * param);
 void taskMqttWifi(void * param);
 
@@ -110,7 +117,11 @@ bool enqueueMqttPublish(const char * leafTopic, const char * payload)
   msg.leafTopic[sizeof(msg.leafTopic) - 1] = '\0';
   strncpy(msg.payload, payload, sizeof(msg.payload) - 1);
   msg.payload[sizeof(msg.payload) - 1] = '\0';
-  return xQueueSend(mqttQueue, &msg, 0) == pdTRUE;
+  if (xQueueSend(mqttQueue, &msg, 0) == pdTRUE) {
+    return true;
+  }
+  mqttDropCount++;
+  return false;
 }
 
 
@@ -167,7 +178,16 @@ void processACMsg(char* topic, byte* payload, unsigned int length)
   else if(String(topic) == "AC/ESP/PING")
   {
       debugPrintln("Ping received.replying");
-      myMqtt->publishValue("ESP/PONG", "1");
+      if (Serial && Serial.availableForWrite() > 32) {
+        Serial.println("--------------pong");
+      }
+      char pongPayload[32];
+      if (strPayload.length() > 0) {
+        snprintf(pongPayload, sizeof(pongPayload), "%s|%lu", strPayload.c_str(), millis());
+      } else {
+        snprintf(pongPayload, sizeof(pongPayload), "%lu", millis());
+      }
+      enqueueMqttPublish("ESP/PONG", pongPayload);
      
   }
   else if(String(topic) == "AC/GREE/mode/set")
@@ -293,7 +313,7 @@ void processACMsg(char* topic, byte* payload, unsigned int length)
 
 void initBoot()
 {
-     myMqtt->publishValue("ESP/INIT_DONE", "1");
+     enqueueMqttPublish("ESP/INIT_DONE", "1");
   
 }
 void initPositions()
@@ -306,7 +326,8 @@ void initPositions()
     positionTargetArray [servoId] = 0;
     positionLoopStartTime[servoId] = 0;
     servoRunning[servoId] = false;
-    myMqtt->publishValue(String("ESP/SERVO/" + ID_TO_ROOM[servoId] + "/REAL_ANGLE").c_str(), "0");
+    String leafTopic = String("ESP/SERVO/") + ID_TO_ROOM[servoId] + "/REAL_ANGLE";
+    enqueueMqttPublish(leafTopic.c_str(), "0");
   }
   // delay(5000);
   debugPrintln("Starting init position");
@@ -340,7 +361,7 @@ void initPositions()
   }
         
   debugPrintln("Servo init Done");
-  myMqtt->publishValue("ESP/INIT_SERVO_DONE", "1");
+  enqueueMqttPublish("ESP/INIT_SERVO_DONE", "1");
 }
 
 
@@ -449,12 +470,12 @@ void setup() {
   WiFi.setSleep(false);
 
   modbusQueue = xQueueCreate(10, sizeof(ModbusCommand));
-  mqttQueue = xQueueCreate(20, sizeof(MqttPublish));
+  mqttQueue = xQueueCreate(50, sizeof(MqttPublish));
 
   if (modbusQueue != NULL && mqttQueue != NULL)
   {
     xTaskCreatePinnedToCore(taskModbus, "ModbusTask", 4096, NULL, 1, &modbusTaskHandle, 1);
-    xTaskCreatePinnedToCore(taskMqttWifi, "MqttTask", 8192, NULL, 2, &mqttTaskHandle, 0);
+    xTaskCreatePinnedToCore(taskMqttWifi, "MqttTask", 8192, NULL, 2, &mqttTaskHandle, 1);
   }
   
 }
@@ -495,7 +516,14 @@ void turn(int servoId, bool turnRight)
      logServo(String(servoId));
      logServo("  : ");
      logServoCR(String(positionArray[servoId]));
-      myMqtt->publishValue(String("ESP/SERVO/" + ID_TO_ROOM[servoId] + "/REAL_ANGLE").c_str(), String(positionArray[servoId]).c_str());
+      unsigned long now = millis();
+      if (now - lastServoPublishMs[servoId] >= SERVO_PUBLISH_INTERVAL_MS) {
+        char payload[12];
+        snprintf(payload, sizeof(payload), "%d", positionArray[servoId]);
+        String leafTopic = String("ESP/SERVO/") + ID_TO_ROOM[servoId] + "/REAL_ANGLE";
+        enqueueMqttPublish(leafTopic.c_str(), payload);
+        lastServoPublishMs[servoId] = now;
+      }
     }
 }
 
@@ -515,10 +543,27 @@ void turnOff(int servoId)
 
 
 
+const char * mqttStateToString(int state)
+{
+  switch (state)
+  {
+    case -4: return "MQTT_CONNECTION_TIMEOUT";
+    case -3: return "MQTT_CONNECTION_LOST";
+    case -2: return "MQTT_CONNECT_FAILED";
+    case -1: return "MQTT_DISCONNECTED";
+    case 0: return "MQTT_CONNECTED";
+    case 1: return "MQTT_CONNECT_BAD_PROTOCOL";
+    case 2: return "MQTT_CONNECT_BAD_CLIENT_ID";
+    case 3: return "MQTT_CONNECT_UNAVAILABLE";
+    case 4: return "MQTT_CONNECT_BAD_CREDENTIALS";
+    case 5: return "MQTT_CONNECT_UNAUTHORIZED";
+    default: return "MQTT_STATE_UNKNOWN";
+  }
+}
+
 int loopCount = 0;
 bool ledHigh = false;
-int nbTry = 0;
-int wifi_timeout_counter = 0;
+unsigned long lastWifiReconnectAttempt = 0;
 
 void blinkLedShort(int nbBlink)
 {
@@ -590,9 +635,26 @@ void taskModbus(void * param)
 void taskMqttWifi(void * param)
 {
   MqttPublish msg;
+  unsigned long lastTaskTick = 0;
   for(;;)
   {
     if(WiFi.status() == WL_CONNECTED) {
+      unsigned long now = millis();
+      if (lastTaskTick != 0 && now - lastTaskTick > 2000) {
+        Serial.print("SERIAL : MQTT TASK GAP=");
+        Serial.print(now - lastTaskTick);
+        Serial.print("ms QUEUE=");
+        if (mqttQueue != NULL) {
+          Serial.print(uxQueueMessagesWaiting(mqttQueue));
+        } else {
+          Serial.print("NA");
+        }
+        Serial.print(" DROPS=");
+        Serial.print(mqttDropCount);
+        Serial.print(" WIFI=");
+        Serial.println((int)WiFi.status());
+      }
+      lastTaskTick = now;
       ArduinoOTA.handle();
       #ifdef TELNET_DEBUG 
       Debug.handle();
@@ -604,6 +666,8 @@ void taskMqttWifi(void * param)
         loopCount = 0;
         debugPrintln("AC Alive, looping\n");
         Serial.println("Alive, looping\n");
+        Serial.print("SERIAL : MQTT DROPS=");
+        Serial.println(mqttDropCount);
         unsigned long delta = millis() - time_now;
         time_now = millis(); 
         debugPrintln(String(delta).c_str());
@@ -624,15 +688,24 @@ void taskMqttWifi(void * param)
       if (!myMqtt->connected()) {
         debugPrintln("MQTT RECONNECT!!!!!!!!!!!!!!!!!!!!!");
         Serial.println("SERIAL : MQTT RECONNECT!!!!!!!!!!!!!!!!!!!!!");
-        myMqtt->reconnect();
-        blinkLedShort(5);
-        nbTry++;
-        if(nbTry > 20)
-        {
-          ESP.restart();
+        int mqttState = myMqtt->state();
+        wl_status_t wifiStatus = WiFi.status();
+        Serial.print("SERIAL : MQTT STATE=");
+        Serial.print(mqttState);
+        Serial.print(" (");
+        Serial.print(mqttStateToString(mqttState));
+        Serial.print(")");
+        Serial.print(" WIFI=");
+        Serial.print((int)wifiStatus);
+        if (wifiStatus == WL_CONNECTED) {
+          Serial.print(" RSSI=");
+          Serial.print(WiFi.RSSI());
+        }
+        Serial.println();
+        if (myMqtt->reconnect()) {
+          blinkLedShort(5);
         }
       }
-      nbTry = 0;
       
       myMqtt->loop();
       
@@ -645,9 +718,12 @@ void taskMqttWifi(void * param)
 
       if (myMqtt->connected())
       {
-        while (xQueueReceive(mqttQueue, &msg, 0) == pdTRUE)
+        int publishCount = 0;
+        while (publishCount < MQTT_PUBLISH_BURST_MAX && xQueueReceive(mqttQueue, &msg, 0) == pdTRUE)
         {
           myMqtt->publishValue(msg.leafTopic, msg.payload);
+          myMqtt->loop();
+          publishCount++;
         }
       }
 
@@ -677,13 +753,12 @@ void taskMqttWifi(void * param)
     {
       //debugPrintln("Wifi reconnect ongoing");
       Serial.println("SERIAL : Wifi reconnect ongoing");
-      vTaskDelay(pdMS_TO_TICKS(100));
-      wifi_timeout_counter++;
-      if(wifi_timeout_counter > 200) // 20secs
-      {
-          ESP.restart();
-          wifi_timeout_counter = 0;
+      unsigned long now = millis();
+      if (now - lastWifiReconnectAttempt >= 5000) {
+        lastWifiReconnectAttempt = now;
+        WiFi.reconnect();
       }
+      vTaskDelay(pdMS_TO_TICKS(100));
       continue;
     }
     vTaskDelay(pdMS_TO_TICKS(1));

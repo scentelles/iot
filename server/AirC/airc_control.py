@@ -103,20 +103,32 @@ def on_message(client, userdata, msg):
     elif(msg.topic == MQTT_ESP_PONG):
         myAirCManager.pingAck = True
         now_mono = round(time.monotonic() * 1000)
-        payload = msg.payload.decode(errors="ignore")
+        payload = msg.payload.decode(errors="ignore").strip()
         t0 = None
         esp_ms = None
         if "|" in payload:
             parts = payload.split("|", 1)
-            if parts[0].isdigit():
-                t0 = int(parts[0])
-            if parts[1].isdigit():
-                esp_ms = int(parts[1])
-        elif payload.isdigit():
-            t0 = int(payload)
+            try:
+                t0 = int(parts[0].strip())
+            except (ValueError, TypeError):
+                t0 = None
+            try:
+                esp_ms = int(parts[1].strip())
+            except (ValueError, TypeError):
+                esp_ms = None
+        else:
+            try:
+                t0 = int(payload)
+            except (ValueError, TypeError):
+                t0 = None
 
-        if t0 is None:
-            t0 = myAirCManager.pingTimeMono
+        if t0 is None or t0 <= 0:
+            if myAirCManager.pingTimeMono and myAirCManager.pingTimeMono > 0:
+                t0 = myAirCManager.pingTimeMono
+            else:
+                print(Fore.RED + "ping time : N/A (no valid t0) payload=" + payload)
+                print(Style.RESET_ALL)
+                return
 
         tempPingTime = now_mono - t0
 
