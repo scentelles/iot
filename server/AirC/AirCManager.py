@@ -30,8 +30,10 @@ class AirCManager:
         self.mqttClient = mqttClient
         self.initDone = False
         self.pingAck = False
+        self.pingTimeMono = 0
         self.FSMState = STATE_INIT
         self.ESP_Connected = False
+        self.lastEspMillis = None
         self.currentACTempTarget = 0
         self.currentACMode = AC_MODE_OFF
         self.currentFanSpeed = 1
@@ -100,8 +102,8 @@ class AirCManager:
 		
             else:     #exlude ping while servos are under init
                 print("!!!!!!!!!!!!!  PINGING ESP  !!!!!!!!!!!!!")
-                self.pingTime = round(time.time() * 1000)
-                self.mqttClient.publish("AC/ESP/PING", 1)
+                self.pingTimeMono = round(time.monotonic() * 1000)
+                self.mqttClient.publish("AC/ESP/PING", str(self.pingTimeMono))
 
                 self.pingAck = False
                 time.sleep(20)

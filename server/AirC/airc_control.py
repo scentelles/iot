@@ -102,8 +102,37 @@ def on_message(client, userdata, msg):
 	
     elif(msg.topic == MQTT_ESP_PONG):
         myAirCManager.pingAck = True
-        tempPingTime = round(time.time() *1000) - myAirCManager.pingTime
-        print(Fore.RED + "ping time : " + str(tempPingTime))
+        now_mono = round(time.monotonic() * 1000)
+        payload = msg.payload.decode(errors="ignore")
+        t0 = None
+        esp_ms = None
+        if "|" in payload:
+            parts = payload.split("|", 1)
+            if parts[0].isdigit():
+                t0 = int(parts[0])
+            if parts[1].isdigit():
+                esp_ms = int(parts[1])
+        elif payload.isdigit():
+            t0 = int(payload)
+
+        if t0 is None:
+            t0 = myAirCManager.pingTimeMono
+
+        tempPingTime = now_mono - t0
+
+        if esp_ms is not None:
+            if myAirCManager.lastEspMillis is None:
+                esp_delta = None
+            else:
+                esp_delta = esp_ms - myAirCManager.lastEspMillis
+            myAirCManager.lastEspMillis = esp_ms
+            if esp_delta is not None:
+                print(Fore.RED + "ping time : " + str(tempPingTime) + " ms | esp delta : " + str(esp_delta) + " ms")
+            else:
+                print(Fore.RED + "ping time : " + str(tempPingTime) + " ms | esp delta : N/A")
+        else:
+            print(Fore.RED + "ping time : " + str(tempPingTime) + " ms")
+
         print(Style.RESET_ALL)
         mqttClient.publish("AC/ESP/PINGDELAY", tempPingTime)
 	
