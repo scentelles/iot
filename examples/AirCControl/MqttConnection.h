@@ -1,11 +1,8 @@
-#if defined(ESP8266)
-  #include "ESP8266WiFi.h"
-#else  
-  #include <WiFi.h>
-#endif
+#include <SPI.h>
+#include <Ethernet.h>
 #include <PubSubClient.h>
 
-/****************************** Wifi connect function ***************************************/
+/****************************** Ethernet MQTT connection ***************************************/
 
 
 #define PING_LEAF_TOPIC "ping"
@@ -16,8 +13,8 @@ class MqttConnection : public PubSubClient
 {  
   public:
 	  String sensorId_;
-	  WiFiClient wifiClient_;
-	  MqttConnection(const char* sensorId, const char* ssid, const char* pass, const char* mqttServer, int mqttPort)  ;
+	  EthernetClient ethClient_;
+	  MqttConnection(const char* sensorId, const char* mqttServer, int mqttPort);
 	  bool reconnect();
       void publishValue(const char * leafTopic, const char* msg);
 	  void publishValue(const char * leafTopic, float value, int precision);
@@ -27,7 +24,5 @@ class MqttConnection : public PubSubClient
   private:
 	  char leafTopicList_[MAX_SUBSCRIBE_LEAF_TOPIC][MAX_CHAR_TOPIC];
 	  int nbLeafTopic_ = 0;
-	  void wifiSetup(const char* ssid, const char* pass);
 	  void subscribeAll();
-	  //static void callback(char* topic, byte* payload, unsigned int length);
 };

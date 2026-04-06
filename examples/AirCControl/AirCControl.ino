@@ -7,7 +7,8 @@
 #include <freertos/queue.h>
 #include <string.h>
 
-#include <ArduinoOTA.h>
+#include <SPI.h>
+#include <Ethernet.h>
 
 #ifdef TELNET_DEBUG 
   #include <RemoteDebug.h> //https://github.com/JoaoLopesF/RemoteDebug v2.1.2
@@ -22,10 +23,30 @@
 MqttConnection * myMqtt;
 
 
-/************************* WiFi Access Point *********************************/
+/************************* W5500 Ethernet *********************************/
 
-#define WLAN_SSID       "SFR_34A8"
-#define WLAN_PASS       "ab4ingrograstanstorc"
+#ifdef LOLIN
+  #define ETH_SCLK  26
+  #define ETH_MISO  35
+  #define ETH_MOSI  27
+  #define ETH_CS    5
+#endif
+#ifdef WEMOSMINI
+  // TODO: assign W5500 SPI pins for WEMOSMINI board
+  #define ETH_SCLK  26
+  #define ETH_MISO  35
+  #define ETH_MOSI  27
+  #define ETH_CS    5
+#endif
+#ifdef ESP32_DEVKIT
+  // TODO: assign W5500 SPI pins for ESP32_DEVKIT board
+  #define ETH_SCLK  26
+  #define ETH_MISO  35
+  #define ETH_MOSI  27
+  #define ETH_CS    5
+#endif
+
+byte mac[] = { 0x02, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE };
 
 
 #define SENSOR_ID "AC"
@@ -96,7 +117,7 @@ const unsigned long SERVO_PUBLISH_INTERVAL_MS = 300;
 unsigned long lastServoPublishMs[NB_SERVO] = {0};
 
 void taskModbus(void * param);
-void taskMqttWifi(void * param);
+void taskMqttEthernet(void * param);
 
 bool enqueueModbusCommand(ModbusCmdType type, int value)
 {
@@ -302,7 +323,6 @@ void processACMsg(char* topic, byte* payload, unsigned int length)
    else if(String(topic) == "AC/ESP/SERVO/CHAMBRE3/ANGLE"){ debugPrint("Received Angle setting : "); debugPrintln(strPayload.c_str()); positionTargetArray[SERVO_CHAMBRE3] = intPayload; servoRunning[SERVO_CHAMBRE3] = true;}
    else if(String(topic) == "AC/ESP/SERVO/DREAMROOM/ANGLE"){debugPrint("Received Angle setting : "); debugPrintln(strPayload.c_str()); positionTargetArray[SERVO_DREAMROOM] = intPayload;servoRunning[SERVO_DREAMROOM] = true;}      
    else if(String(topic) == "AC/ESP/SERVO/ETAGE/ANGLE"){    debugPrint("Received Angle setting : "); debugPrintln(strPayload.c_str()); positionTargetArray[SERVO_ETAGE] = intPayload;    servoRunning[SERVO_ETAGE] = true;} 
-   else if(String(topic) == "AC/ESP/SERVO/MASTER2/ANGLE"){  debugPrint("Received Angle setting : "); debugPrintln(strPayload.c_str()); positionTargetArray[SERVO_MASTER2] = intPayload;  servoRunning[SERVO_MASTER2] = true;} 		 
 	 else if(String(topic) == "AC/ESP/SERVO/SALON/ANGLE"){    debugPrint("Received Angle setting : "); debugPrintln(strPayload.c_str()); positionTargetArray[SERVO_SALON] = intPayload;    servoRunning[SERVO_SALON] = true;} 	 
 		 
 		 else {
@@ -375,40 +395,7 @@ void blinkLED(int value)
 
 }
 
-void initOTA()
-{
-  
-  ArduinoOTA.setHostname("ESP_32_AC_GREE");
-
-  ArduinoOTA
-    .onStart([]() {
-      String type;
-      if (ArduinoOTA.getCommand() == U_FLASH)
-        type = "sketch";
-      else // U_SPIFFS
-        type = "filesystem";
-
-      // NOTE: if updating SPIFFS this would be the place to unmount SPIFFS using SPIFFS.end()
-      debugPrintln(String("Start updating " + type).c_str());
-    })
-    .onEnd([]() {
-      debugPrintln("\nEnd");
-    })
-    .onProgress([](unsigned int progress, unsigned int total) {
-      debugPrintln(String("Progress: " +  (progress / (total / 100))).c_str());
-    })
-    .onError([](ota_error_t error) {
-      debugPrintln(String("Error: " + error).c_str());
-      if (error == OTA_AUTH_ERROR) debugPrintln("Auth Failed");
-      else if (error == OTA_BEGIN_ERROR) debugPrintln("Begin Failed");
-      else if (error == OTA_CONNECT_ERROR) debugPrintln("Connect Failed");
-      else if (error == OTA_RECEIVE_ERROR) debugPrintln("Receive Failed");
-      else if (error == OTA_END_ERROR) debugPrintln("End Failed");
-    });
-
-  ArduinoOTA.begin();
-
-}
+// OTA removed (was WiFi-dependent). Flash via USB/serial.
 
 void setup() {
   delay(1000); //delay to wait power supply to stabilize
@@ -432,8 +419,19 @@ void setup() {
 
   initServoPins();
 
- 
-  myMqtt = new MqttConnection(SENSOR_ID, WLAN_SSID, WLAN_PASS, MQTT_SERVER, MQTT_PORT);
+  // Initialize W5500 Ethernet (RST tied to 3.3V via pull-up, INT unused)
+  SPI.begin(ETH_SCLK, ETH_MISO, ETH_MOSI, ETH_CS);
+  Ethernet.init(ETH_CS);
+
+  Serial.println("Starting Ethernet DHCP...");
+  while (Ethernet.begin(mac) == 0) {
+    Serial.println("DHCP failed, retrying in 5s...");
+    delay(5000);
+  }
+  Serial.print("Ethernet IP: ");
+  Serial.println(Ethernet.localIP());
+
+  myMqtt = new MqttConnection(SENSOR_ID, MQTT_SERVER, MQTT_PORT);
   myMqtt->registerCustomProcessing(&processACMsg);
   myMqtt->addSubscription("ESP/SERVO/CHAMBRE1/ANGLE");
   myMqtt->addSubscription("ESP/SERVO/CHAMBRE2/ANGLE");
@@ -441,7 +439,6 @@ void setup() {
   myMqtt->addSubscription("ESP/SERVO/DREAMROOM/ANGLE");
   myMqtt->addSubscription("ESP/SERVO/ETAGE/ANGLE");
   myMqtt->addSubscription("ESP/SERVO/SALON/ANGLE");
-  myMqtt->addSubscription("ESP/SERVO/MASTER2/ANGLE");
   myMqtt->addSubscription("ESP/HOST_INIT_REQUEST"); 
   myMqtt->addSubscription("ESP/PING"); 
   myMqtt->addSubscription("GREE/mode/set");   
@@ -461,22 +458,18 @@ void setup() {
   initCoils();
   initHregs();
 
-  initOTA();
-
   // init remote debug
   #ifdef TELNET_DEBUG 
   Debug.begin("ESP32");  
   #endif 
   
-  WiFi.setSleep(false);
-
   modbusQueue = xQueueCreate(10, sizeof(ModbusCommand));
   mqttQueue = xQueueCreate(50, sizeof(MqttPublish));
 
   if (modbusQueue != NULL && mqttQueue != NULL)
   {
     xTaskCreatePinnedToCore(taskModbus, "ModbusTask", 4096, NULL, 1, &modbusTaskHandle, 1);
-    xTaskCreatePinnedToCore(taskMqttWifi, "MqttTask", 8192, NULL, 2, &mqttTaskHandle, 1);
+    xTaskCreatePinnedToCore(taskMqttEthernet, "MqttTask", 8192, NULL, 2, &mqttTaskHandle, 1);
   }
   
 }
@@ -564,7 +557,6 @@ const char * mqttStateToString(int state)
 
 int loopCount = 0;
 bool ledHigh = false;
-unsigned long lastWifiReconnectAttempt = 0;
 
 void blinkLedShort(int nbBlink)
 {
@@ -633,14 +625,22 @@ void taskModbus(void * param)
   }
 }
 
-void taskMqttWifi(void * param)
+void taskMqttEthernet(void * param)
 {
   MqttPublish msg;
   unsigned long lastTaskTick = 0;
+  unsigned long lastDhcpMaintain = 0;
   for(;;)
   {
-    if(WiFi.status() == WL_CONNECTED) {
+    if(Ethernet.linkStatus() == LinkON) {
       unsigned long now = millis();
+
+      // DHCP lease renewal every 30s
+      if (now - lastDhcpMaintain > 30000) {
+        Ethernet.maintain();
+        lastDhcpMaintain = now;
+      }
+
       if (lastTaskTick != 0 && now - lastTaskTick > 2000) {
         Serial.print("SERIAL : MQTT TASK GAP=");
         Serial.print(now - lastTaskTick);
@@ -652,11 +652,10 @@ void taskMqttWifi(void * param)
         }
         Serial.print(" DROPS=");
         Serial.print(mqttDropCount);
-        Serial.print(" WIFI=");
-        Serial.println((int)WiFi.status());
+        Serial.print(" ETH=LinkON");
+        Serial.println();
       }
       lastTaskTick = now;
-      ArduinoOTA.handle();
       #ifdef TELNET_DEBUG 
       Debug.handle();
       #endif
@@ -690,19 +689,12 @@ void taskMqttWifi(void * param)
         debugPrintln("MQTT RECONNECT!!!!!!!!!!!!!!!!!!!!!");
         Serial.println("SERIAL : MQTT RECONNECT!!!!!!!!!!!!!!!!!!!!!");
         int mqttState = myMqtt->state();
-        wl_status_t wifiStatus = WiFi.status();
         Serial.print("SERIAL : MQTT STATE=");
         Serial.print(mqttState);
         Serial.print(" (");
         Serial.print(mqttStateToString(mqttState));
-        Serial.print(")");
-        Serial.print(" WIFI=");
-        Serial.print((int)wifiStatus);
-        if (wifiStatus == WL_CONNECTED) {
-          Serial.print(" RSSI=");
-          Serial.print(WiFi.RSSI());
-        }
-        Serial.println();
+        Serial.print(") ETH=LinkON IP=");
+        Serial.println(Ethernet.localIP());
         if (myMqtt->reconnect()) {
           blinkLedShort(5);
         }
@@ -756,14 +748,8 @@ void taskMqttWifi(void * param)
     }
     else
     {
-      //debugPrintln("Wifi reconnect ongoing");
-      Serial.println("SERIAL : Wifi reconnect ongoing");
-      unsigned long now = millis();
-      if (now - lastWifiReconnectAttempt >= 5000) {
-        lastWifiReconnectAttempt = now;
-        WiFi.reconnect();
-      }
-      vTaskDelay(pdMS_TO_TICKS(100));
+      Serial.println("SERIAL : Ethernet link down");
+      vTaskDelay(pdMS_TO_TICKS(1000));
       continue;
     }
     vTaskDelay(pdMS_TO_TICKS(1));

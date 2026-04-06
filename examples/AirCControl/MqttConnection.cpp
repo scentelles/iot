@@ -51,34 +51,7 @@ void  mycallback(char* topic, byte* payload, unsigned int length) {
 
 
 
-/****************************** Wifi connect function ***************************************/
-void MqttConnection::wifiSetup(const char* ssid, const char* pass) {
-
-  delay(10);
-  // We start by connecting to a WiFi network
-  serialLogf("\nConnecting to %s\n", ssid);
-  
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(ssid, pass);
-
-  const unsigned long connectTimeoutMs = 20000;
-  unsigned long start = millis();
-  while (WiFi.status() != WL_CONNECTED && millis() - start < connectTimeoutMs) {
-    delay(1000);
-    serialLogf(".");
-  }
-
-  randomSeed(micros());
-
-  if (WiFi.status() == WL_CONNECTED) {
-    serialLogf("\nWiFi connected\nIP address: %s\n", WiFi.localIP().toString().c_str());
-  }
-
-  WiFi.setAutoReconnect(true);
-  WiFi.persistent(true);
-
-
-}
+/****************************** Ethernet connection ***************************************/
 
 void MqttConnection::registerCustomProcessing(void (*myFunc)(char* topic, byte* payload, unsigned int length) )
 {
@@ -132,13 +105,7 @@ void MqttConnection::subscribeAll()
 
 bool MqttConnection::reconnect() {
   static unsigned long lastAttempt = 0;
-	
-	//first, check Wifi is connected
-  //while (WiFi.status() != WL_CONNECTED) {
-   // Serial.print('.');
-    //delay(1000);
- // }
-  
+
   // Loop until we're reconnected
   if (connected()) {
     return false;
@@ -182,12 +149,10 @@ void MqttConnection::addSubscription(const char * leafTopic)
 	}
 }
 
-MqttConnection::MqttConnection(const char* sensorId, const char* ssid, const char* pass, const char* mqttServer, int mqttPort) : PubSubClient(wifiClient_)
+MqttConnection::MqttConnection(const char* sensorId, const char* mqttServer, int mqttPort) : PubSubClient(ethClient_)
 {
   addSubscription(PING_LEAF_TOPIC);
   sensorId_ = sensorId; 
-  wifiSetup(ssid, pass);
-
 
   //make a copy in a global char array due to bug somewhere in the pubsub lib?
   strcpy(tmpChars, mqttServer);
