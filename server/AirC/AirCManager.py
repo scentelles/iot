@@ -56,13 +56,28 @@ class AirCManager:
 
         for r in self.roomList: 
             roomList[r].aeroChannel.init()
-            self.mqttClient.publish(MQTT_PREFIX + "/" + r + "/" + MQTT_SUFFIX_AC_STATE, AC_STATE_OFF)   
-            self.mqttClient.publish(MQTT_PREFIX + "/" + r + "/" + MQTT_SUFFIX_TARGETTEMP, DEFAULT_TARGET_TEMP)  
+            self.mqttClient.publish(MQTT_PREFIX + "/" + r + "/" + MQTT_SUFFIX_AC_STATE, AC_STATE_OFF, retain=True)   
+            self.mqttClient.publish(MQTT_PREFIX + "/" + r + "/" + MQTT_SUFFIX_TARGETTEMP, DEFAULT_TARGET_TEMP, retain=True)  
             self.mqttClient.publish("AC/ESP/SERVO/" + r + "/ANGLE", 0) 
         self.mqttClient.publish("AC/ESP/SERVO/MASTER2/ANGLE", 0) 
 
         self.mqttClient.publish("AC/ESP/SERVO/RESET", 1)
 	    
+    def republishCurrentState(self):
+        """Republish the current in-memory state of all rooms to MQTT with retain.
+        Used when Home Assistant restarts so it picks up the real values
+        instead of its own defaults."""
+        print("Republishing current state to HA")
+        for r in self.roomList:
+            room = self.roomList[r]
+            self.mqttClient.publish(MQTT_PREFIX + "/" + r + "/" + MQTT_SUFFIX_AC_STATE, room.AC_ON, retain=True)
+            self.mqttClient.publish(MQTT_PREFIX + "/" + r + "/" + MQTT_SUFFIX_TARGETTEMP, room.temperature_target, retain=True)
+            print("  " + r + ": AC_ON=" + str(room.AC_ON) + " target=" + str(room.temperature_target))
+        # Also republish the AC mode
+        self.mqttClient.publish(MQTT_AC_MODE, self.currentACMode, retain=True)
+        self.mqttClient.publish(MQTT_AC_TURBO_FORCED, 2 if self.currentTurboForced else 1, retain=True)
+        self.mqttClient.publish("AC/ERROR", "HA RESTARTED - STATE RESYNC DONE")
+
     def isAnyAeroAngleStaged(self):
         result = False
         for r in self.roomList: 

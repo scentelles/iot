@@ -97,7 +97,9 @@ def on_message(client, userdata, msg):
         if(myAirCManager.HAStarted == False):
             myAirCManager.HAStarted = True        
         else:
-            myAirCManager.FSMState = STATE_INIT
+            # HA restarted while we were already running: republish current state
+            # instead of doing a full reinit which would reset all temperatures/states
+            myAirCManager.republishCurrentState()
 
 	
     elif(msg.topic == MQTT_ESP_PONG):
