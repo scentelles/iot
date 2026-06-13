@@ -72,7 +72,12 @@ class AirCManager:
             room = self.roomList[r]
             self.mqttClient.publish(MQTT_PREFIX + "/" + r + "/" + MQTT_SUFFIX_AC_STATE, room.AC_ON, retain=True)
             self.mqttClient.publish(MQTT_PREFIX + "/" + r + "/" + MQTT_SUFFIX_TARGETTEMP, room.temperature_target, retain=True)
-            print("  " + r + ": AC_ON=" + str(room.AC_ON) + " target=" + str(room.temperature_target))
+            # Republish servo angles
+            totalAngle = int(room.aeroChannel.currentAngle + room.aeroChannel.safetyAngle)
+            self.mqttClient.publish("AC/ESP/SERVO/" + r + "/ANGLE", totalAngle, retain=True)
+            print("  " + r + ": AC_ON=" + str(room.AC_ON) + " target=" + str(room.temperature_target) + " servo=" + str(totalAngle))
+        # Republish master servo
+        self.mqttClient.publish("AC/ESP/SERVO/MASTER2/ANGLE", 90, retain=True)
         # Also republish the AC mode
         self.mqttClient.publish(MQTT_AC_MODE, self.currentACMode, retain=True)
         self.mqttClient.publish(MQTT_AC_TURBO_FORCED, 2 if self.currentTurboForced else 1, retain=True)
