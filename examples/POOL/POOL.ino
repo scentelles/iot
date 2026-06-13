@@ -55,14 +55,14 @@ void processCommandMsg(char* topic, byte* payload, unsigned int length)
 
   if(String(topic) == commandTopic){
      Serial.println("Received state topic change");
-       if ((char)payload[0] == RELAY_STATE_ON) {
+       if (length > 0 && (char)payload[0] == RELAY_STATE_ON) {
           Serial.println("RELAY STATE ON received");
 
           digitalWrite(RELAY_PIN, HIGH);
           char tmpChar = RELAY_STATE_ON;
           myMqtt->publishValue("state", &tmpChar);
        }
-       else if ((char)payload[0] == RELAY_STATE_OFF){
+       else if (length > 0 && (char)payload[0] == RELAY_STATE_OFF){
         Serial.println("RELAY STATE OFF received");
 
           digitalWrite(RELAY_PIN, LOW);    
@@ -71,7 +71,11 @@ void processCommandMsg(char* topic, byte* payload, unsigned int length)
        }
      else {
         Serial.print("Unknown payload : ");
-      Serial.println((char)payload[0]);
+        if (length > 0) {
+          Serial.println((char)payload[0]);
+        } else {
+          Serial.println("empty");
+        }
      }
 
   }
@@ -82,6 +86,7 @@ void processCommandMsg(char* topic, byte* payload, unsigned int length)
 void setup()
 {
   Serial.begin(115200);
+  DS18B20.begin();
   myMqtt = new MqttConnection(SENSOR_ID, WLAN_SSID, WLAN_PASS, MQTT_SERVER, MQTT_PORT);
 
   pinMode(RELAY_PIN, OUTPUT);

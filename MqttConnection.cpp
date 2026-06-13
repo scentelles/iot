@@ -4,6 +4,7 @@
 char tmpChars[32];
   
 PubSubClient * g_mqttClient;
+extern MqttConnection * myMqtt; // We can use myMqtt or cast g_mqttClient
 void (* customMsgProcessing)(char* topic, byte* payload, unsigned int length) = NULL;
 
 void  mycallback(char* topic, byte* payload, unsigned int length) {
@@ -15,8 +16,10 @@ void  mycallback(char* topic, byte* payload, unsigned int length) {
   }
   Serial.println();
 
-  if(String(topic) == "PING_LEAF_TOPIC"){
-	  if ((char)payload[0] == '1') {
+  // Check for ping topic
+  String expectedPingTopic = ((MqttConnection*)g_mqttClient)->sensorId_ + "/" + PING_LEAF_TOPIC;
+  if(String(topic) == expectedPingTopic){
+	  if (length > 0 && (char)payload[0] == '1') {
 		Serial.println("Ping received");
 		String tmp_string = topic;
 		tmp_string += " : I'm alive!!!!";
@@ -51,6 +54,9 @@ void MqttConnection::wifiSetup(const char* ssid, const char* pass) {
   Serial.println(ssid);
   
   WiFi.mode(WIFI_STA);
+  #if defined(ESP8266)
+  WiFi.setSleepMode(WIFI_NONE_SLEEP); // Prevent connection drops
+  #endif
   WiFi.begin(ssid, pass);
 
   while (WiFi.status() != WL_CONNECTED) {
@@ -103,7 +109,7 @@ void MqttConnection::publishValue(const char * leafTopic, float value, int preci
     format += "f";
 
     
-    snprintf (msg, 75, "%.*f", precision, value);
+    snprintf (msg, sizeof(msg), "%.*f", precision, value);
     //String tmp = value;
     Serial.print("Publish message: ");
     Serial.println(msg);
@@ -189,6 +195,7 @@ MqttConnection::MqttConnection(const char* sensorId, const char* ssid, const cha
   strcpy(tmpChars, mqttServer);
   setServer(tmpChars, mqttPort);
   setCallback(mycallback);
+  setKeepAlive(60); // Increase keepalive to 60 seconds
   g_mqttClient = this;
   
 
