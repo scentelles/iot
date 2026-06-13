@@ -93,13 +93,16 @@ def on_message(client, userdata, msg):
 
     elif(msg.topic == MQTT_HA_STARTED):
         print("Home assistant (re)started \n")
-        time.sleep(4) #do not reinit immediately. default values are beeing set just after HA start finalized
         if(myAirCManager.HAStarted == False):
             myAirCManager.HAStarted = True        
         else:
-            # HA restarted while we were already running: republish current state
-            # instead of doing a full reinit which would reset all temperatures/states
-            myAirCManager.republishCurrentState()
+            # HA restarted while we were already running:
+            # 1. Snapshot current state BEFORE HA overwrites values with defaults
+            myAirCManager.snapshotState()
+            # 2. Wait for HA to finish sending its default values
+            time.sleep(4)
+            # 3. Republish saved state (and restore room objects) to override HA defaults
+            myAirCManager.republishSavedState()
 
 	
     elif(msg.topic == MQTT_ESP_PONG):

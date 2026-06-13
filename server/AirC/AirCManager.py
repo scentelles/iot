@@ -63,25 +63,53 @@ class AirCManager:
 
         self.mqttClient.publish("AC/ESP/SERVO/RESET", 1)
 	    
-    def republishCurrentState(self):
-        """Republish the current in-memory state of all rooms to MQTT with retain.
-        Used when Home Assistant restarts so it picks up the real values
-        instead of its own defaults."""
-        print("Republishing current state to HA")
+    def snapshotState(self):
+        """Capture the current in-memory state of all rooms before HA overwrites them
+        with its default values during startup."""
+        self._savedState = {}
         for r in self.roomList:
             room = self.roomList[r]
-            self.mqttClient.publish(MQTT_PREFIX + "/" + r + "/" + MQTT_SUFFIX_AC_STATE, room.AC_ON, retain=True)
-            self.mqttClient.publish(MQTT_PREFIX + "/" + r + "/" + MQTT_SUFFIX_TARGETTEMP, room.temperature_target, retain=True)
-            # Republish servo angles
-            totalAngle = int(room.aeroChannel.currentAngle + room.aeroChannel.safetyAngle)
+            self._savedState[r] = {
+                'AC_ON': room.AC_ON,
+                'temperature_target': room.temperature_target,
+                'currentAngle': room.aeroChannel.currentAngle,
+                'safetyAngle': room.aeroChannel.safetyAngle,
+            }
+            print("  Snapshot " + r + ": AC_ON=" + str(room.AC_ON) + " target=" + str(room.temperature_target))
+        self._savedACMode = self.currentACMode
+        self._savedTurboForced = self.currentTurboForced
+        print("Snapshot saved")
+
+    def republishSavedState(self):
+        """Republish the previously saved snapshot to MQTT with retain,
+        and restore room objects to the saved values (undoing any HA default overwrites)."""
+        if not hasattr(self, '_savedState') or self._savedState is None:
+            print("WARNING: No saved state to republish!")
+            return
+        print("Republishing saved state to HA")
+        for r in self._savedState:
+            saved = self._savedState[r]
+            room = self.roomList[r]
+            # Restore room object values (HA may have overwritten them with defaults)
+            room.AC_ON = saved['AC_ON']
+            room.temperature_target = saved['temperature_target']
+            room.aeroChannel.currentAngle = saved['currentAngle']
+            room.aeroChannel.safetyAngle = saved['safetyAngle']
+            # Publish to MQTT with retain so HA picks them up
+            self.mqttClient.publish(MQTT_PREFIX + "/" + r + "/" + MQTT_SUFFIX_AC_STATE, saved['AC_ON'], retain=True)
+            self.mqttClient.publish(MQTT_PREFIX + "/" + r + "/" + MQTT_SUFFIX_TARGETTEMP, saved['temperature_target'], retain=True)
+            totalAngle = int(saved['currentAngle'] + saved['safetyAngle'])
             self.mqttClient.publish("AC/ESP/SERVO/" + r + "/ANGLE", totalAngle, retain=True)
-            print("  " + r + ": AC_ON=" + str(room.AC_ON) + " target=" + str(room.temperature_target) + " servo=" + str(totalAngle))
+            print("  Republish " + r + ": AC_ON=" + str(saved['AC_ON']) + " target=" + str(saved['temperature_target']) + " servo=" + str(totalAngle))
         # Republish master servo
         self.mqttClient.publish("AC/ESP/SERVO/MASTER2/ANGLE", 90, retain=True)
-        # Also republish the AC mode
-        self.mqttClient.publish(MQTT_AC_MODE, self.currentACMode, retain=True)
-        self.mqttClient.publish(MQTT_AC_TURBO_FORCED, 2 if self.currentTurboForced else 1, retain=True)
+        # Republish AC mode
+        self.currentACMode = self._savedACMode
+        self.currentTurboForced = self._savedTurboForced
+        self.mqttClient.publish(MQTT_AC_MODE, self._savedACMode, retain=True)
+        self.mqttClient.publish(MQTT_AC_TURBO_FORCED, 2 if self._savedTurboForced else 1, retain=True)
         self.mqttClient.publish("AC/ERROR", "HA RESTARTED - STATE RESYNC DONE")
+        self._savedState = None
 
     def isAnyAeroAngleStaged(self):
         result = False
