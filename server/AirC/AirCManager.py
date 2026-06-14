@@ -103,10 +103,11 @@ class AirCManager:
             print("  Republish " + r + ": AC_ON=" + str(saved['AC_ON']) + " target=" + str(saved['temperature_target']) + " servo=" + str(totalAngle))
         # Republish master servo
         self.mqttClient.publish("AC/ESP/SERVO/MASTER2/ANGLE", 90, retain=True)
-        # Republish AC mode
+        # Republish AC mode using correct MQTT payload mapping
         self.currentACMode = self._savedACMode
         self.currentTurboForced = self._savedTurboForced
-        self.mqttClient.publish(MQTT_AC_MODE, self._savedACMode, retain=True)
+        mqttModeValue = AC_MODE_TO_MQTT.get(self._savedACMode, MQTT_AC_MODE_OFF)
+        self.mqttClient.publish(MQTT_AC_MODE, mqttModeValue, retain=True)
         self.mqttClient.publish(MQTT_AC_TURBO_FORCED, 2 if self._savedTurboForced else 1, retain=True)
         self.mqttClient.publish("AC/ERROR", "HA RESTARTED - STATE RESYNC DONE")
         self._savedState = None

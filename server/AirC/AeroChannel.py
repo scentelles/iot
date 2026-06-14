@@ -26,7 +26,7 @@ class AeroChannel:
             if(self.angleStaged == True):
                 print("CURRENT ANGLE : " + str(self.currentAngle))
                 print("SAFETY ANGLE : " + str(self.safetyAngle))		
-                self.mqttClient.publish("AC/ESP/SERVO/" + self.name + "/ANGLE", int(self.currentAngle + self.safetyAngle))
+                self.mqttClient.publish("AC/ESP/SERVO/" + self.name + "/ANGLE", int(self.currentAngle + self.safetyAngle), retain=True)
                 print("MQTT angle sent : " + str(self.currentAngle + self.safetyAngle))
                 self.angleStaged = False
 	    	    	    	

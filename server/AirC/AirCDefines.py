@@ -51,6 +51,15 @@ MQTT_AC_MODE_COOL = b'2'
 MQTT_AC_MODE_FAN  = b'3'
 MQTT_AC_MODE_DRY  = b'4'
 
+# Mapping from internal AC mode to MQTT payload value
+AC_MODE_TO_MQTT = {
+    AC_MODE_OFF:  b'0',
+    AC_MODE_HEAT: b'1',
+    AC_MODE_COOL: b'2',
+    AC_MODE_FAN:  b'3',
+    AC_MODE_DRY:  b'4',
+}
+
 
 MQTT_AC_TURBO_FORCED = "AC/turboforced"
 
